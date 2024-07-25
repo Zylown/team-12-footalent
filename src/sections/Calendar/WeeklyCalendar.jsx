@@ -1,0 +1,118 @@
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import esLocale from "@fullcalendar/core/locales/es";
+
+export default function WeeklyCalendar({
+  handleEvents,
+  eventsDB,
+  dateSelected,
+}) {
+  const [calendarApis, setCalendarApis] = useState(null);
+
+  let nowStr = new Date().toISOString().slice(0, 19);
+  console.log("Calendario", eventsDB);
+
+  //Dirije hacie la vista diaria segun la fecha seleccionada en el MiniCalendar
+  useEffect(() => {
+    if (calendarApis && dateSelected) {
+      //calendarApis.gotoDate(dateSelected);
+      calendarApis.changeView("timeGridDay", dateSelected);
+    }
+  }, [calendarApis, dateSelected]);
+
+  //Toma la referencia de la api del calendario cuando este listo
+  const handleDatesSet = (arg) => {
+    setCalendarApis(arg.view.calendar);
+  };
+
+  //funcion para añadir eventos
+  function handleDateSelect(selectInfo) {
+    let title = prompt("Alerta");
+    let calendarApi = selectInfo.view.calendar;
+
+    calendarApi.unselect(); // clear date selection
+
+    if (title) {
+      calendarApi.addEvent({
+        id: nowStr,
+        title,
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay,
+      });
+    }
+  }
+
+  function handleEventClick(clickInfo) {
+    if (
+      confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      )
+    ) {
+      clickInfo.event.remove();
+    }
+  }
+
+  return (
+    <div className="demo-app">
+      <div className="demo-app-main">
+        <FullCalendar
+          locale={esLocale}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          initialView="timeGridWeek"
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          weekends={false}
+          events={eventsDB}
+          select={handleDateSelect}
+          eventContent={renderEventContent} // custom render function
+          eventClick={handleEventClick}
+          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          /* you can update a remote database when these fire:
+          eventAdd={function(){}}
+          eventChange={function(){}}
+          eventRemove={function(){}}          
+          */
+          //dateClick={handleDateClick}
+          datesSet={handleDatesSet}
+          //CONFIGURACION PARA LAS CELDAS
+          slotDuration="00:30:00"
+          slotMinTime="08:00:00"
+          slotMaxTime="21:00:00"
+          allDaySlot={false}
+          contentHeight={600}
+          slotLabelFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            meridiem: false,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function renderEventContent(eventInfo) {
+  return (
+    <div className="font-medium text-white">
+      <i>{eventInfo.event.title}</i>
+    </div>
+  );
+}
+
+WeeklyCalendar.propTypes = {
+  handleEvents: PropTypes.func.isRequired,
+  eventsDB: PropTypes.array.isRequired,
+  dateSelected: PropTypes.string.isRequired, // Cambiado a string
+};
