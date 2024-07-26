@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ScheduleShift from "../../sections/Daily/Modal/ScheduleShift";
-import EditShift from "../../sections/Daily/Modal/EditShift";
+import ScheduleShift from "../../sections/ShiftManager/Modal/ScheduleShift";
+import EditShift from "../../sections/ShiftManager/Modal/EditShift";
 
 export default function Diary() {
   const [modalShiftIsVisible, setModalShiftIsVisible] = useState(false);
