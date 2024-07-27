@@ -9,13 +9,6 @@ const Table = ({ nameButton, userRole, sections }) => {
   const toggleTable = () => {
     setIsOpen(!isOpen);
   };
-//deberia guardar loq que se cambia
-  const handleInputChange = (e, sectionIndex, fieldName) => {
-    const { value } = e.target;
-    const updatedSections = [...sections];
-    updatedSections[sectionIndex][fieldName] = value;
-    setSections(updatedSections);
-  };
 
   return (
 
@@ -23,7 +16,7 @@ const Table = ({ nameButton, userRole, sections }) => {
       <Button
         type="button"
         onClick={toggleTable}
-        className="bg-gradiant p-4 w-full text-xl flex justify-center items-center"
+        className="bg-custom-gradient !py-3 w-full text-xl flex justify-center items-center"
       >
         {nameButton}
         {isOpen ? <FaCaretUp className="ml-2" /> : <FaCaretDown className="ml-2" />}
@@ -39,19 +32,15 @@ const Table = ({ nameButton, userRole, sections }) => {
 
                 </td>
                 <td className=" w-3/4">
-                  <div className="flex items-center justify-center relative">  <input
-                    type="text"
-                    name="value"
-                    value={section.value}
-                    onChange={(e) => handleInputChange(e, index, 'value')}
-                    className={`w-full p-2 rounded-md text-center bg-gray-100 mr-2`}
-                    readOnly={userRole !== 'admin'}
-                  />
+                
+                  <div className="flex items-center justify-center relative">
+                    <p className="w-full p-2 rounded-md text-center bg-gray-100 mr-2">{section.value} </p>
+                    
                     <Button
                       type="button"
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                     >
-                      {section.icon && section.icon}
+                      {section.icon ? section.icon: ""}
                     </Button>
                     </div>
                 </td>

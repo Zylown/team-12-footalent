@@ -19,9 +19,7 @@ const addPatientSchema = z.object({
   phone1: z
     .string()
     .min(9, { message: "El teléfono debe tener al menos 9 caracteres" }),
-  phone2: z
-    .string()
-    .min(9, { message: "El teléfono debe tener al menos 9 caracteres" }),
+  phone2: z.string().optional(),
 });
 
 export default addPatientSchema;

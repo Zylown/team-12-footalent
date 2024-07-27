@@ -1,11 +1,16 @@
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import InputPassword from "../../components/InputPassWord";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import loginSchema from "../../validations/login";
 import CardWhite from "../../components/CardWhite";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { apiLogin} from "../../api/apiLogin";
+import { useNavigate } from 'react-router-dom';
 const LoginSesion = () => {
+  const [formFailed, setFormFailed] = useState(false);
+  const [formMessage, setFormMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -13,12 +18,34 @@ const LoginSesion = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-
+const navigate = useNavigate()
   // Manejo del envío del formulario
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await apiLogin(data); // Enviamos el objeto data directamente
+      // Guardar el token y redirigir al /home
+      localStorage.setItem('token', response.data.token);
+     navigate('/inicio');
+    } catch (error) {
+      if (error.response) {
+        // El servidor respondió con un estado diferente a 2xx
+     
+        setFormFailed(!formFailed)
+        setFormMessage(error.response.data.error + ", vuelva a intentarlo")
+        
+      } else if (error.request) {
+        // La solicitud fue hecha pero no hubo respuesta
+  
+        setFormFailed(true);
+        setFormMessage('Error de conexión. Por favor, intente nuevamente.') 
+      } else {
+        // Ocurrió un error al configurar la solicitud
+      
+        setFormFailed(true);
+        setFormMessage('Error de desconocido. Por favor, intente mas tarde.')
+      }
+    }
   };
-
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
@@ -72,7 +99,9 @@ const LoginSesion = () => {
                   />
                   {errors.password && (
                     <p className="text-error">{errors.password.message}</p>
+                    
                   )}
+                  {formFailed && <p className="text-error">{formMessage}</p> }
                 </div>
               </div>
 

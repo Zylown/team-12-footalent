@@ -3,10 +3,12 @@ import Button from '../../components/Button'
 import Input from '../../components/Input'
 import Options from '../../components/Options';
 import InputPassword from '../../components/InputPassWord'
+import CardWhite from '../../components/CardWhite';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import registerSchema from '../../validations/register';
+import { apiRegister } from '../../api/apiRegister';
 
 const RegisterUser = () => {
   const navigate = useNavigate();
@@ -15,8 +17,26 @@ const RegisterUser = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit =async (data) => {
+    
+    try {
+      const response = await apiRegister(data); // Enviamos el objeto data directamente
+      
+     
+     navigate('/inicio');
+    } catch (error) {
+      if (error.response) {
+        // El servidor respondió con un estado diferente a 2xx
+        console.error('Register failed with response:', error.response.data);
+      } else if (error.request) {
+        // La solicitud fue hecha pero no hubo respuesta
+        console.error('Register failed with request:', error.request);
+       
+      } else {
+        // Ocurrió un error al configurar la solicitud
+        console.error('Register failed with message:', error.message);
+      }
+    }
   };
   //con esto paso los roles al campo con opciones
   const roleOptions = [
@@ -30,15 +50,15 @@ const RegisterUser = () => {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md shadow-md p-6 rounded-lg">
+        <CardWhite className="sm:mx-auto sm:w-full sm:max-w-md p-6 pt-[48px] rounded-lg gap-[24px]">
           <div className="sm:w-full">
             <h2 className="text-start text-2xl font-bold leading-9 mx-2 tracking-tight text-gray-900">
               Añadir Usuario
             </h2>
           </div>
 
-          <div className="mt-10 sm:w-full">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="sm:w-full">
+            <form className="flex flex-col gap-[24px]" onSubmit={handleSubmit(onSubmit)}>
               {/* Inputs de nombre y apellido */}
               <div className='flex gap-4'>
                 <div className="w-1/2">
@@ -190,8 +210,9 @@ const RegisterUser = () => {
               Cancelar
             </Button>
           </div>
+          </CardWhite>
         </div>
-      </div>
+      
     </>
   )
 }

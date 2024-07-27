@@ -137,7 +137,7 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                ${errors.phone2 && "border-red-600 border-2"}`}
                   type="text"
                   placeholder="ejemplo: 11 5585-2901"
-                  {...register("phone2")}
+                  {...register("phone2", { required: false })}
                 />
               </div>
             </div>
