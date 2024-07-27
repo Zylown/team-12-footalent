@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import {
   useReactTable,
   createColumnHelper,
@@ -17,7 +18,7 @@ const dataExample = [
   },
 ];
 
-export default function TableDni() {
+export default function TablePatients({ onSelectPatient }) {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
   const columnHelper = createColumnHelper();
 
@@ -51,7 +52,7 @@ export default function TableDni() {
               <th
                 key={column.id}
                 className={`h-11 flex items-center justify-center px-3.5 border border-[#BBD9FF] rounded text-[#005FDB] text-lg font-semibold
-                   ${column.id === "dni" ? "flex-none w-1/5" : "flex-1"}`}
+                     ${column.id === "dni" ? "flex-none w-1/5" : "flex-1"}`}
                 style={{
                   backgroundImage:
                     "linear-gradient(to bottom, #FAFDFF, #DBE5FF)",
@@ -71,6 +72,8 @@ export default function TableDni() {
           <tr
             key={row.id}
             className="flex gap-2.5 cursor-pointer hover:opacity-70 mt-2.5"
+            // onClick es un evento que se dispara cuando se hace click en el elemento para seleccionar el paciente
+            onClick={() => onSelectPatient(row.original.patient)}
           >
             {row.getVisibleCells().map((cell) => (
               <td
@@ -88,3 +91,7 @@ export default function TableDni() {
     </table>
   );
 }
+
+TablePatients.propTypes = {
+  onSelectPatient: PropTypes.func.isRequired,
+};

@@ -1,14 +1,14 @@
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import { IoSearch } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
+import PropTypes from "prop-types";
+import CardWhite from "../../../../components/CardWhite";
+import Input from "../../../../components/Input";
+import Button from "../../../../components/Button";
+import { IoSearch, IoClose } from "react-icons/io5";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useState } from "react";
-import TableDni from "./TableDni";
-import CardWhite from "../../components/CardWhite";
-import AddPatients from "./Modal/AddPatients";
+import TablePatients from "./TablePatientsModal";
+import AddPatients from "../../../Pacientes/Modal/AddPatients";
 
-export default function SearchPatients() {
+export default function PatientsModal({ onSelectPatient }) {
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [searchDni, setSearchDni] = useState("");
 
@@ -27,8 +27,8 @@ export default function SearchPatients() {
 
   return (
     <>
-      <div className="bg-white mt-6 px-2">
-        <CardWhite className="gap-5 min-w-[690px] px-6 py-4">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <CardWhite className="bg-white gap-5 min-w-[690px] px-6 py-4">
           <div className="container__h1 py-[10px]">
             <h1 className="text-[32px] text-[#192739] font-semibold">
               Pacientes
@@ -68,7 +68,7 @@ export default function SearchPatients() {
             </Button>
           </div>
           <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 h-80">
-            <TableDni />
+            <TablePatients onSelectPatient={onSelectPatient} />
           </div>
         </CardWhite>
       </div>
@@ -81,3 +81,7 @@ export default function SearchPatients() {
     </>
   );
 }
+
+PatientsModal.propTypes = {
+  onSelectPatient: PropTypes.func.isRequired,
+};

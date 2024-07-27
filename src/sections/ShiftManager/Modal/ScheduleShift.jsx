@@ -14,17 +14,21 @@ import { es } from "date-fns/locale";
 import { format, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import ModalCancel from "../../../components/ModalCancel";
+import PatientsModal from "./AddPatients/AddPatientsModal";
 
 const locale = es;
 registerLocale("es", locale);
 
 export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
+  // estado para manejar el paciente seleccionado
   const [selectedPatient, setSelectedPatient] = useState(null);
   //estados para manejar la fecha y la hora
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
   //estado para cancelar turno y mostrar modal
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
+  //estado para mostrar el modal de agregar paciente
+  const [modalAddPatientVisible, setModalAddPatientVisible] = useState(false);
 
   const {
     control,
@@ -59,9 +63,10 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
     setModalShiftIsVisible(false);
   };
 
+  // Función para manejar la selección de paciente
   const handleSelectPatient = (patient) => {
     setSelectedPatient(patient);
-    console.log("Paciente seleccionado:", patient);
+    setModalAddPatientVisible(false); //cerrar modal de agregar paciente
   };
 
   const handleDatePickerChange = (date) => {
@@ -107,8 +112,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
               {/* esto te lleva a otro modal para seleccionar el paciente */}
               <Button
                 type="button"
-                className="flex pl-3.5 pr-0 box-border w-[250px] text-lg border border-[#C3D4FF] bg-[#F6FBFF] text-[#005FDB]"
-                onClick={() => handleSelectPatient("Marcelo Tinelli")}
+                className="flex pl-3.5 pr-0 box-border w-[250px] text-lg border border-[#005FDB] bg-[#F6FBFF] text-[#005FDB]"
+                onClick={() => setModalAddPatientVisible(true)}
               >
                 <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
                 {selectedPatient ? selectedPatient : "Seleccionar paciente"}
@@ -289,6 +294,9 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
           setIsVisible={setModalCancelIsVisible}
           cancelModal={handleOnClose}
         />
+        {modalAddPatientVisible && (
+          <PatientsModal onSelectPatient={handleSelectPatient} />
+        )}
       </>
     )
   );

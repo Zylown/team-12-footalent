@@ -82,7 +82,7 @@ export default function Navbar() {
                 </button>
                 {isOpenMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded z-10">
-                    <div className="absolute top-[-6px] right-2 w-5 h-5 bg-white rotate-45 z-20"></div>
+                    <div className="absolute top-[-6px] right-2 w-5 h-5 bg-white rotate-45 -z-10"></div>
                     <Link
                       to="/perfil"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
