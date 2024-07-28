@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
@@ -33,6 +32,7 @@ export default function WeeklyCalendar({
   function handleDateSelect(selectInfo) {
     let title = prompt("Alerta");
     let calendarApi = selectInfo.view.calendar;
+    console.log(calendarApi);
 
     calendarApi.unselect(); // clear date selection
 
@@ -62,11 +62,11 @@ export default function WeeklyCalendar({
       <div className="demo-app-main">
         <FullCalendar
           locale={esLocale}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[timeGridPlugin, interactionPlugin]}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "timeGridWeek,timeGridDay",
           }}
           initialView="timeGridWeek"
           editable={true}
@@ -74,6 +74,7 @@ export default function WeeklyCalendar({
           selectMirror={true}
           dayMaxEvents={true}
           weekends={false}
+          /* events */
           events={eventsDB}
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
@@ -84,6 +85,13 @@ export default function WeeklyCalendar({
           eventChange={function(){}}
           eventRemove={function(){}}          
           */
+          /* eventContent={(eventInfo) => (
+            <EventContent
+              eventInfo={eventInfo}
+              handleChangeState={handleChangeState}
+              handleOpenUpdateWindow={handleOpenUpdateWindow}
+            />
+          )} */
           //dateClick={handleDateClick}
           datesSet={handleDatesSet}
           //CONFIGURACION PARA LAS CELDAS
@@ -104,8 +112,36 @@ export default function WeeklyCalendar({
 }
 
 function renderEventContent(eventInfo) {
+  /* console.log(eventInfo.view.type);
+  if (eventInfo.view.type === "timeGridDay") {
+    return (
+      <div className="inline-flex items-center text-sm font-medium text-textBlue">
+        <i>{eventInfo.event.title}</i>
+      </div>
+    );
+  } */
+  /* let diary = eventInfo.view.type === "timeGridDay"; */
+  const week = " text-sm text-textBlue";
+  const diary = "text-sm  font-medium text-textBlue";
   return (
-    <div className="font-medium text-white">
+    <div
+      className={`flex items-center ${
+        eventInfo.view.type === "timeGridDay" ? week : diary
+      }`}
+      /* className={`flex items-center text-sm text-textBlue ${
+        eventInfo.view.type === "timeGridDay" ? "" : "font-normal "
+      }`} */
+    >
+      {eventInfo.view.type === "timeGridDay" && (
+        <>
+          <div
+            /* style={{ backgroundColor: statusColor }} */
+            className={`w-2.5 h-2.5 rounded-full mr-2 bg-green-500`}
+          />
+          <b className="me-2">{eventInfo.timeText}</b>
+        </>
+      )}
+
       <i>{eventInfo.event.title}</i>
     </div>
   );

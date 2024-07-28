@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import WeeklyCalendar from "../../sections/Calendar/WeeklyCalendar";
 import ShiftSidebar from "../../sections/ShiftManager/ShiftSidebar";
-import { getAppointments } from "../../api/appointments-services";
+import { getAppointments } from "../../api/appointments/appointments-services";
 
 function ShiftManager() {
-  const [currentEvents, setCurrentEvents] = useState([]);
+  /* const [currentEvents, setCurrentEvents] = useState([]); */
   const [eventsDB, setEventsDB] = useState([]);
   const [loading, setLoading] = useState([null]);
   const [dateSelected, setDateSelected] = useState(
@@ -28,30 +28,30 @@ function ShiftManager() {
     getAppointment();
   }, []);
 
-  if (!loading) {
+  /* if (!loading) {
     console.log("Eventos seteados", eventsDB);
-  }
+  } */
 
   function handleDateSelect(date) {
     setDateSelected(date);
   }
 
-  function handleEvents(events) {
+  /* function handleEvents(events) {
     console.log("pasa por aca");
     setCurrentEvents(events);
-  }
+  } */
 
   return (
-    <div className="container flex justify-center w-full px-2 mx-auto bg-white border-2 border-red-500 border-solid">
+    <div className="max-w-7xl flex justify-center w-full mx-auto bg-white border-2 border-[#1C3454]/26 border-solid rounded my-6 font-sans">
       {loading === false && (
         <>
           <WeeklyCalendar
-            handleEvents={handleEvents}
+            /* handleEvents={handleEvents} */
             eventsDB={eventsDB}
             dateSelected={dateSelected}
           />
           <ShiftSidebar
-            currentEvents={currentEvents}
+            /* currentEvents={currentEvents} */
             handleDateSelect={handleDateSelect}
           />
         </>

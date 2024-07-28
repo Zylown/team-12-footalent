@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
-import { Calendar, Button, theme, Typography } from "antd";
+import { Calendar, Button, Typography } from "antd";
 import dayLocaleData from "dayjs/plugin/localeData";
 import { useState } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
@@ -11,14 +11,7 @@ dayjs.locale("es");
 
 const MonthCalendar = ({ handleDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const { token } = theme.useToken();
-
-  const wrapperStyle = {
-    marginLeft: -20,
-    width: 280,
-    border: `1px solid ${token.colorBorderSecondary}`,
-    borderRadius: token.borderRadiusLG,
-  };
+  /* const { token } = theme.useToken(); */
 
   const handleDateChange = (value) => {
     setCurrentDate(value);
@@ -31,8 +24,16 @@ const MonthCalendar = ({ handleDateSelect }) => {
     handleDateSelect(newDate.format("YYYY-MM-DD"));
   };
 
+  const customLocale = {
+    lang: {
+      locale: "es",
+      ...dayjs.localeData("es"),
+      shortWeekDays: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+    },
+  };
+
   return (
-    <div style={wrapperStyle}>
+    <div className="w-full py-2">
       <Calendar
         fullscreen={false}
         value={currentDate}
@@ -41,14 +42,7 @@ const MonthCalendar = ({ handleDateSelect }) => {
           const year = value.year();
 
           return (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "8px",
-              }}
-            >
+            <div className="flex items-center justify-between p-2 pb-3">
               <Button
                 icon={<LeftOutlined />}
                 onClick={() => handleMonthChange(-1)}
@@ -69,6 +63,7 @@ const MonthCalendar = ({ handleDateSelect }) => {
           );
         }}
         onChange={handleDateChange}
+        locale={customLocale}
       />
     </div>
   );

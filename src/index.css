@@ -23,8 +23,9 @@ body {
   display: flex;
   width: 100%;
   max-width: 1100px;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
+  padding: 8px 8px 12px 8px;
+  border-right: 2px solid rgba(26, 56, 96, 0.1);
 }
 
 .demo-app-sidebar {
@@ -32,12 +33,12 @@ body {
   line-height: 1.5;
 }
 
-.demo-app-sidebar-section {
+/* .demo-app-sidebar-section {
   padding: 2em;
-}
+} */
 
 .demo-app-main {
-  padding: 3em 0;
+  /* padding: 3em 0; */
   flex-grow: 1;
   background-color: white;
 }
@@ -58,8 +59,6 @@ body {
   width: 100%;
   color: #000000;
   font-size: 18px;
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
   font-style: normal;
 }
 
@@ -67,17 +66,52 @@ body {
   color: #000000;
 }
 
+.fc-col-header-cell-cushion{
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.fc-toolbar-chunk .fc-button-group{
+  gap: 6px;
+}
+
 .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr .fc-toolbar-chunk button {
   color: #005FDB;
   background-color: white;
-  border-color: #005FDB;
+  border-color: #006AF5;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 18px;
 }
+
+.fc .fc-button:focus {
+  box-shadow: none;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus, .fc .fc-button-primary:not(:disabled):active:focus {
+  box-shadow: none;
+}
+
+.fc-col-header {
+  background: linear-gradient(180deg, #FAFDFF 0%, #DBE5FF 100%);
+  ;
+}
+.fc-timegrid-axis{
+  background-color: white;
+}
+
 
 /* modifica el estilo del evento del calendario */
 .fc-v-event{
   border-radius: 5px;
+  border-color: #006AF5;
   margin: 2px;
   padding: 2px;
+  background-color: #E4ECFF;
+}
+
+.fc-event-main{
+  display: inline-flex;
 }
 
 /* aumenta la altura de las celdas del calendario */

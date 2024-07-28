@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        sans: ["Roboto", "sans-serif"],
         nunito: ["Nunito", "sans-serif"],
       },
       boxShadow: {
@@ -17,9 +18,11 @@ export default {
         error: "#E21D12",
       },
       backgroundImage: {
-        "custom-gradient": "linear-gradient(0deg, rgba(195,212,255,1) 10%, rgba(246,251,255,1) 100%)",
+        "custom-gradient":
+          "linear-gradient(0deg, rgba(195,212,255,1) 10%, rgba(246,251,255,1) 100%)",
       },
     },
   },
   plugins: [],
 };
+

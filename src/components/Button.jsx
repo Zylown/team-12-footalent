@@ -19,3 +19,4 @@ Button.propTypes = {
   type: PropTypes.oneOf(["button", "submit", "reset"]),
   onClick: PropTypes.func,
 };
+
