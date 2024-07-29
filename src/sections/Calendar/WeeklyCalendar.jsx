@@ -4,15 +4,17 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
+import EditShift from "../ShiftManager/Modal/EditShift";
 
 export default function WeeklyCalendar({
-  handleEvents,
   eventsDB,
   dateSelected,
+  setModalModifyIsVisible,
+  modalModifyIsVisible,
 }) {
   const [calendarApis, setCalendarApis] = useState(null);
 
-  let nowStr = new Date().toISOString().slice(0, 19);
+  //let nowStr = new Date().toISOString().slice(0, 19);
   console.log("Calendario", eventsDB);
 
   //Dirije hacie la vista diaria segun la fecha seleccionada en el MiniCalendar
@@ -25,20 +27,21 @@ export default function WeeklyCalendar({
 
   //Toma la referencia de la api del calendario cuando este listo
   const handleDatesSet = (arg) => {
-    setCalendarApis(arg.view.calendar);
+    setTimeout(() => {
+      setCalendarApis(arg.view.calendar);
+    }, 0);
   };
 
   //funcion para añadir eventos
   function handleDateSelect(selectInfo) {
     let title = prompt("Alerta");
     let calendarApi = selectInfo.view.calendar;
-    console.log(calendarApi);
 
     calendarApi.unselect(); // clear date selection
 
     if (title) {
       calendarApi.addEvent({
-        id: nowStr,
+        //id: nowStr,
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
@@ -48,66 +51,77 @@ export default function WeeklyCalendar({
   }
 
   function handleEventClick(clickInfo) {
-    if (
+    setModalModifyIsVisible(true);
+    console.log("evento clickeado", clickInfo.event);
+    /* if (
       confirm(
         `Are you sure you want to delete the event '${clickInfo.event.title}'`
       )
     ) {
+      console.log("evento clickeado", clickInfo.event);
       clickInfo.event.remove();
-    }
+    } */
   }
 
   return (
-    <div className="demo-app">
-      <div className="demo-app-main">
-        <FullCalendar
-          locale={esLocale}
-          plugins={[timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "timeGridWeek,timeGridDay",
-          }}
-          initialView="timeGridWeek"
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={false}
-          /* events */
-          events={eventsDB}
-          select={handleDateSelect}
-          eventContent={renderEventContent} // custom render function
-          eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
-          eventAdd={function(){}}
-          eventChange={function(){}}
-          eventRemove={function(){}}          
-          */
-          /* eventContent={(eventInfo) => (
-            <EventContent
-              eventInfo={eventInfo}
-              handleChangeState={handleChangeState}
-              handleOpenUpdateWindow={handleOpenUpdateWindow}
-            />
-          )} */
-          //dateClick={handleDateClick}
-          datesSet={handleDatesSet}
-          //CONFIGURACION PARA LAS CELDAS
-          slotDuration="00:30:00"
-          slotMinTime="08:00:00"
-          slotMaxTime="21:00:00"
-          allDaySlot={false}
-          contentHeight={600}
-          slotLabelFormat={{
-            hour: "numeric",
-            minute: "2-digit",
-            meridiem: false,
-          }}
-        />
+    <>
+      <div className="demo-app">
+        <div className="demo-app-main">
+          <FullCalendar
+            locale={esLocale}
+            plugins={[timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "timeGridWeek,timeGridDay",
+            }}
+            initialView="timeGridWeek"
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
+            weekends={false}
+            /* events */
+            events={eventsDB}
+            select={handleDateSelect}
+            eventContent={renderEventContent} // custom render function
+            eventClick={handleEventClick}
+            //eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+            /* you can update a remote database when these fire:
+            eventAdd={function(){}}
+            eventChange={function(){}}
+            eventRemove={function(){}}          
+            */
+            /* eventContent={(eventInfo) => (
+              <EventContent
+                eventInfo={eventInfo}
+                handleChangeState={handleChangeState}
+                handleOpenUpdateWindow={handleOpenUpdateWindow}
+              />
+            )} */
+            //dateClick={handleDateClick}
+            datesSet={handleDatesSet}
+            //CONFIGURACION PARA LAS CELDAS
+            slotDuration="00:30:00"
+            slotMinTime="08:00:00"
+            slotMaxTime="21:00:00"
+            allDaySlot={false}
+            contentHeight={600}
+            slotLabelFormat={{
+              hour: "numeric",
+              minute: "2-digit",
+              meridiem: false,
+            }}
+          />
+        </div>
       </div>
-    </div>
+      {modalModifyIsVisible && (
+        <EditShift
+          isVisible={modalModifyIsVisible}
+          setModalModifyIsVisible={setModalModifyIsVisible}
+        />
+      )}
+    </>
   );
 }
 
@@ -148,7 +162,9 @@ function renderEventContent(eventInfo) {
 }
 
 WeeklyCalendar.propTypes = {
-  handleEvents: PropTypes.func.isRequired,
+  /* setStateCalendarApi: PropTypes.func.isRequired, */
+  modalModifyIsVisible: PropTypes.bool.isRequired,
+  setModalModifyIsVisible: PropTypes.func.isRequired,
   eventsDB: PropTypes.array.isRequired,
   dateSelected: PropTypes.string.isRequired, // Cambiado a string
 };

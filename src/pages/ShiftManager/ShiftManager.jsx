@@ -8,6 +8,8 @@ function ShiftManager() {
   /* const [currentEvents, setCurrentEvents] = useState([]); */
   const [eventsDB, setEventsDB] = useState([]);
   const [loading, setLoading] = useState([null]);
+  const [modalModifyIsVisible, setModalModifyIsVisible] = useState(false);
+  /* const [stateCalendarApi, setStateCalendarApi] = useState(null); */
   const [dateSelected, setDateSelected] = useState(
     dayjs().format("YYYY-MM-DD")
   );
@@ -46,9 +48,11 @@ function ShiftManager() {
       {loading === false && (
         <>
           <WeeklyCalendar
-            /* handleEvents={handleEvents} */
+            /* setStateCalendarApi={setStateCalendarApi} */
             eventsDB={eventsDB}
             dateSelected={dateSelected}
+            modalModifyIsVisible={modalModifyIsVisible}
+            setModalModifyIsVisible={setModalModifyIsVisible}
           />
           <ShiftSidebar
             /* currentEvents={currentEvents} */

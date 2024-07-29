@@ -41,17 +41,27 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
   });
 
   const handleOnSubmit = (data) => {
-    const dateFormatted = format(selectedDate, "dd/MM/yyyy");
-    const hourFormatted = format(selectedHour, "HH:mm");
+    const dateFormatted = format(selectedDate, "yyyy-MM-dd");
+    const hourFormatted = format(selectedHour, "HH:mm:ss");
 
     const formData = {
       ...data,
-      patient: selectedPatient,
+      title: selectedPatient,
       // formatear la fecha y la hora para que se envie en el formato correcto
-      date: dateFormatted,
-      hour: hourFormatted,
+      /* date: dateFormatted,
+      hour: hourFormatted, */
+      startStr: dateFormatted + "T" + hourFormatted,
+      endStr: dateFormatted + "T" + hourFormatted,
     };
     console.log(formData);
+    /*calendarApi.addEvent({
+      id: nowStr,
+      title,
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: selectInfo.allDay,
+      color: "#ef4444",
+    }); */
   };
 
   //manejo de cancelar turno y mostrar modal
@@ -71,34 +81,32 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
 
   const handleDatePickerChange = (date) => {
     // aca se formatea la fecha para que se muestre en el input y podemos cambiar de formato
-    const formattedDate = date ? format(date, "dd-MM-yyyy") : "";
+    const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
     setValue("date", formattedDate);
     setSelectedDate(date);
-    console.log(formattedDate);
   };
 
   const handleHourChange = (hour) => {
     // aca se formatea la hora para que se muestre en el input y podemos cambiar de formato
-    const formattedHour = hour ? format(hour, "HH:mm") : "";
+    const formattedHour = hour ? format(hour, "HH:mm:ss") : "";
     setValue("hour", formattedHour);
     setSelectedHour(hour);
-    console.log(formattedHour);
   };
 
   //parsear la fecha para que se muestre en el input
   const parsedDate = selectedDate
-    ? parse(format(selectedDate, "dd-MM-yyyy"), "dd-MM-yyyy", new Date())
+    ? parse(format(selectedDate, "yyyy-MM-dd"), "yyyy-MM-dd", new Date())
     : null;
 
   //parsear la hora para que se muestre en el input
   const parsedHour = selectedHour
-    ? parse(format(selectedHour, "HH:mm"), "HH:mm", new Date())
+    ? parse(format(selectedHour, "HH:mm:ss"), "HH:mm:ss", new Date())
     : null;
 
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
           <CardWhite className="bg-white min-w-[568px] px-6 py-2">
             <div className="pb-5">
               <h2 className="text-[32px] font-semibold text-[#192739]">
@@ -121,7 +129,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
             </div>
             {/* mostrar solo 1 mensaje de campos invalidos*/}
             {Object.keys(errors).length > 0 && (
-              <p className="text-red-600 text-sm font-normal">
+              <p className="text-sm font-normal text-red-600">
                 {"Estos campos son requeridos"}
               </p>
             )}
@@ -129,7 +137,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(handleOnSubmit)}
             >
-              <div className="flex gap-5 w-full">
+              <div className="flex w-full gap-5">
                 <div className="flex flex-col w-2/4">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                     Fecha *
@@ -171,7 +179,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                     Horario *
                   </label>
-                  <div className="w-full relative">
+                  <div className="relative w-full">
                     <Controller
                       control={control}
                       name="hour"
@@ -222,9 +230,10 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                     {...register("reason", { required: true })}
                   >
                     <option value="">Seleccione el motivo</option>
-                    <option value="1">Opcion 1</option>
-                    <option value="2">Opcion 2</option>
-                    <option value="3">Opcion 3</option>
+                    <option value="01:00:00">Extracción de molares</option>
+                    <option value="00:30:00">Consulta general</option>
+                    <option value="00:30:00">Control bucal</option>
+                    <option value="01:00:00">Tratamiento Conducto</option>
                   </select>
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
@@ -250,8 +259,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
               </div>
-              <div className="flex gap-1 items-center">
-                <div className="flex gap-2 w-2/4 items-center">
+              <div className="flex items-center gap-1">
+                <div className="flex items-center w-2/4 gap-2">
                   <input
                     className="w-6 h-6 bg-[#193B67] bg-opacity-15"
                     type="checkbox"
@@ -271,7 +280,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                   </Button>
                 </div>
               </div>
-              <div className="w-full flex flex-col gap-2">
+              <div className="flex flex-col w-full gap-2">
                 <Button
                   type="submit"
                   className="bg-[#006AF5] text-white font-semibold"
@@ -306,3 +315,4 @@ ScheduleShift.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   setModalShiftIsVisible: PropTypes.func.isRequired,
 };
+
