@@ -1,15 +1,14 @@
+import CardWhite from "../../components/CardWhite";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { IoSearch } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
+import { IoSearch, IoClose } from "react-icons/io5";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useState } from "react";
-import TableDni from "./TableDni";
-import CardWhite from "../../components/CardWhite";
-import AddPatients from "./Modal/AddPatients";
+import TableClinicalInfo from "./TableClinicalInfo";
+// import AddUser from "./Modal/AddUser";
 
-export default function SearchPatients() {
-  const [modalIsVisible, setModalIsVisible] = useState(false);
+export default function SearchClinical() {
+  //   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [searchDni, setSearchDni] = useState("");
 
   const handleInputSearch = (e) => {
@@ -22,16 +21,16 @@ export default function SearchPatients() {
   };
 
   const handleOpenModalAdd = () => {
-    setModalIsVisible(true);
+    // setModalIsVisible(true);
   };
 
   return (
     <>
       <div className="bg-white mt-6 px-2 w-full flex justify-center">
-        <CardWhite className="sm:gap-5 gap-2 max-w-[690px] w-full sm:px-6 px-4 py-4">
+        <CardWhite className="sm:gap-5 gap-2 max-w-[744px] w-full sm:px-6 px-4 py-4">
           <div className="container__h1 py-[10px]">
             <h1 className="text-[32px] text-[#192739] font-semibold">
-              Pacientes
+              Información de la clínica
             </h1>
           </div>
           <div className="w-full md:h-11 h-auto flex sm:gap-1.5 gap-2 flex-col md:flex-row">
@@ -41,7 +40,7 @@ export default function SearchPatients() {
                 type="text"
                 onChange={handleInputSearch}
                 className="w-full box-border h-full bg-white border-[1.5px] border-[#1C304A] border-opacity-50 placeholder:text-[#1B2B41] placeholder:text-opacity-70 placeholder:text-lg placeholder:font-normal outline-[#1C304A] text-[#1B2B41] text-opacity-70 font-normal px-3"
-                placeholder="Buscar DNI del paciente..."
+                placeholder="Buscar información..."
               />
               {searchDni && (
                 <button
@@ -64,20 +63,20 @@ export default function SearchPatients() {
               onClick={handleOpenModalAdd}
             >
               <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
-              Añadir paciente
+              Añadir información
             </Button>
           </div>
-          <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 md:h-80 h-auto overflow-y-auto">
-            <TableDni />
+          <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg sm:p-4 p-2 md:h-80 h-auto overflow-y-auto custom-scrollbar">
+            <TableClinicalInfo />
           </div>
         </CardWhite>
       </div>
-      {modalIsVisible && (
-        <AddPatients
+      {/* {modalIsVisible && (
+        <AddUser
           isVisible={modalIsVisible}
           setModalIsVisible={setModalIsVisible}
         />
-      )}
+      )} */}
     </>
   );
 }

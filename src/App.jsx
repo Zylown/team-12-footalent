@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar";
 import History from "./pages/Pacientes/History";
 import Profile from "./pages/Profile/Profile";
 import ShiftManager from "./pages/ShiftManager/ShiftManager";
+import ClininalInfo from "./pages/ClinicalInfo/ClininalInfo";
 
 function App() {
   const token = localStorage.getItem("token") ? true : false;
@@ -45,6 +46,7 @@ function App() {
           path="/perfil"
           element={token ? <Profile /> : <Navigate to="/" replace />}
         />
+        <Route path="/info-clinica" element={<ClininalInfo />} />
         <Route path="/test" element={<ShiftManager />} />
         <Route path="*" element={<p>404 page not found</p>} />
       </Routes>

@@ -89,7 +89,7 @@ export default function CardWelcome() {
                   <p className="text-xl font-extralight">Reportes</p>
                 </Link>
                 <Link
-                  to={"/clinica"}
+                  to={"/info-clinica"}
                   className="flex rounded items-center justify-center bg-[#006af5] flex-1 px-[14px] py-2 text-white hover:bg-[#005fdb] transition-all min-h-[52px]"
                 >
                   <p className="text-xl font-extralight">

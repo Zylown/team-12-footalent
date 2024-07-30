@@ -17,7 +17,10 @@ export default function Navbar() {
   if (token) {
     try {
       const decoded = jwtDecode(token);
-      nombreUsuario = `${decoded.first_name.toUpperCase()} ${decoded.last_name.toUpperCase()}`;
+      nombreUsuario =
+        decoded.last_name === "User"
+          ? `${decoded.first_name.toUpperCase()}`
+          : `${decoded.first_name.toUpperCase()} ${decoded.last_name.toUpperCase()}`;
     } catch (e) {
       console.error("Invalid token", e);
     }
@@ -38,7 +41,9 @@ export default function Navbar() {
     if (
       location.pathname === "/agenda" ||
       location.pathname === "/pacientes" ||
-      location.pathname === "/pacientes/historia-clinica"
+      location.pathname === "/pacientes/historia-clinica" ||
+      location.pathname === "/perfil" ||
+      location.pathname === "/info-clinica"
     ) {
       setIsLogin(true);
     } else {
@@ -97,7 +102,7 @@ export default function Navbar() {
                     <Link
                       to="/perfil"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
-                      onClick={closeMenu}
+                      // onClick={closeMenu}
                     >
                       <AiOutlineUser className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
                       Perfil
@@ -105,7 +110,7 @@ export default function Navbar() {
                     <Link
                       to="/soporte"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100"
-                      onClick={closeMenu}
+                      // onClick={closeMenu}
                     >
                       <MdOutlineContactSupport className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
                       Soporte
@@ -113,7 +118,10 @@ export default function Navbar() {
                     <Link
                       to="/"
                       className="flex items-center px-4 py-3 border-t  text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
-                      onClick={closeMenu}
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        window.location.reload();
+                      }}
                     >
                       <AiOutlineLogout className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
                       Cerrar sesión

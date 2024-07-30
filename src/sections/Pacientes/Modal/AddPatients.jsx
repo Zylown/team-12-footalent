@@ -32,10 +32,10 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
-          <CardWhite className="bg-white min-w-[568px] p-6">
+        <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50 px-2">
+          <CardWhite className="bg-white max-w-[568px] w-full p-6 relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="pb-6">
-              <h2 className="text-[32px] font-semibold text-[#192739]">
+              <h2 className="sm:text-[32px] text-2xl font-semibold text-[#192739]">
                 Añadir paciente
               </h2>
             </div>
@@ -48,7 +48,7 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <div className="flex-row flex gap-6">
+              <div className="flex-row flex sm:gap-6 gap-3 flex-wrap">
                 <div className="flex flex-col gap-2 flex-1">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-65">
                     Nombre *
@@ -77,7 +77,7 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   />
                 </div>
               </div>
-              <div className="flex-row flex gap-6">
+              <div className="flex-row flex sm:gap-6 gap-3 flex-wrap">
                 <div className="flex flex-col gap-2 flex-1">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-65">
                     Fecha de nacimiento *
@@ -120,7 +120,7 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   />
                 </div>
               </div>
-              <div className="flex-row flex gap-6">
+              <div className="flex-row flex sm:gap-6 gap-3 flex-wrap">
                 <div className="flex flex-col gap-2 flex-1">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-65">
                     Teléfono 1 *

@@ -8,36 +8,58 @@ import { useEffect, useState } from "react";
 
 const dataExample = [
   {
-    dni: "23.638.746",
-    patient: "Marcelo Tinelli",
+    id: 1,
+    data: "Nombre",
+    description: "OdontoClinica",
   },
   {
-    dni: "22.747.857",
-    patient: "Lionel Messi",
+    id: 2,
+    data: "Teléfono",
+    description: "123456789",
+  },
+  {
+    id: 3,
+    data: "Dirección",
+    description: "Calle Falsa 123",
+  },
+  {
+    id: 4,
+    data: "Correo electrónico",
+    description: "contacto@odontoclinica.com",
+  },
+  {
+    id: 5,
+    data: "Horario de apertura",
+    description: "08:00",
+  },
+  {
+    id: 6,
+    data: "Horario de cierre",
+    description: "20:00",
   },
 ];
 
-export default function TableDni() {
-  const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
+export default function TableClinicalInfo() {
+  const [clinics, setClinics] = useState([]); // Inicializar con dataExample por ahora
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor("dni", {
-      header: () => "DNI",
-      cell: (info) => info.getValue(), // Obtiene el valor de la celda
+    columnHelper.accessor("data", {
+      header: () => "DATO",
+      cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("patient", {
-      header: () => "NOMBRE Y APELLIDO",
+    columnHelper.accessor("description", {
+      header: () => "DESCRIPCIÓN",
       cell: (info) => info.getValue(),
     }),
   ];
 
   useEffect(() => {
-    setPacientes(dataExample);
+    setClinics(dataExample);
   }, []);
 
   const table = useReactTable({
-    data: pacientes,
+    data: clinics,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -50,8 +72,10 @@ export default function TableDni() {
             {headerGroup.headers.map((column) => (
               <th
                 key={column.id}
-                className={`min-h-11 flex items-center justify-center px-3.5 border border-[#BBD9FF] rounded text-[#005FDB] text-lg font-semibold ${
-                  column.id === "dni" ? "w-2/5 sm:w-1/5" : "w-3/5 sm:flex-1"
+                className={`min-h-[46px] flex items-center justify-center px-3.5 border border-[#BBD9FF] rounded text-[#005FDB] text-lg font-semibold ${
+                  column.id === "data"
+                    ? "w-2/5 sm:w-[186px]"
+                    : "w-3/5 sm:flex-1"
                 }`}
                 style={{
                   backgroundImage:
@@ -76,11 +100,12 @@ export default function TableDni() {
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.column.id}
-                className={`min-h-11 flex items-center justify-center px-2.5 py-3 border border-[#99C3FB] text-[#192739] bg-white text-center rounded sm:text-lg text-base font-normal ${
-                  cell.column.id === "dni"
-                    ? "w-2/5 sm:w-1/5"
+                className={`min-h-11 flex items-center justify-center px-2.5 py-3 border border-[#99C3FB] text-[#192739] bg-white text-center rounded sm:text-lg text-base font-normal break-words whitespace-normal ${
+                  cell.column.id === "data"
+                    ? "w-2/5 sm:w-[186px]"
                     : "w-3/5 sm:flex-1"
                 }`}
+                style={{ whiteSpace: "normal", wordBreak: "break-word" }}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
