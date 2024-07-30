@@ -6,11 +6,11 @@ import CardWhite from "../../components/CardWhite";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { apiLogin} from "../../api/apiLogin";
-import { useNavigate } from 'react-router-dom';
+import { apiLogin } from "../../api/apiLogin";
+
 const LoginSesion = () => {
   const [formFailed, setFormFailed] = useState(false);
-  const [formMessage, setFormMessage] = useState('');
+  const [formMessage, setFormMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -18,31 +18,32 @@ const LoginSesion = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-const navigate = useNavigate()
   // Manejo del envío del formulario
   const onSubmit = async (data) => {
     try {
       const response = await apiLogin(data); // Enviamos el objeto data directamente
       // Guardar el token y redirigir al /home
-      localStorage.setItem('token', response.data.token);
-     navigate('/inicio');
+      localStorage.setItem("token", response.data.token);
+      console.log(response);
+      if (response.status === 200) {
+        window.location.href = "/inicio";
+      }
     } catch (error) {
       if (error.response) {
         // El servidor respondió con un estado diferente a 2xx
-     
-        setFormFailed(!formFailed)
-        setFormMessage(error.response.data.error + ", vuelva a intentarlo")
-        
+
+        setFormFailed(!formFailed);
+        setFormMessage(error.response.data.error + ", vuelva a intentarlo");
       } else if (error.request) {
         // La solicitud fue hecha pero no hubo respuesta
-  
+
         setFormFailed(true);
-        setFormMessage('Error de conexión. Por favor, intente nuevamente.') 
+        setFormMessage("Error de conexión. Por favor, intente nuevamente.");
       } else {
         // Ocurrió un error al configurar la solicitud
-      
+
         setFormFailed(true);
-        setFormMessage('Error de desconocido. Por favor, intente mas tarde.')
+        setFormMessage("Error de desconocido. Por favor, intente mas tarde.");
       }
     }
   };
@@ -99,9 +100,8 @@ const navigate = useNavigate()
                   />
                   {errors.password && (
                     <p className="text-error">{errors.password.message}</p>
-                    
                   )}
-                  {formFailed && <p className="text-error">{formMessage}</p> }
+                  {formFailed && <p className="text-error">{formMessage}</p>}
                 </div>
               </div>
 
