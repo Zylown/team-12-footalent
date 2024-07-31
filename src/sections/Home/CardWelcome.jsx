@@ -1,5 +1,6 @@
 import CardWhite from "../../components/CardWhite";
 import BannerHome from "../../assets/ImageFilter.svg";
+import BannerAdmin from "../../assets/BannerAdmin.svg";
 import { PiIdentificationCard } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
@@ -27,17 +28,13 @@ export default function CardWelcome() {
   return (
     <div className="bg-[#fafdff] max-w-[1126px] w-full lg:px-28 sm:px-8 px-4 pt-6">
       <CardWhite className="gap-6">
-        {role === "admin" ? (
-          <div></div>
-        ) : (
-          <div className="w-full h-40 sm:h-full bg-center">
-            <img
-              src={BannerHome}
-              alt="Banner"
-              className="w-full h-full object-cover rounded-t-lg"
-            />
-          </div>
-        )}
+        <div className="w-full h-40 sm:h-full bg-center">
+          <img
+            src={role === "admin" ? BannerAdmin : BannerHome}
+            alt="Banner"
+            className="w-full h-full object-cover rounded-t-lg"
+          />
+        </div>
 
         <div className="bg-white flex justify-center">
           <p className="sm:text-2xl text-base font-normal">

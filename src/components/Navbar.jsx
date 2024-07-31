@@ -6,6 +6,8 @@ import { FaCaretDown } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
+import { FaArrowLeft } from "react-icons/fa6";
+import { IoMenu } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
 
 export default function Navbar() {
@@ -71,13 +73,59 @@ export default function Navbar() {
       }}
     >
       <div className="lg:px-[120px] px-4 flex justify-between items-center">
-        <div className="flex items-center">
+        <div className="flex w-full items-center justify-between">
           <Link to={"/"} className="flex items-center">
             <p className="text-white text-2xl font-bold font-nunito mr-2">
               DentPlanner
             </p>
             <img src={Logo} alt="Logo" />
           </Link>
+          <div className="sm:hidden block" ref={menuRef}>
+            <IoMenu
+              className="text-white text-3xl cursor-pointer"
+              onClick={toggleMenu}
+            />
+            <div
+              className={`fixed right-0 top-0 w-48 h-full bg-white shadow-lg z-10 transform transition-transform duration-300 ${
+                isOpenMenu ? "translate-x-0" : "translate-x-full"
+              }`}
+            >
+              <button
+                className="flex items-center px-4 py-6 text-black text-lg font-normal hover:bg-gray-100 rounded-t w-full"
+                onClick={closeMenu}
+              >
+                <FaArrowLeft className="text-black text-2xl mr-3" />
+                Volver
+              </button>
+              <Link
+                to="/perfil"
+                className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
+                onClick={closeMenu}
+              >
+                <AiOutlineUser className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
+                Perfil
+              </Link>
+              <Link
+                to="/soporte"
+                className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100"
+                onClick={closeMenu}
+              >
+                <MdOutlineContactSupport className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
+                Soporte
+              </Link>
+              <Link
+                to="/"
+                className="flex items-center px-4 py-3 border-t-2 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  window.location.reload();
+                }}
+              >
+                <AiOutlineLogout className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
+                Cerrar sesión
+              </Link>
+            </div>
+          </div>
         </div>
         {isLogin && (
           <div className="md:flex hidden">
@@ -102,7 +150,7 @@ export default function Navbar() {
                     <Link
                       to="/perfil"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
-                      // onClick={closeMenu}
+                      onClick={closeMenu}
                     >
                       <AiOutlineUser className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
                       Perfil
@@ -110,7 +158,7 @@ export default function Navbar() {
                     <Link
                       to="/soporte"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100"
-                      // onClick={closeMenu}
+                      onClick={closeMenu}
                     >
                       <MdOutlineContactSupport className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
                       Soporte
