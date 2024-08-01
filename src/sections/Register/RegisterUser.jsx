@@ -45,7 +45,7 @@ const RegisterUser = () => {
   ];
   //funcion para el boton cancelar 
   const handleCancel =()=>{
-    navigate('/inicio');
+    navigate('/usuarios');
   }
   return (
     <>

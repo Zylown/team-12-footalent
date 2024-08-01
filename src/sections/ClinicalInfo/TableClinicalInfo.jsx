@@ -11,6 +11,8 @@ import {
   apiClinicalInfo, // GET
   apiEditClinicalInfo, // PATCH
 } from "../../api/clinicalInfo/apiClinicalInfo";
+import { apiGetUserById } from "../../api/users/apiUsers";
+import { useDecode } from "../../hooks/useDecode";
 
 // esto transforma el objeto en un array de objetos con la forma {field: key, value: clinic[key]}
 const transformData = (clinic) => {
@@ -22,6 +24,8 @@ const transformData = (clinic) => {
 // console.log(transformData(dataExample[id]));
 
 export default function TableClinicalInfo() {
+  // Variable para guardar el token decodificado
+  const decoded = useDecode(localStorage.getItem("token"));
   const [clinics, setClinics] = useState([]); // Inicializar con dataExample por ahora
   // Estado para mostrar el modal de edición
   const [modalEditVisible, setModalEditVisible] = useState(false);
@@ -96,11 +100,16 @@ export default function TableClinicalInfo() {
     });
   };
 
-  const handleSubmitEdit = async (id = 1, data) => {
+  const handleSubmitEdit = async (id, data) => {
     try {
+      // Obtiene el id del usuario logueado
+      const userId = apiGetUserById(decoded.user_id);
+      // Obtiene el id de la clínica del usuario logueado
+      const clinicId = userId.data.clinic_id;
+      // Actualiza la información de la clínica
       const updatedData = clinics.map((clinic) => {
         // clinic.data es de la data que viene de la API y data.data es de la data que viene del formulario
-        if (clinic.id === id) {
+        if (clinic.id === clinicId) {
           // ...clinic es para mantener los datos que no se están editando y solo cambiar la descripción
           return { ...clinic, description: data.description };
         }
@@ -112,7 +121,7 @@ export default function TableClinicalInfo() {
       // Aquí se debe hacer la petición PUT a la API
       // el {[data.data]: data.description} es para que el objeto tenga la forma {key: value}
       // por ejemplo {nombre: "DentPlanner"}
-      await apiEditClinicalInfo(id, { [data.data]: data.description });
+      await apiEditClinicalInfo(clinicId, { [data.data]: data.description });
       console.log("Información editada con éxito");
     } catch (error) {
       console.error("Error al editar la información:", error);

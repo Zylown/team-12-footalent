@@ -8,25 +8,24 @@ import { MdOutlineContactSupport } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
-import { jwtDecode } from "jwt-decode";
+import { useDecode } from "../hooks/useDecode";
 
 export default function Navbar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const decoded = useDecode(token);
   let nombreUsuario;
 
-  if (token) {
-    try {
-      const decoded = jwtDecode(token);
-      nombreUsuario =
-        decoded.last_name === "User"
-          ? `${decoded.first_name.toUpperCase()}`
-          : `${decoded.first_name.toUpperCase()} ${decoded.last_name.toUpperCase()}`;
-    } catch (e) {
-      console.error("Invalid token", e);
+  if (decoded) {
+    const { first_name, last_name } = decoded; // destructuracion de objeto decoded
+    if (last_name === "User") {
+      nombreUsuario = first_name.toUpperCase();
+    } else {
+      nombreUsuario = `${first_name.toUpperCase()} ${last_name.toUpperCase()}`;
     }
   }
+
   const menuRef = useRef(null);
 
   const [isLogin, setIsLogin] = useState(false);
@@ -118,7 +117,6 @@ export default function Navbar() {
                 className="flex items-center px-4 py-3 border-t-2 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
                 onClick={() => {
                   localStorage.removeItem("token");
-                  window.location.reload();
                 }}
               >
                 <AiOutlineLogout className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
@@ -168,7 +166,6 @@ export default function Navbar() {
                       className="flex items-center px-4 py-3 border-t  text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
                       onClick={() => {
                         localStorage.removeItem("token");
-                        window.location.reload();
                       }}
                     >
                       <AiOutlineLogout className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />

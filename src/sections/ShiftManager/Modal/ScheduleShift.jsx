@@ -106,10 +106,10 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <CardWhite className="bg-white min-w-[568px] px-6 py-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50 px-2">
+          <CardWhite className="bg-white max-w-[568px] px-6 py-2 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="pb-5">
-              <h2 className="text-[32px] font-semibold text-[#192739]">
+              <h2 className="sm:text-[32px] text-2xl font-semibold text-[#192739]">
                 Agendar turno
               </h2>
             </div>
@@ -120,7 +120,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
               {/* esto te lleva a otro modal para seleccionar el paciente */}
               <Button
                 type="button"
-                className="flex pl-3.5 pr-0 box-border w-[250px] text-lg border border-[#005FDB] bg-[#F6FBFF] text-[#005FDB]"
+                className="flex pl-3.5 pr-0 box-border max-w-[250px] w-full text-lg border border-[#005FDB] bg-[#F6FBFF] text-[#005FDB]"
                 onClick={() => setModalAddPatientVisible(true)}
               >
                 <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
@@ -137,8 +137,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(handleOnSubmit)}
             >
-              <div className="flex w-full gap-5">
-                <div className="flex flex-col w-2/4">
+              <div className="flex w-full gap-5 sm:flex-row flex-col">
+                <div className="flex flex-col w-full sm:w-2/4">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                     Fecha *
                   </label>
@@ -175,7 +175,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col w-2/4">
+                <div className="flex flex-col w-full sm:w-2/4">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                     Horario *
                   </label>
@@ -259,8 +259,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="flex items-center w-2/4 gap-2">
+              <div className="flex sm:items-center sm:gap-1 gap-2 sm:flex-row flex-col">
+                <div className="flex items-center sm:w-2/4 w-full gap-2">
                   <input
                     className="w-6 h-6 bg-[#193B67] bg-opacity-15"
                     type="checkbox"
@@ -304,7 +304,10 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
           cancelModal={handleOnClose}
         />
         {modalAddPatientVisible && (
-          <PatientsModal onSelectPatient={handleSelectPatient} />
+          <PatientsModal
+            onSelectPatient={handleSelectPatient}
+            closeModal={() => setModalAddPatientVisible(false)}
+          />
         )}
       </>
     )

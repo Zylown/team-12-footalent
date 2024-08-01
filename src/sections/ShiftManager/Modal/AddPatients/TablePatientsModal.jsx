@@ -6,17 +6,7 @@ import {
   getCoreRowModel,
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-
-const dataExample = [
-  {
-    dni: "23.638.746",
-    patient: "Marcelo Tinelli",
-  },
-  {
-    dni: "22.747.857",
-    patient: "Lionel Messi",
-  },
-];
+import { getAllPatients } from "../../../../api/patients/apiPatients";
 
 export default function TablePatients({ onSelectPatient }) {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
@@ -33,8 +23,23 @@ export default function TablePatients({ onSelectPatient }) {
     }),
   ];
 
+  // GET ALL PATIENTS
   useEffect(() => {
-    setPacientes(dataExample);
+    const fetchData = async () => {
+      try {
+        const res = await getAllPatients();
+        console.log(res.data);
+        //mapear el array de pacientes
+        const mappedPatients = res.data.map((patient) => ({
+          dni: patient.dni,
+          patient: patient.first_name + " " + patient.last_name,
+        }));
+        setPacientes(mappedPatients);
+      } catch (error) {
+        console.error("Error de la API:", error);
+      }
+    };
+    fetchData();
   }, []);
 
   const table = useReactTable({
@@ -51,7 +56,7 @@ export default function TablePatients({ onSelectPatient }) {
             {headerGroup.headers.map((column) => (
               <th
                 key={column.id}
-                className={`h-11 flex items-center justify-center px-3.5 border border-[#BBD9FF] rounded text-[#005FDB] text-lg font-semibold
+                className={`min-h-11 flex items-center justify-center px-3.5 border border-[#BBD9FF] rounded text-[#005FDB] text-lg font-semibold
                      ${column.id === "dni" ? "flex-none w-1/5" : "flex-1"}`}
                 style={{
                   backgroundImage:
@@ -78,7 +83,7 @@ export default function TablePatients({ onSelectPatient }) {
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.column.id}
-                className={`max-h-12 flex items-center justify-center px-2.5 py-3 border border-[#99C3FB] text-[#192739] bg-white text-center rounded text-lg font-normal ${
+                className={`min-h-11 flex items-center justify-center px-2.5 py-3 border border-[#99C3FB] text-[#192739] bg-white text-center rounded sm:text-lg text-base font-normal ${
                   cell.column.id === "dni" ? "flex-none w-1/5" : "flex-1"
                 }`}
               >

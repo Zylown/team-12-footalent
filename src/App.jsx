@@ -12,8 +12,9 @@ import Patients from "./pages/Pacientes/Patients";
 import Navbar from "./components/Navbar";
 import History from "./pages/Pacientes/History";
 import Profile from "./pages/Profile/Profile";
-import ShiftManager from "./pages/ShiftManager/ShiftManager";
 import ClininalInfo from "./pages/ClinicalInfo/ClininalInfo";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
+import Users from "./pages/Users/Users";
 
 function App() {
   const token = localStorage.getItem("token") ? true : false;
@@ -24,7 +25,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route
           path="/agenda"
-          element={token ? <ShiftManager /> : <Navigate to="/" replace />}
+          element={token ? <CalendarPage /> : <Navigate to="/" replace />}
         />
         <Route
           path="/inicio"
@@ -39,7 +40,11 @@ function App() {
           element={token ? <History /> : <Navigate to="/" replace />}
         />
         <Route
-          path="/registrar"
+          path="/usuarios"
+          element={token ? <Users /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="usuarios/añadir"
           element={token ? <Register /> : <Navigate to="/" replace />}
         />
         <Route
@@ -47,7 +52,7 @@ function App() {
           element={token ? <Profile /> : <Navigate to="/" replace />}
         />
         <Route path="/info-clinica" element={<ClininalInfo />} />
-        <Route path="/test" element={<ShiftManager />} />
+        <Route path="/test" element={<CalendarPage />} />
         <Route path="*" element={<p>404 page not found</p>} />
       </Routes>
     </Router>

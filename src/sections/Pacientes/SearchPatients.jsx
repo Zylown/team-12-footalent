@@ -67,7 +67,7 @@ export default function SearchPatients() {
               Añadir paciente
             </Button>
           </div>
-          <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 md:h-80 h-auto overflow-y-auto">
+          <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 md:h-80 h-auto overflow-y-auto custom-scrollbar">
             <TableDni />
           </div>
         </CardWhite>

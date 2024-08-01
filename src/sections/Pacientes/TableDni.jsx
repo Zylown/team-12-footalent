@@ -5,17 +5,7 @@ import {
   getCoreRowModel,
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-
-const dataExample = [
-  {
-    dni: "23.638.746",
-    patient: "Marcelo Tinelli",
-  },
-  {
-    dni: "22.747.857",
-    patient: "Lionel Messi",
-  },
-];
+import { getAllPatients } from "../../api/patients/apiPatients";
 
 export default function TableDni() {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
@@ -32,8 +22,23 @@ export default function TableDni() {
     }),
   ];
 
+  // GET ALL PATIENTS
   useEffect(() => {
-    setPacientes(dataExample);
+    const fetchData = async () => {
+      try {
+        const res = await getAllPatients();
+        console.log(res.data);
+        //mapear el array de pacientes
+        const mappedPatients = res.data.map((patient) => ({
+          dni: patient.dni,
+          patient: patient.first_name + " " + patient.last_name,
+        }));
+        setPacientes(mappedPatients);
+      } catch (error) {
+        console.error("Error de la API:", error);
+      }
+    };
+    fetchData();
   }, []);
 
   const table = useReactTable({

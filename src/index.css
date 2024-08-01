@@ -33,92 +33,87 @@ body {
   line-height: 1.5;
 }
 
-/* .demo-app-sidebar-section {
-  padding: 2em;
-} */
-
 .demo-app-main {
   /* padding: 3em 0; */
   flex-grow: 1;
   background-color: white;
 }
 
-.fc {
-  /* the calendar root */
+.fc { /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
 }
 
 /* Indicador visual del dia actual */
 .fc-day-today {
-  background-color: #e6f7ff !important; /* Ajusta el color a tu preferencia */
+  background-color: transparent !important; /* Ajusta el color a tu preferencia */
 }
 
 /* CALENDAR HEADER */
 
-.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr .fc-toolbar-title {
+.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr .fc-toolbar-title{
   width: 100%;
   color: #000000;
   font-size: 18px;
   font-style: normal;
 }
 
-.fc-toolbar-title {
+.fc-toolbar-title{
   color: #000000;
 }
 
-.fc-col-header-cell-cushion {
+.fc-col-header-cell-cushion{
   text-transform: capitalize;
   font-weight: 500;
 }
 
-.fc-toolbar-chunk .fc-button-group {
+.fc-toolbar-chunk .fc-button-group{
   gap: 6px;
 }
 
 .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr .fc-toolbar-chunk button {
-  color: #005fdb;
+  color: #005FDB;
   background-color: white;
-  border-color: #006af5;
+  border-color: #006AF5;
   border-radius: 4px;
   font-weight: 500;
-  font-size: 18px;
 }
 
 .fc .fc-button:focus {
   box-shadow: none;
 }
 
-.fc .fc-button-primary:not(:disabled).fc-button-active:focus,
-.fc .fc-button-primary:not(:disabled):active:focus {
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus, .fc .fc-button-primary:not(:disabled):active:focus {
   box-shadow: none;
 }
 
 .fc-col-header {
-  background: linear-gradient(180deg, #fafdff 0%, #dbe5ff 100%);
+  background: linear-gradient(180deg, #FAFDFF 0%, #DBE5FF 100%);
+  ;
 }
-.fc-timegrid-axis {
+.fc-timegrid-axis{
   background-color: white;
 }
 
 /* modifica el estilo del evento del calendario */
-.fc-v-event {
+.fc-v-event{
   border-radius: 5px;
-  border-color: #006af5;
   margin: 2px;
   padding: 2px;
-  background-color: #e4ecff;
+  background-color: #F5EDD9;
+  border-color: #834E00;
 }
 
-.fc-event-main {
+.fc-event-main{
   display: inline-flex;
+  width: 100%;
 }
 
 /* aumenta la altura de las celdas del calendario */
-/* .fc-timegrid-slot-label {
+.fc-timegrid-slot-label {
   height: 45px;
-  line-height: 30px; 
-} */
+  line-height: 45px; 
+}
 
 /* CUSTOM SCROLLBAR */
 .custom-scrollbar::-webkit-scrollbar {

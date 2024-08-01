@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { BASE_URL } from "./constants/base-url";
 
 // Función para manejar la solicitud de login
 export const apiRegister = async (data) => {
@@ -11,14 +11,14 @@ export const apiRegister = async (data) => {
       email: data.email,
       phone_number: data.phone1,
       password: data.password,
-      role_id: data.role === 'odontologo' ? 2 : 1,
+      role_id: data.role === "odontologo" ? 2 : 1,
       active: true,
-      clinic_id: 1
-    }
-    const response = await axios.post('https://dentplanner-backend.onrender.com/api/users', requestData);
+      clinic_id: 1,
+    };
+    const response = await axios.post(`${BASE_URL}/auth/register`, requestData);
     return response;
   } catch (error) {
-    
-    throw error;
+    console.error("Error de la API:", error);
+    return error;
   }
 };

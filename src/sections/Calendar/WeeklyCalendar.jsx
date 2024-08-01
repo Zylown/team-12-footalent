@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
 import EditShift from "../ShiftManager/Modal/EditShift";
+import EventsContent from "./EventsContent";
 
 export default function WeeklyCalendar({
   eventsDB,
@@ -13,9 +14,31 @@ export default function WeeklyCalendar({
   modalModifyIsVisible,
 }) {
   const [calendarApis, setCalendarApis] = useState(null);
+  const [contentHeight, setContentHeight] = useState(600);
 
-  //let nowStr = new Date().toISOString().slice(0, 19);
-  console.log("Calendario", eventsDB);
+  const adjustContentHeight = () => {
+    const height = window.innerHeight;
+    if (height < 600) {
+      setContentHeight(420); // Altura para pantallas pequeñas
+    } else if (height < 768) {
+      setContentHeight(550); // Altura para pantallas medianas
+    } else {
+      setContentHeight(600); // Altura para pantallas grandes
+    }
+  };
+
+  useEffect(() => {
+    // Ajusta la altura inicialmente
+    adjustContentHeight();
+
+    // Agrega un listener para el evento resize
+    window.addEventListener("resize", adjustContentHeight);
+
+    // Limpia el listener al desmontar el componente
+    return () => {
+      window.removeEventListener("resize", adjustContentHeight);
+    };
+  }, []);
 
   //Dirije hacie la vista diaria segun la fecha seleccionada en el MiniCalendar
   useEffect(() => {
@@ -25,12 +48,9 @@ export default function WeeklyCalendar({
     }
   }, [calendarApis, dateSelected]);
 
-  //Toma la referencia de la api del calendario cuando este listo
-  const handleDatesSet = (arg) => {
-    setTimeout(() => {
-      setCalendarApis(arg.view.calendar);
-    }, 0);
-  };
+  const handleDatesSet = useCallback((arg) => {
+    setCalendarApis(arg.view.calendar);
+  }, []);
 
   //funcion para añadir eventos
   function handleDateSelect(selectInfo) {
@@ -84,21 +104,19 @@ export default function WeeklyCalendar({
             /* events */
             events={eventsDB}
             select={handleDateSelect}
-            eventContent={renderEventContent} // custom render function
+            eventContent={(eventInfo) => (
+              <EventsContent eventInfo={eventInfo} />
+            )} // custom render function
             eventClick={handleEventClick}
+            eventOverlap={false}
+            updateSize={true}
             //eventsSet={handleEvents} // called after events are initialized/added/changed/removed
             /* you can update a remote database when these fire:
             eventAdd={function(){}}
             eventChange={function(){}}
             eventRemove={function(){}}          
             */
-            /* eventContent={(eventInfo) => (
-              <EventContent
-                eventInfo={eventInfo}
-                handleChangeState={handleChangeState}
-                handleOpenUpdateWindow={handleOpenUpdateWindow}
-              />
-            )} */
+
             //dateClick={handleDateClick}
             datesSet={handleDatesSet}
             //CONFIGURACION PARA LAS CELDAS
@@ -106,7 +124,8 @@ export default function WeeklyCalendar({
             slotMinTime="08:00:00"
             slotMaxTime="21:00:00"
             allDaySlot={false}
-            contentHeight={600}
+            contentHeight={contentHeight}
+            /* height={500} */
             slotLabelFormat={{
               hour: "numeric",
               minute: "2-digit",
@@ -122,42 +141,6 @@ export default function WeeklyCalendar({
         />
       )}
     </>
-  );
-}
-
-function renderEventContent(eventInfo) {
-  /* console.log(eventInfo.view.type);
-  if (eventInfo.view.type === "timeGridDay") {
-    return (
-      <div className="inline-flex items-center text-sm font-medium text-textBlue">
-        <i>{eventInfo.event.title}</i>
-      </div>
-    );
-  } */
-  /* let diary = eventInfo.view.type === "timeGridDay"; */
-  const week = " text-sm text-textBlue";
-  const diary = "text-sm  font-medium text-textBlue";
-  return (
-    <div
-      className={`flex items-center ${
-        eventInfo.view.type === "timeGridDay" ? week : diary
-      }`}
-      /* className={`flex items-center text-sm text-textBlue ${
-        eventInfo.view.type === "timeGridDay" ? "" : "font-normal "
-      }`} */
-    >
-      {eventInfo.view.type === "timeGridDay" && (
-        <>
-          <div
-            /* style={{ backgroundColor: statusColor }} */
-            className={`w-2.5 h-2.5 rounded-full mr-2 bg-green-500`}
-          />
-          <b className="me-2">{eventInfo.timeText}</b>
-        </>
-      )}
-
-      <i>{eventInfo.event.title}</i>
-    </div>
   );
 }
 

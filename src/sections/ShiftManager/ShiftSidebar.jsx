@@ -24,7 +24,7 @@ function ShiftSidebar({ handleDateSelect }) {
 
   return (
     <>
-      <div className="px-3 border-l-2 border-[#1A3860]/10 w-80 min-w-[300px] space-y-3">
+      <div className="px-3 border-l-2 border-[#1A3860]/10 w-80 min-w-[300px] space-y-3 hidden lg:block">
         <MonthCalendar handleDateSelect={handleDateSelect} />
         <div className="flex items-center justify-center w-full mx-auto">
           <div className="w-full">

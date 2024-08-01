@@ -2,10 +2,12 @@ import Button from "./Button"
 import { useState } from "react";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 
-const Table = ({ nameButton, userRole, sections }) => {
+const Table = ({ nameButton,  sections, setModalIsVisible }) => {
   //seteo y funcion para desplegar la tabla
   const [isOpen, setIsOpen] = useState(false);
-
+const handle=()=>{
+  console.log("holooo");
+}
   const toggleTable = () => {
     setIsOpen(!isOpen);
   };
@@ -36,12 +38,13 @@ const Table = ({ nameButton, userRole, sections }) => {
                   <div className="flex items-center justify-center relative">
                     <p className="w-full p-2 rounded-md text-center bg-gray-100 mr-2">{section.value} </p>
                     
-                    <Button
+                   {section.icon && <Button
                       type="button"
+                      onClick={setModalIsVisible}
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                     >
-                      {section.icon ? section.icon: ""}
-                    </Button>
+                        {section.icon}
+                    </Button>}
                     </div>
                 </td>
 
