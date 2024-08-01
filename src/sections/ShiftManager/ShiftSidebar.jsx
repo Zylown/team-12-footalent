@@ -2,21 +2,46 @@ import PropTypes from "prop-types";
 import { Select } from "antd";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import MonthCalendar from "../Calendar/MonthCalendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ScheduleShift from "./Modal/ScheduleShift";
 import Button from "../../components/Button";
+import { getDentists } from "../../api/dentist/dentist-services";
+import { useNavigate } from "react-router-dom";
+
+const { Option } = Select;
 
 function ShiftSidebar({ handleDateSelect }) {
   // modal estado para mostrar u ocultar el modal de agendar turno
   const [modalShiftIsVisible, setModalShiftIsVisible] = useState(false);
+  const [listDentist, setListDentist] = useState(null);
+  const [selectDentist, setSelectDentist] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDentist = async () => {
+      try {
+        const response = await getDentists();
+        setListDentist(response.data);
+      } catch (err) {
+        console.error("Error fetching dentist list");
+      }
+    };
+
+    fetchDentist();
+  }, []);
+
   // funcion para mostrar el modal de agendar turno
   const handleOpenModalAdd = () => {
     setModalShiftIsVisible(true);
   };
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    console.log("Valuee", value);
+    setSelectDentist(value);
+    navigate(`/test/${value}`);
   };
+  /* console.log("useState", selectDentist); */
 
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
@@ -37,7 +62,8 @@ function ShiftSidebar({ handleDateSelect }) {
             </Button>
             <div className="w-full mt-3 text-lg">
               <Select
-                placeholder={"Seleccionar profesional"}
+                defaultValue={selectDentist || "Seleccionar profesional"}
+                /* placeholder={selectDentist || "Seleccionar profesional"} */
                 variant="Borderless"
                 style={{
                   width: "100%",
@@ -50,32 +76,22 @@ function ShiftSidebar({ handleDateSelect }) {
                   borderRadius: 4,
                   fontFamily: "Roboto, sans-serif",
                 }}
+                loading={!listDentist}
                 allowClear
                 onChange={handleChange}
-                options={[
-                  {
-                    value: "jack",
-                    label: "Jack",
-                  },
-                  {
-                    value: "lucy",
-                    label: "Lucy",
-                  },
-                  {
-                    value: "Yiminghe",
-                    label: "yiminghe",
-                  },
-                  {
-                    value: "disabled",
-                    label: "Disabled",
-                    disabled: true,
-                  },
-                ]}
-              />
+              >
+                {listDentist &&
+                  listDentist.map((dentist) => (
+                    <Option key={dentist.id} value={dentist.id}>
+                      {dentist.first_name}
+                      {dentist.last_name}
+                    </Option>
+                  ))}
+              </Select>
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 pb-5">
           <h2>Estados</h2>
           <Checkbox onChange={onChange}>Reprogramado</Checkbox>
           <Checkbox onChange={onChange}>Ausente</Checkbox>
