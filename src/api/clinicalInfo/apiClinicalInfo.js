@@ -13,7 +13,7 @@ export const apiClinicalInfo = async () => {
 // PUT
 export const apiEditClinicalInfo = async (id, data) => {
   try {
-    const res = await axios.patch(`${BASE_URL}clinic-info/${id}`, data);
+    const res = await axios.patch(`${BASE_URL}/clinic-info/${id}`, data);
     return res;
   } catch (error) {
     console.log(error);

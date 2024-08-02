@@ -100,10 +100,10 @@ export default function TableClinicalInfo() {
     });
   };
 
-  const handleSubmitEdit = async (id, data) => {
+  const handleSubmitEdit = async (data) => {
     try {
       // Obtiene el id del usuario logueado
-      const userId = apiGetUserById(decoded.user_id);
+      const userId = await apiGetUserById(decoded.user_id);
       // Obtiene el id de la clínica del usuario logueado
       const clinicId = userId.data.clinic_id;
       // Actualiza la información de la clínica
@@ -119,10 +119,18 @@ export default function TableClinicalInfo() {
       // Actualiza el estado con la nueva información de la clínica editada
       setClinics(updatedData);
       // Aquí se debe hacer la petición PUT a la API
-      // el {[data.data]: data.description} es para que el objeto tenga la forma {key: value}
-      // por ejemplo {nombre: "DentPlanner"}
-      await apiEditClinicalInfo(clinicId, { [data.data]: data.description });
-      console.log("Información editada con éxito");
+      try {
+        // el {[data.data]: data.description} es para que el objeto tenga la forma {key: value}
+        // por ejemplo {nombre: "DentPlanner"}
+        const response = await apiEditClinicalInfo(clinicId, {
+          [data.data]: data.description,
+        });
+        if (response.status === 200) {
+          console.log("Información editada con éxito");
+        }
+      } catch (error) {
+        console.error("Error al editar la información:", error);
+      }
     } catch (error) {
       console.error("Error al editar la información:", error);
     } finally {

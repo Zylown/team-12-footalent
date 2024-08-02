@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiLogin } from "../../api/apiLogin";
+import { Link } from "react-router-dom";
 
 const LoginSesion = () => {
   const [formFailed, setFormFailed] = useState(false);
@@ -103,6 +104,13 @@ const LoginSesion = () => {
                   )}
                   {formFailed && <p className="text-error">{formMessage}</p>}
                 </div>
+              </div>
+              <div>
+                <Link to="/recuperar-contraseña">
+                  <p className="text-[#1B2B41] text-opacity-70 text-lg font-normal underline">
+                    ¿Olvidaste tu contraseña?
+                  </p>
+                </Link>
               </div>
 
               <div className="flex flex-col gap-2 items-center justify-between">

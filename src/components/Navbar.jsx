@@ -28,6 +28,7 @@ export default function Navbar() {
 
   const menuRef = useRef(null);
 
+  //estado para saber si el usuario esta logueado
   const [isLogin, setIsLogin] = useState(false);
 
   const toggleMenu = () => {
@@ -44,7 +45,8 @@ export default function Navbar() {
       location.pathname === "/pacientes" ||
       location.pathname === "/pacientes/historia-clinica" ||
       location.pathname === "/perfil" ||
-      location.pathname === "/info-clinica"
+      location.pathname === "/info-clinica" ||
+      location.pathname === "/inicio"
     ) {
       setIsLogin(true);
     } else {
@@ -73,7 +75,7 @@ export default function Navbar() {
     >
       <div className="lg:px-[120px] px-4 flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <Link to={"/"} className="flex items-center">
+          <Link to={isLogin ? "/inicio" : "/"} className="flex items-center">
             <p className="text-white text-2xl font-bold font-nunito mr-2">
               DentPlanner
             </p>

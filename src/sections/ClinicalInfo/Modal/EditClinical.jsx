@@ -50,7 +50,7 @@ export default function EditClinical({
           <form
             className="flex flex-col gap-6"
             // ese onSubmit pasa 1 porque es el id, pero de manera hardcodeada (hasta que sepa como manejarlo)
-            onSubmit={handleSubmit((data) => onSubmit(1, data))}
+            onSubmit={handleSubmit((data) => onSubmit(data))}
           >
             <div className="flex flex-col gap-2.5">
               <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">

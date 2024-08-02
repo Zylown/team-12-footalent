@@ -15,6 +15,7 @@ import Profile from "./pages/Profile/Profile";
 import ClininalInfo from "./pages/ClinicalInfo/ClininalInfo";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import Users from "./pages/Users/Users";
+import ResetPassword from "./sections/Login/ResetPassword";
 
 function App() {
   const token = localStorage.getItem("token") ? true : false;
@@ -51,6 +52,7 @@ function App() {
           path="/perfil"
           element={token ? <Profile /> : <Navigate to="/" replace />}
         />
+        <Route path="/recuperar-contraseña" element={<ResetPassword />} />
         <Route path="/info-clinica" element={<ClininalInfo />} />
         <Route path="/test" element={<CalendarPage />} />
         <Route path="/test/:id" element={<CalendarPage />} />
@@ -61,4 +63,3 @@ function App() {
 }
 
 export default App;
-

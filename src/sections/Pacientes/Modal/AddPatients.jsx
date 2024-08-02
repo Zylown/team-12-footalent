@@ -7,6 +7,7 @@ import Button from "../../../components/Button";
 import addPatientSchema from "../../../validations/addPatient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ModalOk from "../../../components/ModalOk";
+import { postPatient } from "../../../api/patients/apiPatients";
 export default function AddPatients({ isVisible, setModalIsVisible }) {
   const [modalOkIsVisible, setModalOkIsVisible] = useState(false);
 
@@ -14,19 +15,80 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      birth_date: "",
+      dni: "",
+      email: "",
+      phone_number: "",
+      alternative_phone_number: " ",
+    },
     resolver: zodResolver(addPatientSchema),
   });
+  const convertToISODate = (date) => {
+    const [day, month, year] = date.split("/").map(Number);
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+      2,
+      "0"
+    )}`;
+  };
+  const onSubmit = async (data) => {
+    const formattedData = {
+      ...data,
+      birth_date: convertToISODate(data.birth_date), // Convertir a formato ISO 8601
+      alternative_phone_number: data.alternative_phone_number || "NO", // Si no hay teléfono alternativo, enviar null
+    };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    setModalOkIsVisible(true);
-    reset();
+    console.log(formattedData);
+    // Llamar a la API para añadir un paciente
+    try {
+      const res = await postPatient(formattedData);
+      console.log(res);
+      if (res.status === 201) {
+        setModalOkIsVisible(true);
+        reset();
+      } else {
+        console.error("Error al añadir un paciente:", res);
+      }
+    } catch (error) {
+      console.error("Error al añadir un paciente:", error);
+    }
   };
 
   const handleOnCancel = () => {
     setModalIsVisible(false);
+  };
+
+  // Formatear la fecha de nacimiento en el input
+  const formatBirthdate = (value) => {
+    const cleanedValue = value.replace(/\D/g, ""); // Eliminar cualquier carácter no numérico
+    let formattedValue = cleanedValue;
+    if (cleanedValue.length >= 3 && cleanedValue.length <= 4) {
+      formattedValue = `${cleanedValue.slice(0, 2)}/${cleanedValue.slice(2)}`;
+    } else if (cleanedValue.length >= 5 && cleanedValue.length <= 6) {
+      formattedValue = `${cleanedValue.slice(0, 2)}/${cleanedValue.slice(
+        2,
+        4
+      )}/${cleanedValue.slice(4)}`;
+    } else if (cleanedValue.length > 6) {
+      formattedValue = `${cleanedValue.slice(0, 2)}/${cleanedValue.slice(
+        2,
+        4
+      )}/${cleanedValue.slice(4, 8)}`;
+    }
+    return formattedValue;
+  };
+
+  // Para formatear la fecha de nacimiento mientras se escribe en el input
+  const handleBirthdateChange = (e) => {
+    const { value } = e.target;
+    const formattedValue = formatBirthdate(value);
+    setValue("birth_date", formattedValue); // Actualizar el valor del input
   };
 
   return (
@@ -56,11 +118,11 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   <Input
                     className={`bg-white placeholder:text-[#c4cbd3] 
                placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none
-               ${errors.name && "border-red-600 border-2"}
+               ${errors.first_name && "border-red-600 border-2"}
                `}
                     type="text"
                     placeholder="Ingrese el nombre"
-                    {...register("name", { required: true })}
+                    {...register("first_name", { required: true })}
                   />
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
@@ -70,10 +132,10 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   <Input
                     className={`bg-white placeholder:text-[#c4cbd3] 
                placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none
-                ${errors.lastName && "border-red-600 border-2"}`}
+                ${errors.last_name && "border-red-600 border-2"}`}
                     type="text"
                     placeholder="Ingrese el apellido"
-                    {...register("lastName", { required: true })}
+                    {...register("last_name", { required: true })}
                   />
                 </div>
               </div>
@@ -85,10 +147,12 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   <Input
                     className={`bg-white placeholder:text-[#c4cbd3] 
                placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none
-               ${errors.birthdate && "border-red-600 border-2"}`}
+               ${errors.birth_date && "border-red-600 border-2"}`}
                     type="text"
                     placeholder="Seleccione fecha"
-                    {...register("birthdate", { required: true })}
+                    {...register("birth_date", { required: true })}
+                    onChange={handleBirthdateChange}
+                    value={watch("birth_date")}
                   />
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
@@ -128,10 +192,10 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   <Input
                     className={`bg-white placeholder:text-[#c4cbd3] 
                placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none
-               ${errors.phone1 && "border-red-600 border-2"}`}
+               ${errors.phone_number && "border-red-600 border-2"}`}
                     type="text"
                     placeholder="ejemplo: 11 5585-2901"
-                    {...register("phone1", { required: true })}
+                    {...register("phone_number", { required: true })}
                   />
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
@@ -141,10 +205,12 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
                   <Input
                     className={`bg-white placeholder:text-[#c4cbd3] 
                placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none
-               ${errors.phone2 && "border-red-600 border-2"}`}
+               ${errors.alternative_phone_number && "border-red-600 border-2"}`}
                     type="text"
                     placeholder="ejemplo: 11 5585-2901"
-                    {...register("phone2", { required: false })}
+                    {...register("alternative_phone_number", {
+                      required: false,
+                    })}
                   />
                 </div>
               </div>
