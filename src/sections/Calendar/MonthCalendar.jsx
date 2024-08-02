@@ -33,7 +33,7 @@ const MonthCalendar = ({ handleDateSelect }) => {
   };
 
   return (
-    <div className="w-full py-2">
+    <div className="w-full pt-2">
       <Calendar
         fullscreen={false}
         value={currentDate}

@@ -7,17 +7,36 @@ import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineSnippets } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { apiGetUserById } from "../../api/users/apiUsers";
 
 export default function CardWelcome() {
+  const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   let nombrePerfil;
-  if (token) {
+
+  useEffect(() => {
+    if (decoded) {
+      const getUsersByIdToken = async () => {
+        try {
+          const response = await apiGetUserById(decoded.user_id);
+          // console.log(response.data);
+          setUser(response.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+      getUsersByIdToken();
+    }
+  }, [decoded]);
+
+  if (user) {
     try {
       nombrePerfil =
-        decoded.last_name === "User"
-          ? decoded.first_name
-          : decoded.first_name + " " + decoded.last_name;
+        user.last_name === "User"
+          ? user.first_name
+          : user.first_name + " " + user.last_name;
     } catch (e) {
       console.error("Invalid token", e);
     }

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 function EventsContent({ eventInfo }) {
   const backgroundColor = eventInfo.event.extendedProps.statusColor;
-  //console.log("evento clickeado", eventInfo.event.extendedProps.statusColor);
   const isWeekView = eventInfo.view.type === "timeGridWeek";
 
   return (

@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
 import EditShift from "../ShiftManager/Modal/EditShift";
 import EventsContent from "./EventsContent";
-import { IoMdInformationCircleOutline } from "react-icons/io";
+
+//import { IoMdInformationCircleOutline } from "react-icons/io";
 
 export default function WeeklyCalendar({
   eventsDB,
@@ -14,12 +15,13 @@ export default function WeeklyCalendar({
   setModalModifyIsVisible,
   modalModifyIsVisible,
   data,
+  updateEventInState,
 }) {
   const [calendarApis, setCalendarApis] = useState(null);
   const [contentHeight, setContentHeight] = useState(600);
   const [eventClickInfo, setEventClickInfo] = useState([]);
 
-  //console.log("Calendario", eventsDB);
+  const calendarRef = useRef(null);
 
   const adjustContentHeight = () => {
     const height = window.innerHeight;
@@ -79,68 +81,25 @@ export default function WeeklyCalendar({
     setModalModifyIsVisible(true);
     /* console.log("evento clickeado", clickInfo.event); */
     setEventClickInfo(clickInfo.event);
-    /* if (
-      confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
-      )
-    ) {
-      console.log("evento clickeado", clickInfo.event);
-      clickInfo.event.remove();
-    } */
   }
 
-  if (!eventsDB) {
-    return (
-      <>
-        <img
-          src="/assets/wallpaper.jpg"
-          alt="wallpaper"
-          className="relative flex justify-center object-fill overflow-hidden rounded-sm opacity-50"
-        />
-        <div className="absolute z-10 p-10 bg-white rounded-lg left-96 top-52 opacity-90">
-          <div>
-            <h1 className="text-lg text-textBlue">
-              Por favor seleccione un dentista para continuar
-            </h1>
-            <br />
-            <ul className="flex flex-col p-2 text-gray-600 rounded-lg">
-              <div className="inline-flex items-center gap-1 text-gray-600">
-                <IoMdInformationCircleOutline />
-                <h2>Info</h2>
-              </div>
-              <p>Los colores muestran el estado del turno:</p>
-              <li className="inline-flex items-center py-1">
-                <div className="w-2.5 h-2.5 mr-1 rounded-full items-center bg-[#FF9900]"></div>
-                <p className="me-2 text-nowrap">Pendiente</p>
-              </li>
-              <li className="inline-flex items-center py-1">
-                <div className="w-2.5 h-2.5 mr-1 rounded-full items-center bg-[#FF0000]"></div>
-                <p className="me-2 text-nowrap">Ausente</p>
-              </li>
-              <li className="inline-flex items-center py-1">
-                <div className="w-2.5 h-2.5 mr-1 rounded-full items-center bg-[#006AF5]"></div>
-                <p className="me-2 text-nowrap">Confirmado</p>
-              </li>
-              <li className="inline-flex items-center py-1">
-                <div className="w-2.5 h-2.5 mr-1 rounded-full items-center bg-[#AD00FF]"></div>
-                <p className="me-2 text-nowrap">Reprogramar</p>
-              </li>
-              <li className="inline-flex items-center py-1">
-                <div className="w-2.5 h-2.5 mr-1 rounded-full items-center bg-[#34C759]"></div>
-                <p className="me-2 text-nowrap">Presente</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </>
-    );
-  }
+  const updateCalendarEvent = (updatedEvent) => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      const existingEvent = calendarApi.getEventById(updatedEvent.id);
+      if (existingEvent) {
+        existingEvent.remove();
+      }
+      calendarApi.addEvent(updatedEvent);
+    }
+  };
 
   return (
     <>
-      <div className="demo-app">
+      <div className="relative p-2 pb-3 demo-app">
         <div className="demo-app-main">
           <FullCalendar
+            ref={calendarRef}
             locale={esLocale}
             plugins={[timeGridPlugin, interactionPlugin]}
             headerToolbar={{
@@ -184,6 +143,11 @@ export default function WeeklyCalendar({
             }}
           />
         </div>
+        <div
+          className={`absolute top-0 left-0 z-40 w-full h-full backdrop-blur-sm ${
+            eventsDB && "hidden"
+          }`}
+        ></div>
       </div>
       {modalModifyIsVisible && (
         <EditShift
@@ -191,6 +155,10 @@ export default function WeeklyCalendar({
           eventInfo={eventClickInfo}
           isVisible={modalModifyIsVisible}
           setModalModifyIsVisible={setModalModifyIsVisible}
+          updateEventInState={(updatedEvent) => {
+            updateEventInState(updatedEvent);
+            updateCalendarEvent(updatedEvent);
+          }}
         />
       )}
     </>
@@ -201,6 +169,7 @@ WeeklyCalendar.propTypes = {
   data: PropTypes.object.isRequired,
   modalModifyIsVisible: PropTypes.bool.isRequired,
   setModalModifyIsVisible: PropTypes.func.isRequired,
+  updateEventInState: PropTypes.func.isRequired,
   eventsDB: PropTypes.array,
   dateSelected: PropTypes.string.isRequired, // Cambiado a string
 };

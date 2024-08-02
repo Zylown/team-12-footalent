@@ -8,7 +8,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiLogin } from "../../api/apiLogin";
 import { Link } from "react-router-dom";
-
+import { Toaster, toast } from "react-hot-toast";
 const LoginSesion = () => {
   const [formFailed, setFormFailed] = useState(false);
   const [formMessage, setFormMessage] = useState("");
@@ -27,7 +27,10 @@ const LoginSesion = () => {
       localStorage.setItem("token", response.data.token);
       console.log(response);
       if (response.status === 200) {
-        window.location.href = "/inicio";
+        toast.success("Inicio de sesión exitoso");
+        setTimeout(() => {
+          window.location.href = "/inicio";
+        }, 500);
       }
     } catch (error) {
       if (error.response) {
@@ -131,6 +134,7 @@ const LoginSesion = () => {
           </div>
         </CardWhite>
       </div>
+      <Toaster position="top-right" />
     </>
   );
 };

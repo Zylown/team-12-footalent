@@ -9,20 +9,36 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { useDecode } from "../hooks/useDecode";
+import { apiGetUserById } from "../api/users/apiUsers";
 
 export default function Navbar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("token");
   const decoded = useDecode(token);
   let nombreUsuario;
 
-  if (decoded) {
-    const { first_name, last_name } = decoded; // destructuracion de objeto decoded
-    if (last_name === "User") {
-      nombreUsuario = first_name.toUpperCase();
+  useEffect(() => {
+    if (decoded) {
+      const getUsersByIdToken = async () => {
+        try {
+          const response = await apiGetUserById(decoded.user_id);
+          // console.log(response.data);
+          setUser(response.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+      getUsersByIdToken();
+    }
+  }, [decoded]);
+
+  if (user) {
+    if (user.last_name === "User") {
+      nombreUsuario = user.first_name.toUpperCase();
     } else {
-      nombreUsuario = `${first_name.toUpperCase()} ${last_name.toUpperCase()}`;
+      nombreUsuario = `${user.first_name.toUpperCase()} ${user.last_name.toUpperCase()}`;
     }
   }
 

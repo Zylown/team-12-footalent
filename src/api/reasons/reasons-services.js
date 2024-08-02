@@ -7,7 +7,7 @@ export const getAllReasons = async () => {
     const response = await axios.get(`${BASE_URL}${REASON_PATH.GET_ALL}`);
     return response;
   } catch (error) {
-    console.error("Error get partients:", error);
+    console.error("Error get reasons:", error);
     throw error;
   }
 };

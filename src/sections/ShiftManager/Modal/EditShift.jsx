@@ -26,8 +26,8 @@ export default function EditShift({
   setModalModifyIsVisible,
   eventInfo,
   data,
+  updateEventInState,
 }) {
-  /* const [selectedPatientID] = useState(eventInfo.extendedProps.patientId); */
   //estados para manejar la fecha y la hora
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
@@ -39,7 +39,7 @@ export default function EditShift({
   });
 
   const SHIFT_ID = Number(eventInfo.id);
-  console.log(eventInfo);
+  console.log("event info por props", eventInfo);
   useEffect(() => {
     if (eventInfo.extendedProps) {
       //setea la fecha
@@ -52,13 +52,14 @@ export default function EditShift({
       setSelectedDate(parsedDate);
       setValue("date", formattedDate);
       //setea la hora
+
       const parsedHour = parse(
-        eventInfo.extendedProps.hour,
+        eventInfo.extendedProps.time,
         "HH:mm",
         new Date()
       );
       setSelectedHour(parsedHour);
-      setValue("hour", eventInfo.extendedProps.hour);
+      setValue("hour", eventInfo.extendedProps.time);
       //setea el dentista
       setValue("odontologist", eventInfo.extendedProps.dentistId);
     }
@@ -92,8 +93,20 @@ export default function EditShift({
       });
       if (response) {
         alert("Turno modificado con éxito");
+
+        const updatedEvent = {
+          id: SHIFT_ID,
+          title: `${formData.title}`, // Ajusta esto según la estructura de tus datos
+          start: `${formData.date}T${formData.time}`,
+          backgroundColor: eventInfo.backgroundColor,
+          borderColor: eventInfo.borderColor,
+          extendedProps: {
+            ...eventInfo.extendedProps,
+          },
+        };
+        console.log("UPDATE EVENTS", updatedEvent);
+        updateEventInState(updatedEvent);
         setModalModifyIsVisible(false);
-        window.location.reload(); //Sacar esto!
       }
     } catch (error) {
       console.error("Error al modificar el turno:", error);
@@ -110,19 +123,11 @@ export default function EditShift({
     setModalModifyIsVisible(false);
   };
 
-  /* const handleSelectPatient = (patient) => {
-    if (selectedPatient === eventInfo.title) {
-      setSelectedPatient(selectedPatientID);
-    }
-    setSelectedPatient(patient);
-  }; */
-
   const handleDatePickerChange = (date) => {
     // aca se formatea la fecha para que se muestre en el input y podemos cambiar de formato
     const formattedDate = date ? format(date, "dd/MM/yyyy") : "";
     setValue("date", formattedDate);
     setSelectedDate(date);
-    console.log(formattedDate);
   };
 
   const handleHourChange = (hour) => {
@@ -130,7 +135,6 @@ export default function EditShift({
     const formattedHour = hour ? format(hour, "HH:mm") : "";
     setValue("hour", formattedHour);
     setSelectedHour(hour);
-    console.log(formattedHour);
   };
 
   //parsear la fecha para que se muestre en el input
@@ -211,7 +215,7 @@ export default function EditShift({
                     <Controller
                       control={control}
                       name="hour"
-                      defaultValue={eventInfo.extendedProps.hour}
+                      defaultValue={selectedHour}
                       render={({ field }) => (
                         <DatePicker
                           className={`bg-[#F6FBFF] rounded-[4px] w-full border placeholder:text-[#1C3454] placeholder:text-opacity-25 placeholder:text-lg placeholder:font-normal border-[#193B67] border-opacity-15`}
@@ -230,7 +234,7 @@ export default function EditShift({
                           icon={
                             <FiClock className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 text-2xl" />
                           }
-                          placeholderText={eventInfo.extendedProps.hour}
+                          placeholderText={eventInfo.extendedProps.time}
                           onChange={(hour) => {
                             handleHourChange(hour);
                             field.onChange(format(hour, "HH:mm")); // para cambie el valor del input
@@ -333,6 +337,7 @@ EditShift.propTypes = {
   eventInfo: PropTypes.object.isRequired,
   isVisible: PropTypes.bool.isRequired,
   setModalModifyIsVisible: PropTypes.func.isRequired,
+  updateEventInState: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
 };
 

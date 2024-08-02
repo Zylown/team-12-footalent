@@ -1,16 +1,13 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 import CardWhite from "../../../components/CardWhite";
 import { useForm } from "react-hook-form";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import addPatientSchema from "../../../validations/addPatient";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ModalOk from "../../../components/ModalOk";
+import { Toaster, toast } from "react-hot-toast";
 import { postPatient } from "../../../api/patients/apiPatients";
 export default function AddPatients({ isVisible, setModalIsVisible }) {
-  const [modalOkIsVisible, setModalOkIsVisible] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -50,9 +47,10 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
       const res = await postPatient(formattedData);
       console.log(res);
       if (res.status === 201) {
-        setModalOkIsVisible(true);
+        toast.success("Se añadió un paciente con éxito");
         reset();
       } else {
+        toast.error("Error al añadir un paciente");
         console.error("Error al añadir un paciente:", res);
       }
     } catch (error) {
@@ -229,14 +227,7 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
             </form>
           </CardWhite>
         </div>
-        {
-          <ModalOk
-            isOkVisible={modalOkIsVisible}
-            setIsOkVisible={setModalOkIsVisible}
-          >
-            Se añadió un paciente con éxito
-          </ModalOk>
-        }
+        <Toaster position="top-right" />
       </>
     )
   );
