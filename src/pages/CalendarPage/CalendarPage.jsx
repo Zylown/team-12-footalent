@@ -6,6 +6,7 @@ import ShiftSidebar from "../../sections/ShiftManager/ShiftSidebar";
 import { FaChevronDown } from "react-icons/fa";
 import { getAppointments, getDentists, getAllReasons } from "../../api";
 import CardWhite from "../../components/CardWhite";
+import CalendarCheck from "../../assets/CalendarCheck.svg";
 
 function CalendarPage() {
   const [eventsDB, setEventsDB] = useState(null);
@@ -128,7 +129,7 @@ function CalendarPage() {
           <CardWhite className="mx-auto bg-white w-80 lg:w-[437px] lg:h-80">
             <div className="flex flex-col items-center justify-center h-full gap-2 p-5 text-center lg:px-14">
               <img
-                src="/src/assets/CalendarCheck.svg"
+                src={CalendarCheck}
                 alt="caledar svg"
                 className="w-12 h-12 lg:w-24 lg:h-24"
               />
