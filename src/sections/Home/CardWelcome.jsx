@@ -7,40 +7,45 @@ import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineSnippets } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { apiGetUserById } from "../../api/users/apiUsers";
+import { userStore } from "../../context/userStore";
 
 export default function CardWelcome() {
-  const [user, setUser] = useState(null);
+  // se obtiene el estado global de la variable user y para guardar el usuario
+  const { user, setUser } = userStore();
   const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
-  let nombrePerfil;
+  const decoded = useMemo(() => {
+    try {
+      return jwtDecode(token);
+    } catch (e) {
+      console.error("Invalid token", e);
+      return null;
+    }
+  }, [token]);
 
   useEffect(() => {
-    if (decoded) {
+    if (!user && decoded) {
       const getUsersByIdToken = async () => {
         try {
           const response = await apiGetUserById(decoded.user_id);
-          // console.log(response.data);
           setUser(response.data);
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error fetching user data:", error.message);
         }
       };
       getUsersByIdToken();
     }
-  }, [decoded]);
+  }, [decoded, user, setUser]);
 
-  if (user) {
-    try {
-      nombrePerfil =
-        user.last_name === "User"
-          ? user.first_name
-          : user.first_name + " " + user.last_name;
-    } catch (e) {
-      console.error("Invalid token", e);
+  const nombrePerfil = useMemo(() => {
+    if (user) {
+      return user.last_name === "User"
+        ? user.first_name
+        : `${user.first_name} ${user.last_name}`;
     }
-  }
+    return null;
+  }, [user]);
 
   const role = decoded.role;
 
@@ -56,7 +61,7 @@ export default function CardWelcome() {
         </div>
 
         <div className="bg-white flex justify-center">
-          <p className="sm:text-2xl text-base font-normal">
+          <p className="sm:text-2xl text-xl font-normal">
             Bienvenido, {nombrePerfil}
           </p>
         </div>

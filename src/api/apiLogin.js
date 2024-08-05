@@ -6,7 +6,7 @@ export const apiLogin = async (data) => {
     const response = await axios.post(`${BASE_URL}/auth/login`, data);
     return response;
   } catch (error) {
-    console.error("Error de la API:", error);
-    return error;
+    // Rechaza el error para que pueda ser capturado en el componente que llama
+    throw error.response ? error.response.data : error;
   }
 };

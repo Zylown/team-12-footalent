@@ -15,6 +15,7 @@ import { format, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import ModalCancel from "../../../components/ModalCancel";
 import PatientsModal from "./AddPatients/AddPatientsModal";
+import EditReminder from "./EditReminder";
 
 const locale = es;
 registerLocale("es", locale);
@@ -29,6 +30,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
   //estado para mostrar el modal de agregar paciente
   const [modalAddPatientVisible, setModalAddPatientVisible] = useState(false);
+  // estado para mostrar el modal de editar recordatorio
+  const [modalReminder, setModalReminder] = useState(false);
 
   const {
     control,
@@ -103,6 +106,10 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
     ? parse(format(selectedHour, "HH:mm:ss"), "HH:mm:ss", new Date())
     : null;
 
+    //Funcion para manejar que se muestre el modal de recordatorio
+    const handleReminder =()=>{
+      setModalReminder(true)
+    }
   return (
     isVisible && (
       <>
@@ -274,6 +281,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                   {/* esto te lleva a otro modal para editar*/}
                   <Button
                     type="button"
+                    onClick={handleReminder}
                     className="w-full justify-center flex font-light text-lg border border-[#C3D4FF] bg-[#F6FBFF] text-[#005FDB]"
                   >
                     Editar recordatorio
@@ -308,6 +316,12 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
             onSelectPatient={handleSelectPatient}
             closeModal={() => setModalAddPatientVisible(false)}
           />
+        )}
+        {modalReminder && (
+            <EditReminder
+            isVisible={modalReminder}
+            setModalIsVisible={setModalReminder}
+            />
         )}
       </>
     )

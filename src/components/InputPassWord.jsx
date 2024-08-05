@@ -26,9 +26,9 @@ const Input = forwardRef(function Input(
         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent mr-2"
       >
         {showPassword ? (
-          <FaEyeSlash className="text-[#1B2B41] text-opacity-70" />
-        ) : (
           <FaEye className="text-[#1B2B41] text-opacity-70" />
+        ) : (
+          <FaEyeSlash className="text-[#1B2B41] text-opacity-70" />
         )}
       </button>
     </div>

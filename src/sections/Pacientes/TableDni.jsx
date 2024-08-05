@@ -6,10 +6,16 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { getAllPatients } from "../../api/patients/apiPatients";
+import { useNavigate } from "react-router-dom";
 
 export default function TableDni() {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
+  const navigate = useNavigate();
   const columnHelper = createColumnHelper();
+
+  const navigateToHistory = (id) => {
+    navigate(`/pacientes/historia-clinica/${id}`);
+  };
 
   const columns = [
     columnHelper.accessor("dni", {
@@ -27,13 +33,13 @@ export default function TableDni() {
     const fetchData = async () => {
       try {
         const res = await getAllPatients();
-        // console.log(res.data);
         //mapear el array de pacientes
         const mappedPatients = res.data.map((patient) => ({
+          id: patient.id, // id del paciente
           dni: patient.dni,
           patient: patient.first_name + " " + patient.last_name,
         }));
-        setPacientes(mappedPatients);
+        setPacientes(mappedPatients); // para setear los pacientes
       } catch (error) {
         console.error("Error de la API:", error);
       }
@@ -77,6 +83,10 @@ export default function TableDni() {
           <tr
             key={row.id}
             className="flex gap-2.5 cursor-pointer hover:opacity-70 mt-2.5"
+            onClick={() => {
+              // setIdPatient(row.original.id);
+              navigateToHistory(row.original.id);
+            }}
           >
             {row.getVisibleCells().map((cell) => (
               <td

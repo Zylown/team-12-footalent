@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "../assets/LogoDental.svg";
 import { useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineContactSupport } from "react-icons/md";
@@ -18,34 +18,37 @@ export default function Navbar() {
   const token = localStorage.getItem("token");
   const decoded = useDecode(token);
   let nombreUsuario;
+  //estado para saber si el usuario esta logueado
+  const [isLogin, setIsLogin] = useState(false);
+
+  const getUserData = useMemo(() => {
+    return async (userId) => {
+      try {
+        const response = await apiGetUserById(userId);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error.message); // Añade más detalles del error
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    if (decoded) {
-      const getUsersByIdToken = async () => {
-        try {
-          const response = await apiGetUserById(decoded.user_id);
-          // console.log(response.data);
-          setUser(response.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      };
-      getUsersByIdToken();
+    if (decoded && !user) {
+      getUserData(decoded.user_id);
     }
-  }, [decoded]);
+  }, [decoded, user, getUserData]);
 
   if (user) {
     if (user.last_name === "User") {
       nombreUsuario = user.first_name.toUpperCase();
     } else {
-      nombreUsuario = `${user.first_name.toUpperCase()} ${user.last_name.toUpperCase()}`;
+      const fullName = `${user.first_name.toUpperCase()} ${user.last_name.toUpperCase()}`;
+      nombreUsuario =
+        fullName.length > 20 ? user.first_name.toUpperCase() : fullName;
     }
   }
 
   const menuRef = useRef(null);
-
-  //estado para saber si el usuario esta logueado
-  const [isLogin, setIsLogin] = useState(false);
 
   const toggleMenu = () => {
     setIsOpenMenu(!isOpenMenu);
@@ -89,7 +92,7 @@ export default function Navbar() {
         backgroundImage: "linear-gradient(to bottom, #418FF5, #1C45D4)",
       }}
     >
-      <div className="lg:px-[120px] px-4 flex justify-between items-center">
+      <div className="lg:px-[120px] px-4 pr-8 flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
           <Link to={isLogin ? "/inicio" : "/"} className="flex items-center">
             <p className="text-white text-2xl font-bold font-nunito mr-2">
@@ -157,7 +160,9 @@ export default function Navbar() {
                   className="flex items-center text-white"
                   onClick={toggleMenu}
                 >
-                  {nombreUsuario}
+                  <span className="truncate max-w-[150px]">
+                    {nombreUsuario}
+                  </span>
                   <FaCaretDown className="ml-1 text-white" />
                 </button>
                 {isOpenMenu && (

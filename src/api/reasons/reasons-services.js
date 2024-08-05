@@ -11,3 +11,14 @@ export const getAllReasons = async () => {
     throw error;
   }
 };
+
+// GET REASON BY ID
+export const getReasonById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/reasons/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error get reason by id:", error);
+    throw error;
+  }
+};

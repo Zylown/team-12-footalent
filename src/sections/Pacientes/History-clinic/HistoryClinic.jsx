@@ -1,46 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import CardWhite from "../../../components/CardWhite";
 import { FaCaretDown } from "react-icons/fa";
 import TableHistory from "./TableHistory";
-
-export default function HistoryClinic() {
+import { getPatientById } from "../../../api/patients/apiPatients";
+export default function HistoryClinic({ patientId }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
-  const patientName = "Marcelo Tinelli";
+  const [patientSelected, setPatientSelected] = useState(null);
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const res = await getPatientById(patientId);
+        setPatientSelected(res.data);
+      } catch (error) {
+        console.error("Error de la API:", error);
+      }
+    };
+    fetchPatient();
+  }, [patientId]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
-    <div className="bg-white mt-6 px-2">
-      <CardWhite className="p-6 lg:min-w-[846px] w-full gap-6">
-        <div className="flex justify-between">
+    <div className="bg-white mt-6 px-2 w-full flex justify-center">
+      <CardWhite className="sm:gap-5 gap-2 max-w-[842px] w-full sm:px-6 px-4 py-4">
+        <div className="flex justify-between sm:flex-row flex-col">
           <div className="py-2.5">
-            <h2 className="font-semibold text-3xl">Historial de visitas</h2>
+            <h2 className="font-semibold sm:text-3xl text-xl">
+              Historial de visitas
+            </h2>
           </div>
-          <div className="min-w-[387px]">
+          <div className="sm:max-w-[387px] w-full">
             <div className="py-6 px-8 shadow-custom-lg rounded-lg flex flex-col gap-1">
-              <h2 className="font-semibold text-2xl text-[#192739]">
-                {patientName}
-              </h2>
-              <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
-                <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
-                  Nació el
-                </b>{" "}
-                01/04/1960
-              </p>
-              <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
-                <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
-                  DNI
-                </b>{" "}
-                21.428.290
-              </p>
-              <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
-                <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
-                  Teléfono
-                </b>{" "}
-                +54 9 15 1248-5938
-              </p>
+              {patientSelected ? (
+                <>
+                  <h2 className="font-semibold text-2xl text-[#192739]">
+                    {patientSelected.first_name} {patientSelected.last_name}
+                  </h2>
+                  <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
+                    <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
+                      Nació el
+                    </b>{" "}
+                    {patientSelected.birth_date}
+                  </p>
+                  <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
+                    <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
+                      DNI
+                    </b>{" "}
+                    {patientSelected.dni}
+                  </p>
+                  <p className="text-lg text-[#1C304A] text-opacity-50 font-semibold">
+                    <b className="mr-2.5 font-medium text-[#1B2B41] text-opacity-70">
+                      Teléfono
+                    </b>{" "}
+                    {patientSelected.phone_number}
+                  </p>
+                </>
+              ) : (
+                <p>Cargando datos del paciente...</p>
+              )}
             </div>
           </div>
         </div>
@@ -62,8 +83,8 @@ export default function HistoryClinic() {
             />
           </div>
           {isDropdownOpen && (
-            <div className="bg-[#f6fbff]">
-              <TableHistory />
+            <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg sm:p-4 p-0 overflow-y-auto custom-scrollbar">
+              <TableHistory patientId={patientId} />
             </div>
           )}
         </div>
@@ -71,3 +92,7 @@ export default function HistoryClinic() {
     </div>
   );
 }
+
+HistoryClinic.propTypes = {
+  patientId: PropTypes.string.isRequired,
+};

@@ -14,7 +14,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="sm:flex hidden bg-[#eef3f7] w-full justify-end pr-[120px] py-3">
+    <div className="sm:flex hidden bg-[#eef3f7] w-full justify-end pr-8 py-3">
       <p className="text-base text-[#262626]">Perfil: {profileRole}</p>
     </div>
   );

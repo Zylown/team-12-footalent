@@ -37,7 +37,7 @@ function App() {
           element={token ? <Patients /> : <Navigate to="/" replace />}
         />
         <Route
-          path="/pacientes/historia-clinica"
+          path="/pacientes/historia-clinica/:id"
           element={token ? <History /> : <Navigate to="/" replace />}
         />
         <Route

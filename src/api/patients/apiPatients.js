@@ -12,6 +12,17 @@ export const getAllPatients = async () => {
   }
 };
 
+//GET PATIENT BY ID
+export const getPatientById = async (id) => {
+  try {
+    const response = await axios(`${BASE_URL}/patients/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error de la API:", error);
+    return error;
+  }
+};
+
 // POST A NEW PATIENT
 export const postPatient = async (patient) => {
   try {
