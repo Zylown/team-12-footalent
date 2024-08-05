@@ -20,6 +20,19 @@ const Adjustments = () => {
     setModalIsVisible(true);
   };
 
+  // Mapeo de nombres de columnas a nombres legibles en español y el useMemo para evitar que se recalcule en cada render
+  const columnNames = useMemo(
+    () => ({
+      name: "Nombre",
+      phone_number: "Teléfono",
+      address: "Dirección",
+      email: "Correo Electrónico",
+      opening_hours: "Hora de Apertura",
+      closing_hours: "Hora de Cierre",
+    }),
+    []
+  );
+
   // usamos useCallback para evitar que se recalcule en cada render
   const transformData = useCallback(
     (clinic) => {
@@ -33,19 +46,6 @@ const Adjustments = () => {
     [columnNames]
   );
   // diferencias entre useCallback y useMemo, el useMemo se usa para valores y el useCallback para funciones
-
-  // Mapeo de nombres de columnas a nombres legibles en español y el useMemo para evitar que se recalcule en cada render
-  const columnNames = useMemo(
-    () => ({
-      name: "Nombre",
-      phone_number: "Teléfono",
-      address: "Dirección",
-      email: "Correo Electrónico",
-      opening_hours: "Hora de Apertura",
-      closing_hours: "Hora de Cierre",
-    }),
-    []
-  );
 
   useEffect(() => {
     const fetchInfoClinic = async () => {

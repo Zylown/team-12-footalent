@@ -1,5 +1,4 @@
 import {useState} from 'react'
-import { useNavigate } from 'react-router-dom';
 import CardWhite from '../../components/CardWhite';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -10,7 +9,7 @@ import TableUsers from './TableUsers';
 
 const SearchUsers = () => {
     const [searchDni, setSearchDni] = useState("");
-    const navigate = useNavigate()
+    
     const handleInputSearch = (e) => {
         const value = e.target.value;
         setSearchDni(value);
@@ -24,7 +23,7 @@ const SearchUsers = () => {
         setModalIsVisible(true);
       };
       const handleAddUser =()=>{
-        navigate('/usuarios/añadir');
+        window.location.href = "/usuarios/añadir";
       }
   return (<>
   <div className="bg-white xl:mx-72 md:mx-48 sm:mx-4 mt-4 mb-4 px-2 gap-[24px]">
@@ -66,7 +65,7 @@ const SearchUsers = () => {
               onClick={handleAddUser}
             >
               <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
-              Añadir paciente
+              Añadir usuario
             </Button>
           </div>
           <TableUsers/>

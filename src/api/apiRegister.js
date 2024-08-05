@@ -11,7 +11,7 @@ export const apiRegister = async (data) => {
       email: data.email,
       phone_number: data.phone1,
       password: data.password,
-      role_id: data.role === "odontologo" ? 2 : 1,
+      role_id: data.role === "odontologo" ? 3 : 2,
       active: true,
       clinic_id: 1,
     };

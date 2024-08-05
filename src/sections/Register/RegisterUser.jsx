@@ -90,23 +90,37 @@ const RegisterUser = () => {
                   </div>
                 </div>
               </div>
-              {/* Input del DNI */}
-              <div >
-                <div className="flex items-center justify-between">
+               {/* Input de los telefono y DNI */}
+               <div className='flex gap-4'>
+                <div className="w-1/2">
                   <label
+                    htmlFor="phone1"
+
+                    className="block text-sm font-medium mx-2 leading-6 text-gray-900 "
+                  >
+                    Telefono 1 *
+                  </label>
+                  <div className="mt-2">
+                    <Input placeholder="Ingrese su número" type="text" className="block w-full"  {...register("phone1")} />
+                    {errors.phone1 && <p className="text-error">{errors.phone1.message}</p>}
+                  </div>
+                </div>
+                <div className="w-1/2">
+                <label
                     htmlFor="dni"
 
                     className="block text-sm font-medium mx-2 leading-6 text-gray-900 "
                   >
                     DNI *
                   </label>
-                </div>
-                <div >
+                  <div className="mt-2" >
                   <Input placeholder="Ingrese su Dni" type="text" className="block w-full"  {...register("dni")} />
                   {errors.dni && <p className="text-error">{errors.dni.message}</p>}
                 </div>
-
+               
+                </div>
               </div>
+
 
               {/* Input del email */}
               <div>
@@ -141,36 +155,8 @@ const RegisterUser = () => {
                   {errors.password && <p className="text-error">{errors.password.message}</p>}
                 </div>
               </div>
-              {/* Input de los telefonos */}
-              <div className='flex gap-4'>
-                <div className="w-1/2">
-                  <label
-                    htmlFor="phone1"
 
-                    className="block text-sm font-medium mx-2 leading-6 text-gray-900 "
-                  >
-                    Telefono 1 *
-                  </label>
-                  <div className="mt-2">
-                    <Input placeholder="Ingrese su número" type="text" className="block w-full"  {...register("phone1")} />
-                    {errors.phone1 && <p className="text-error">{errors.phone1.message}</p>}
-                  </div>
-                </div>
-                <div className="w-1/2">
-                  <label
-                    htmlFor="phone2"
-
-                    className="block text-sm font-medium mx-2 leading-6 text-gray-900 "
-                  >
-                    Telefono 2
-                  </label>
-                  <div className="mt-2">
-                    <Input placeholder="Ingrese su número" type="text" className="block w-full" {...register("phone2")} />
-                    {errors.phone2 && <p className="text-error">{errors.phone2.message}</p>}
-                  </div>
-                </div>
-              </div>
-
+             
 
               {/* Input del Rol */}
               <div>

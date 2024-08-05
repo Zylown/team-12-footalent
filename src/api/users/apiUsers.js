@@ -22,3 +22,13 @@ export const apiGetUserById = async (id) => {
     return error;
   }
 };
+//DELETE USER
+export const apiDeleteUserById = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/users/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error de la API:", error);
+    return error;
+  }
+};
