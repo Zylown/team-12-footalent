@@ -23,10 +23,12 @@ function App() {
   const token = localStorage.getItem("token");
   const decoded = useDecode(token);
 
+  // Verificar si el usuario tiene alguno de los siguientes roles
   const allRoles =
-    decoded.role === "admin" ||
-    decoded.role === "secretary" ||
-    decoded.role === "dentist";
+    decoded &&
+    (decoded.role === "admin" ||
+      decoded.role === "secretary" ||
+      decoded.role === "dentist");
 
   return (
     <Router>
@@ -52,13 +54,17 @@ function App() {
         <Route
           path="/usuarios"
           element={
-            decoded.role === "admin" ? <Users /> : <Navigate to="/inicio" replace />
+            decoded?.role === "admin" ? (
+              <Users />
+            ) : (
+              <Navigate to="/inicio" replace />
+            )
           }
         />
         <Route
           path="usuarios/añadir"
           element={
-            decoded.role === "admin" ? (
+            decoded?.role === "admin" ? (
               <Register />
             ) : (
               <Navigate to="/inicio" replace />
@@ -73,7 +79,7 @@ function App() {
         <Route
           path="/info-clinica"
           element={
-            decoded.role === "admin" ? (
+            decoded?.role === "admin" ? (
               <ClininalInfo />
             ) : (
               <Navigate to="/inicio" replace />
