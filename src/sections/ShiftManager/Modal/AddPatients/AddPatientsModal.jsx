@@ -14,12 +14,15 @@ export default function PatientsModal({ onSelectPatient, closeModal }) {
   const [searchDni, setSearchDni] = useState("");
 
   const handleInputSearch = (e) => {
-    const value = e.target.value;
-    setSearchDni(value);
+    if (setSearchDni) {
+      setSearchDni(e.target.value);
+    }
   };
 
   const handleClearSearch = () => {
-    setSearchDni("");
+    if (searchDni && setSearchDni) {
+      setSearchDni("");
+    }
   };
 
   const handleOpenModalAdd = () => {
@@ -75,7 +78,10 @@ export default function PatientsModal({ onSelectPatient, closeModal }) {
             </Button>
           </div>
           <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 sm:h-80 h-auto overflow-y-auto custom-scrollbar">
-            <TablePatients onSelectPatient={onSelectPatient} />
+            <TablePatients
+              onSelectPatient={onSelectPatient}
+              searchDni={searchDni}
+            />
           </div>
         </CardWhite>
       </div>

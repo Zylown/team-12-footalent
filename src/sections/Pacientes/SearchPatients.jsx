@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { IoSearch } from "react-icons/io5";
@@ -13,12 +14,15 @@ export default function SearchPatients() {
   const [searchDni, setSearchDni] = useState("");
 
   const handleInputSearch = (e) => {
-    const value = e.target.value;
-    setSearchDni(value);
+    if (setSearchDni) {
+      setSearchDni(e.target.value);
+    }
   };
 
   const handleClearSearch = () => {
-    setSearchDni("");
+    if (searchDni && setSearchDni) {
+      setSearchDni("");
+    }
   };
 
   const handleOpenModalAdd = () => {
@@ -68,7 +72,7 @@ export default function SearchPatients() {
             </Button>
           </div>
           <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 md:h-80 h-auto overflow-y-auto custom-scrollbar">
-            <TableDni />
+            <TableDni searchDni={searchDni} />
           </div>
         </CardWhite>
       </div>
@@ -81,3 +85,8 @@ export default function SearchPatients() {
     </>
   );
 }
+
+SearchPatients.propTypes = {
+  searchDni: PropTypes.string,
+  setSearchDni: PropTypes.func,
+};

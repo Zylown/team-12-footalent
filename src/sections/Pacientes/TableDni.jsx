@@ -1,14 +1,15 @@
+import PropTypes from "prop-types";
 import {
   useReactTable,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllPatients } from "../../api/patients/apiPatients";
 import { useNavigate } from "react-router-dom";
 
-export default function TableDni() {
+export default function TableDni({ searchDni }) {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
   const navigate = useNavigate();
   const columnHelper = createColumnHelper();
@@ -47,8 +48,17 @@ export default function TableDni() {
     fetchData();
   }, []);
 
+  const filteredPatients = useMemo(() => {
+    if (!searchDni) {
+      return pacientes;
+    }
+    return pacientes.filter((patient) =>
+      patient.dni.toString().toLowerCase().startsWith(searchDni.toLowerCase())
+    );
+  }, [searchDni, pacientes]);
+
   const table = useReactTable({
-    data: pacientes,
+    data: filteredPatients,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -106,3 +116,6 @@ export default function TableDni() {
     </table>
   );
 }
+TableDni.propTypes = {
+  searchDni: PropTypes.string,
+};

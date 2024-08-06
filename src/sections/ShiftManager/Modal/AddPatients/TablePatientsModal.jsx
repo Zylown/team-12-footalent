@@ -5,10 +5,10 @@ import {
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getAllPatients } from "../../../../api/patients/apiPatients";
 
-export default function TablePatients({ onSelectPatient }) {
+export default function TablePatients({ onSelectPatient, searchDni }) {
   const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
   const columnHelper = createColumnHelper();
 
@@ -42,8 +42,17 @@ export default function TablePatients({ onSelectPatient }) {
     fetchData();
   }, []);
 
+  const filteredPatients = useMemo(() => {
+    if (!searchDni) {
+      return pacientes;
+    }
+    return pacientes.filter((patient) =>
+      patient.dni.toString().toLowerCase().startsWith(searchDni.toLowerCase())
+    );
+  }, [searchDni, pacientes]);
+
   const table = useReactTable({
-    data: pacientes,
+    data: filteredPatients,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -99,4 +108,5 @@ export default function TablePatients({ onSelectPatient }) {
 
 TablePatients.propTypes = {
   onSelectPatient: PropTypes.func.isRequired,
+  searchDni: PropTypes.string,
 };
