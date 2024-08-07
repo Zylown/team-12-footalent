@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "../assets/LogoDental.svg";
 import { useLocation } from "react-router-dom";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState /*useMemo*/ } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineContactSupport } from "react-icons/md";
@@ -9,11 +9,11 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { useDecode } from "../hooks/useDecode";
-import { apiGetUserById } from "../api/users/apiUsers";
+// import { apiGetUserById } from "../api/users/apiUsers";
 
 export default function Navbar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const location = useLocation();
   const token = localStorage.getItem("token");
   const decoded = useDecode(token);
@@ -23,30 +23,40 @@ export default function Navbar() {
   // no mostrar pacientes y agenda en el inicio
   const [isInicio, setIsInicio] = useState(false);
 
-  const getUserData = useMemo(() => {
-    return async (userId) => {
-      try {
-        const response = await apiGetUserById(userId);
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error.message); // Añade más detalles del error
-      }
-    };
-  }, []);
+  // const getUserData = useMemo(() => {
+  //   return async (userId) => {
+  //     try {
+  //       const response = await apiGetUserById(userId);
+  //       setUser(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error.message); // Añade más detalles del error
+  //     }
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    if (decoded && !user) {
-      getUserData(decoded.user_id);
-    }
-  }, [decoded, user, getUserData]);
+  // useEffect(() => {
+  //   if (decoded && !user) {
+  //     getUserData(decoded.user_id);
+  //   }
+  // }, [decoded, user, getUserData]);
 
-  if (user) {
-    if (user.last_name === "User") {
-      nombreUsuario = user.first_name.toUpperCase();
+  // if (user) {
+  //   if (user.last_name === "User") {
+  //     nombreUsuario = user.first_name.toUpperCase();
+  //   } else {
+  //     const fullName = `${user.first_name.toUpperCase()} ${user.last_name.toUpperCase()}`;
+  //     nombreUsuario =
+  //       fullName.length > 20 ? user.first_name.toUpperCase() : fullName;
+  //   }
+  // }
+
+  if (decoded) {
+    if (decoded.last_name === "User") {
+      nombreUsuario = decoded.first_name.toUpperCase();
     } else {
-      const fullName = `${user.first_name.toUpperCase()} ${user.last_name.toUpperCase()}`;
+      const fullName = `${decoded.first_name.toUpperCase()} ${decoded.last_name.toUpperCase()}`;
       nombreUsuario =
-        fullName.length > 20 ? user.first_name.toUpperCase() : fullName;
+        fullName.length > 20 ? decoded.first_name.toUpperCase() : fullName;
     }
   }
 

@@ -23,7 +23,7 @@ export default function CardWelcome() {
       return null;
     }
   }, [token]);
-
+  
   useEffect(() => {
     if (!user && decoded) {
       const getUsersByIdToken = async () => {
@@ -39,13 +39,18 @@ export default function CardWelcome() {
   }, [decoded, user, setUser]);
 
   const nombrePerfil = useMemo(() => {
-    if (user) {
-      return user.last_name === "User"
-        ? user.first_name
-        : `${user.first_name} ${user.last_name}`;
+    // if (user) {
+    //   return user.last_name === "User"
+    //     ? user.first_name
+    //     : `${user.first_name} ${user.last_name}`;
+    // }
+    if (decoded) {
+      return decoded.last_name === "User"
+        ? decoded.first_name
+        : `${decoded.first_name} ${decoded.last_name}`;
     }
     return null;
-  }, [user]);
+  }, [decoded]);
 
   const role = decoded.role;
 
