@@ -38,7 +38,7 @@ const AnticipationInput = ({ maxTime, interval, onChange, className, label }) =>
           <option  value="">Seleccione un Horario</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {option.label + " hs"}
             </option>
           ))}
         </select>

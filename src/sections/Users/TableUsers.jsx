@@ -1,34 +1,47 @@
-import React, { useState, useEffect } from "react";
-import {apiGetUsers} from "../../api/users/apiUsers"
+import React, { useState } from "react";
 import Button from "../../components/Button";
 import { TbUserMinus } from "react-icons/tb";
-import { useCallback } from "react";
+import PropTypes from "prop-types";
+import { apiDeleteUserById } from "../../api/users/apiUsers";
+import ModalDeleted from "../../components/ModalDeleted";
+import { Toaster, toast } from "react-hot-toast";
 
-const TableUsers = () => {
-  const [users, setUsers] = useState([]);
+const TableUsers = ({ users }) => {
+  const [modalDeleted, setModalDeleted] = useState(false);
+  const [userDeleted, setUserDeleted] = useState(null);
 
-  const fetchUsers = useCallback(async () => {
-    const usersData = await apiGetUsers();
-    setUsers(usersData.data);
-  }, []);
+  const handleDeletedModal = (data) => {
+    setModalDeleted(true);
+    setUserDeleted(data);
+  };
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
-
-  const handleDeletedUser = useCallback((data) => {
-    console.log(data);
-  }, []);
-//funcion para mostrar los roles 
-const handleRole =(role)=>{
-  if (role === 1) {
-    return "Administrador"
-  }else if (role === 2) {
-    return "Secretario"
-  }else if (role === 3){
-    return "Odontólogo"
+  const handleDeletedUser = async () => {
+    try {
+    if (userDeleted) {
+     const response=  await apiDeleteUserById(userDeleted.id);
+     if (response.status === 200) {
+      toast.success("Usuario eliminado exitosamente");
+      setTimeout(() => {
+        window.location.reload(); // Recargar la página después de eliminar el usuario 
+      }, 500);
+    }
+      
+    }
+  }catch (error) {
+    console.error("Error de la API:", error);
   }
-}
+  };
+
+  const handleRole = (role) => {
+    if (role === 1) {
+      return "Administrador";
+    } else if (role === 2) {
+      return "Secretario";
+    } else if (role === 3) {
+      return "Odontólogo";
+    }
+  };
+
   return (
     <div className="min-w-[744px] border rounded-md bg-bgTable py-[16px] max-w-[20rem] h-[20rem] overflow-y-auto">
       <table className="w-full ">
@@ -61,7 +74,7 @@ const handleRole =(role)=>{
                   </p>
                   <Button
                     type="button"
-                    onClick={() => handleDeletedUser(user)}
+                    onClick={() => handleDeletedModal(user)}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                   >
                     <TbUserMinus className="text-[#7d8693]" />
@@ -72,9 +85,20 @@ const handleRole =(role)=>{
           ))}
         </tbody>
       </table>
-      
+      <ModalDeleted
+        isVisible={modalDeleted}
+        setIsVisible={setModalDeleted}
+        DeletedModal={handleDeletedUser}
+        titleModal={"Eliminar usuario"}
+        infoModal={"¿Estás seguro que querés eliminar este usuario? Se eliminarán todos sus datos."}
+      />
+      <Toaster position="top-right" />
     </div>
   );
+};
+
+TableUsers.propTypes = {
+  users: PropTypes.array.isRequired,
 };
 
 export default TableUsers;

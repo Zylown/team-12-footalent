@@ -13,8 +13,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
   const [anticipation, setAnticipation] = useState(null); 
   //estado para el modal de ok
   const [modalOk, setModalOk] = useState(false);
-  //estados para los estilos que cambian con los botones
-  const [textStyle, setTextStyle] = useState({ fontWeight: 'normal', fontStyle: 'normal', textDecoration: 'none' });
+  
   //estado para el modal de cancelar
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
 
@@ -23,26 +22,12 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
     setText(generateReminderMessage("Marcelo", "01/08/2024", anticipation));
   }, [anticipation]);
 
-  const applyStyle = (style) => {
-    switch(style) {
-      case 'bold':
-        setTextStyle(prev => ({ ...prev, fontWeight: prev.fontWeight === 'bold' ? 'normal' : 'bold' }));
-        break;
-      case 'italic':
-        setTextStyle(prev => ({ ...prev, fontStyle: prev.fontStyle === 'italic' ? 'normal' : 'italic' }));
-        break;
-      case 'underline':
-        setTextStyle(prev => ({ ...prev, textDecoration: prev.textDecoration === 'underline' ? 'none' : 'underline' }));
-        break;
-      default:
-        break;
-    }
-  };
+  
 
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
-
+//configuro la anticipacion
   const handleAnticipationChange = (value) => {
     if (value === "") {
       setAnticipation(null);
@@ -50,7 +35,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
       const minutes = parseInt(value, 10);
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
-      setAnticipation(`${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`);
+      setAnticipation(`${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')} hs`);
     }
   };
   const handleOnClose = () => {
@@ -80,13 +65,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
           <CardWhite className="w-[568px] bg-white">
             <div className="space-y-1">
               {/* Sección de botones para modificar texto */}
-              <div className="flex justify-between items-baseline p-[10px] bg-bgGrey">
-                <div className="flex gap-1">
-                  <Button onClick={() => applyStyle('bold')}><FaBold /></Button>
-                  <Button onClick={() => applyStyle('italic')}><FaItalic /></Button>
-                  <Button onClick={() => applyStyle('underline')}><FaUnderline /></Button>
-                  <Button><FaImage /></Button>
-                </div>
+              <div className="flex justify-between items-start p-[10px] bg-bgGrey">
                 <h2 className="text-[24px] font-semibold text-textGrey mb-1">Recordatorio</h2>
               </div>
               {/* Campo de texto predefinido */}
@@ -99,8 +78,8 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
                     id="text"
                     value={text}
                     onChange={handleTextChange}
-                    style={textStyle}
                     className="w-full h-[21rem] text-[#616D7C] resize-none"
+                    readOnly={true}
                   />
                 </div>
               </div>
@@ -112,7 +91,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
                 </label>
                 <TimeInput
                   maxTime={2880} // Máximo tiempo en minutos (48 horas)
-                  interval={240} // Intervalo en minutos (4 hora)
+                  interval={720} // Intervalo en minutos (12 hora)
                   onChange={handleAnticipationChange}
                   className="max-w-[250px]" // Clase personalizada para el ancho máximo
                 />

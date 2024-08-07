@@ -29,15 +29,15 @@ export default function ResetPassword() {
     fetchData();
   }, []);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // Verificar si el email ingresado está en la lista de emails
     if (emails.includes(data.email)) {
       // Si se encuentra el email, resetear el estado de emailNotFound
       setEmailNotFound(false);
       try {
         // Llamar a la API para resetear la contraseña
-        const res = apiResetPassword(data.email);
-        if (res.response.status === 200) {
+        const res = await apiResetPassword(data.email);
+        if (res.status === 200) {
           // Si la respuesta es correcta, mostrar el modal de éxito
           setModalIsVisible(true);
         } else {

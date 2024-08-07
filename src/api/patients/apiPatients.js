@@ -33,3 +33,14 @@ export const postPatient = async (patient) => {
     return error;
   }
 };
+
+// DELETE A PATIENT BY ID
+export const deletePatientById = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/patients/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error de la API:", error);
+    return error;
+  }
+};
