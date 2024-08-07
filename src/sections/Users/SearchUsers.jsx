@@ -61,22 +61,16 @@ const SearchUsers = () => {
               className="w-full box-border h-full bg-white border-[1.5px] border-[#1C304A] border-opacity-50 placeholder:text-[#1B2B41] placeholder:text-opacity-70 placeholder:text-lg placeholder:font-normal outline-[#1C304A] text-[#1B2B41] text-opacity-70 font-normal px-3"
               placeholder="Buscar DNI o Nombre del Usuario..."
             />
-            {searchQuery && (
-              <button
+            {searchQuery === "" ? (
+             <IoSearch className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2 text-[#1B2B41]" />
+            ): (<button
                 onClick={handleClearSearch}
                 className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2"
               >
                 <IoClose className="text-[#1B2B41]" />
-              </button>
-            )}
+              </button>)
+          }
           </div>
-          <Button
-            className="flex items-center py-1.5 px-3 gap-2 bg-[#006AF5] text-white font-normal text-lg"
-            onClick={() => console.log(searchQuery)}
-          >
-            <IoSearch className="text-white" />
-            Buscar
-          </Button>
           <Button
             className="flex px-[14px] box-border items-center font-normal text-lg text-[#005FDB] rounded border border-[#C3D4FF]"
             onClick={handleAddUser}

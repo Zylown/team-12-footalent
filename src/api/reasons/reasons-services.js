@@ -22,3 +22,25 @@ export const getReasonById = async (id) => {
     throw error;
   }
 };
+// CREATE REASON
+export const createReason = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/reasons`, data);
+    return response;
+  } catch (error) {
+    console.error("API Error:", error);
+   
+    
+    return error;
+  }
+};
+// Delete Reason 
+export const deleteReasonById = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/reasons/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error delete reason by id:", error);
+    throw error;
+  }
+};

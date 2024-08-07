@@ -15,12 +15,19 @@ import { format, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import ModalCancel from "../../../components/ModalCancel";
 import PatientsModal from "./AddPatients/AddPatientsModal";
+import { createAppointment } from "/src/api/appointments/appointments-services";
+import { Toaster, toast } from "react-hot-toast";
 import EditReminder from "./EditReminder";
 
 const locale = es;
 registerLocale("es", locale);
 
-export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
+export default function ScheduleShift({
+  isVisible,
+  setModalShiftIsVisible,
+  data,
+  forceCalendarUpdate,
+}) {
   // estado para manejar el paciente seleccionado
   const [selectedPatient, setSelectedPatient] = useState(null);
   //estados para manejar la fecha y la hora
@@ -43,28 +50,40 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
     resolver: zodResolver(addShiftSchema),
   });
 
-  const handleOnSubmit = (data) => {
-    const dateFormatted = format(selectedDate, "yyyy-MM-dd");
-    const hourFormatted = format(selectedHour, "HH:mm:ss");
+  const handleOnSubmit = async (data) => {
+    console.log(data);
+    try {
+      const dateFormatted = format(selectedDate, "yyyy-MM-dd");
+      const hourFormatted = format(selectedHour, "HH:mm");
+      const dentistID = Number(data.odontologist);
+      const reasonID = Number(data.reason);
+      const selectedPatientID = Number(selectedPatient.id);
 
-    const formData = {
-      ...data,
-      title: selectedPatient,
-      // formatear la fecha y la hora para que se envie en el formato correcto
-      /* date: dateFormatted,
-      hour: hourFormatted, */
-      startStr: dateFormatted + "T" + hourFormatted,
-      endStr: dateFormatted + "T" + hourFormatted,
-    };
-    console.log(formData);
-    /*calendarApi.addEvent({
-      id: nowStr,
-      title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-      color: "#ef4444",
-    }); */
+      const formData = {
+        patient_id: selectedPatientID,
+        dentist_id: dentistID,
+        reason_id: reasonID,
+        date: dateFormatted,
+        time: hourFormatted,
+        is_active: data.reminder,
+      };
+      console.log("formData", formData);
+      const response = await createAppointment({
+        data: formData,
+      });
+      if (response) {
+        toast.success("Turno creado con éxito");
+        forceCalendarUpdate();
+        setTimeout(() => {
+          setModalShiftIsVisible(false);
+        }, 600);
+      }
+    } catch (error) {
+      console.error("Error al crear el turno:", error);
+      toast.error(
+        "No se pudo realizar el cambio. Por favor, intenta nuevamente."
+      );
+    }
   };
 
   //manejo de cancelar turno y mostrar modal
@@ -106,14 +125,14 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
     ? parse(format(selectedHour, "HH:mm:ss"), "HH:mm:ss", new Date())
     : null;
 
-    //Funcion para manejar que se muestre el modal de recordatorio
-    const handleReminder =()=>{
-      setModalReminder(true)
-    }
+  //Funcion para manejar que se muestre el modal de recordatorio
+  const handleReminder = () => {
+    setModalReminder(true);
+  };
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50 px-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-2 bg-white bg-opacity-50">
           <CardWhite className="bg-white max-w-[568px] px-6 py-2 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="pb-5">
               <h2 className="sm:text-[32px] text-2xl font-semibold text-[#192739]">
@@ -131,7 +150,9 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                 onClick={() => setModalAddPatientVisible(true)}
               >
                 <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
-                {selectedPatient ? selectedPatient : "Seleccionar paciente"}
+                {selectedPatient
+                  ? selectedPatient.patient
+                  : "Seleccionar paciente"}
               </Button>
             </div>
             {/* mostrar solo 1 mensaje de campos invalidos*/}
@@ -144,7 +165,7 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(handleOnSubmit)}
             >
-              <div className="flex w-full gap-5 sm:flex-row flex-col">
+              <div className="flex flex-col w-full gap-5 sm:flex-row">
                 <div className="flex flex-col w-full sm:w-2/4">
                   <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                     Fecha *
@@ -236,11 +257,15 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                     }`}
                     {...register("reason", { required: true })}
                   >
-                    <option value="">Seleccione el motivo</option>
-                    <option value="01:00:00">Extracción de molares</option>
-                    <option value="00:30:00">Consulta general</option>
-                    <option value="00:30:00">Control bucal</option>
-                    <option value="01:00:00">Tratamiento Conducto</option>
+                    <option value="" disabled hidden>
+                      Seleccione el motivo
+                    </option>
+                    {data.reasons &&
+                      data.reasons.map((reason) => (
+                        <option key={reason.id} value={Number(reason.id)}>
+                          {reason.description}
+                        </option>
+                      ))}
                   </select>
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
@@ -259,15 +284,19 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
                     {...register("odontologist", { required: true })}
                   >
                     <option value="">Seleccione el odontólogo</option>
-                    <option value="1">Opcion 1</option>
-                    <option value="2">Opcion 2</option>
-                    <option value="3">Opcion 3</option>
+                    {data.dentists &&
+                      data.dentists.map((dentist) => (
+                        <option key={dentist.id} value={dentist.id}>
+                          {dentist.first_name}
+                          {dentist.last_name}
+                        </option>
+                      ))}
                   </select>
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
               </div>
-              <div className="flex sm:items-center sm:gap-1 gap-2 sm:flex-row flex-col">
-                <div className="flex items-center sm:w-2/4 w-full gap-2">
+              <div className="flex flex-col gap-2 sm:items-center sm:gap-1 sm:flex-row">
+                <div className="flex items-center w-full gap-2 sm:w-2/4">
                   <input
                     className="w-6 h-6 bg-[#193B67] bg-opacity-15"
                     type="checkbox"
@@ -318,11 +347,12 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
           />
         )}
         {modalReminder && (
-            <EditReminder
+          <EditReminder
             isVisible={modalReminder}
             setModalIsVisible={setModalReminder}
-            />
+          />
         )}
+        <Toaster position="top-right" />
       </>
     )
   );
@@ -330,5 +360,8 @@ export default function ScheduleShift({ isVisible, setModalShiftIsVisible }) {
 
 ScheduleShift.propTypes = {
   isVisible: PropTypes.bool.isRequired,
+  data: PropTypes.object,
   setModalShiftIsVisible: PropTypes.func.isRequired,
+  forceCalendarUpdate: PropTypes.func.isRequired,
 };
+

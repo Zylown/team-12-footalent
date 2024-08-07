@@ -77,6 +77,7 @@ export default function WeeklyCalendar({
     }
   }
 
+  //funcion para mostrar modal a hacer click en evento
   function handleEventClick(clickInfo) {
     setModalModifyIsVisible(true);
     /* console.log("evento clickeado", clickInfo.event); */

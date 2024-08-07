@@ -1,7 +1,6 @@
 import CardWhite from "../../components/CardWhite";
 import DropTable from "../../components/DropTable";
 import ConfigProfile from "./ConfigProfile";
-import Reasons from "./Modal/Reasons";
 import { FaRegEdit } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { apiGetClinicalInfoById } from "../../api/clinicalInfo/apiClinicalInfo";
@@ -16,8 +15,8 @@ const Adjustments = () => {
   const [infoClinic, setInfoClinic] = useState(null);
   const [modalIsVisible, setModalIsVisible] = useState(false);
 
-  const handleOpenModalAdd = () => {
-    setModalIsVisible(true);
+  const handleReasons = () => {
+    window.location.href = "perfil/motivos";
   };
 
   // Mapeo de nombres de columnas a nombres legibles en español y el useMemo para evitar que se recalcule en cada render
@@ -89,7 +88,7 @@ const Adjustments = () => {
             <DropTable
               nameButton={"Consultas"}
               sections={section2}
-              setModalIsVisible={handleOpenModalAdd}
+              setModalIsVisible={handleReasons}
             />
           </div>
 
@@ -98,12 +97,7 @@ const Adjustments = () => {
           </div>
         </CardWhite>
       </div>
-      {modalIsVisible && (
-        <Reasons
-          isVisible={modalIsVisible}
-          setModalIsVisible={setModalIsVisible}
-        />
-      )}
+     
     </>
   );
 };

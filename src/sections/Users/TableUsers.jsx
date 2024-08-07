@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../components/Button";
-import { TbUserMinus } from "react-icons/tb";
+import { HiOutlineTrash } from "react-icons/hi";
 import PropTypes from "prop-types";
 import { apiDeleteUserById } from "../../api/users/apiUsers";
 import ModalDeleted from "../../components/ModalDeleted";
@@ -77,7 +77,7 @@ const TableUsers = ({ users }) => {
                     onClick={() => handleDeletedModal(user)}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                   >
-                    <TbUserMinus className="text-[#7d8693]" />
+                    <HiOutlineTrash  className="text-[#7d8693]" />
                   </Button>
                 </div>
               </td>
@@ -88,7 +88,7 @@ const TableUsers = ({ users }) => {
       <ModalDeleted
         isVisible={modalDeleted}
         setIsVisible={setModalDeleted}
-        DeletedModal={handleDeletedUser}
+        deletedModal={handleDeletedUser}
         titleModal={"Eliminar usuario"}
         infoModal={"¿Estás seguro que querés eliminar este usuario? Se eliminarán todos sus datos."}
       />

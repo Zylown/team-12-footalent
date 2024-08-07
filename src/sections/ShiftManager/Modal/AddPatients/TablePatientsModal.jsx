@@ -28,11 +28,11 @@ export default function TablePatients({ onSelectPatient, searchDni }) {
     const fetchData = async () => {
       try {
         const res = await getAllPatients();
-        console.log(res.data);
         //mapear el array de pacientes
         const mappedPatients = res.data.map((patient) => ({
           dni: patient.dni,
           patient: patient.first_name + " " + patient.last_name,
+          id: patient.id,
         }));
         setPacientes(mappedPatients);
       } catch (error) {
@@ -87,7 +87,7 @@ export default function TablePatients({ onSelectPatient, searchDni }) {
             key={row.id}
             className="flex gap-2.5 cursor-pointer hover:opacity-70 mt-2.5"
             // onClick es un evento que se dispara cuando se hace click en el elemento para seleccionar el paciente
-            onClick={() => onSelectPatient(row.original.patient)}
+            onClick={() => onSelectPatient(row.original)}
           >
             {row.getVisibleCells().map((cell) => (
               <td
@@ -110,3 +110,4 @@ TablePatients.propTypes = {
   onSelectPatient: PropTypes.func.isRequired,
   searchDni: PropTypes.string,
 };
+

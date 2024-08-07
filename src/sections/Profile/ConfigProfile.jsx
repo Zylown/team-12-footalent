@@ -3,16 +3,14 @@ import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { useState } from "react";
 import Soporte from "./Modal/Soporte";
 import ModalPassword from "./Modal/ModalPassword";
+import { Link } from "react-router-dom";
 const ConfigProfile = () => {
   // info que vendria desde el back
-  const Contraseña = "contraseña";
   const [isOpen, setIsOpen] = useState(false);
   const [modalIsVisible, setModalIsVisible] = useState(false);
-  const [modalPassword, setModalPassword] = useState(false);
+  
 
-  const handleModalPassword = () => {
-    setModalPassword(true);
-  };
+ 
   //funcio para desplegar la tabla
   const toggleTable = () => {
     setIsOpen(!isOpen);
@@ -39,13 +37,13 @@ const ConfigProfile = () => {
         {isOpen && (
           <div className="flex justify-center gap-2 py-1">
             <div className="py-1 flex  justify-center ">
-              <Button
-                type="button"
+              <Link
+                to="/perfil/cambiar-contraseña"
                 className="py-[13.5px] px-[48px] border border-mainBlue text-mainBlue   text-center "
-                onClick={handleModalPassword}
+                
               >
                 Cambiar contraseña
-              </Button>
+              </Link>
             </div>
             <div className="py-1 flex justify-center ">
               <Button
@@ -57,12 +55,15 @@ const ConfigProfile = () => {
               </Button>
             </div>
             <div className="py-1 flex  justify-center ">
-              <Button
-                type="button"
+              <Link
+                to="/"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                }}
                 className="py-[13.5px] px-[48px] border bg-mainBlue text-white text-center "
               >
                 Cerrar sesion
-              </Button>
+              </Link>
             </div>
           </div>
         )}
@@ -73,12 +74,7 @@ const ConfigProfile = () => {
           setModalIsVisible={setModalIsVisible}
         />
       )}
-      {modalPassword && (
-        <ModalPassword
-          isVisible={modalPassword}
-          setModalIsVisible={setModalPassword}
-        />
-      )}
+      
     </>
   );
 };

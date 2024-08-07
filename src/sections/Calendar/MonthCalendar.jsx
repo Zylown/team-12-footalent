@@ -11,7 +11,6 @@ dayjs.locale("es");
 
 const MonthCalendar = ({ handleDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  /* const { token } = theme.useToken(); */
 
   const handleDateChange = (value) => {
     setCurrentDate(value);

@@ -33,7 +33,6 @@ export default function formatEvents(events) {
     const colors = eventColors[event.state] || {};
     const parsedDate = parse(event.date, "dd-MM-yyyy", new Date());
     const formattedDate = format(parsedDate, "yyyy-MM-dd");
-    console.log("FECHA PARSEADA: ", event.ending_time);
     return {
       id: event.id,
       title: `${event.patient_name}`,

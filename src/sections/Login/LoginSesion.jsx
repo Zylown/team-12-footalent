@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiLogin } from "../../api/apiLogin";
-import { Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 const LoginSesion = () => {
   const [formFailed, setFormFailed] = useState(false);
@@ -36,15 +35,19 @@ const LoginSesion = () => {
       console.error("Error de inicio de sesión:", error);
       setFormFailed(true);
       // Comprueba si el error tiene una propiedad 'error', si no usa un mensaje por defecto
-      setFormMessage(error.error ? error.error + ", vuelva a intentarlo" : "Error desconocido. Por favor, intente más tarde.");
+      setFormMessage(
+        error.error
+          ? error.error + ", vuelva a intentarlo"
+          : "Error desconocido. Por favor, intente más tarde."
+      );
     }
   };
-  const handleForgetPassword =()=>{
+  const handleForgetPassword = () => {
     window.location.href = "/recuperar-contraseña";
-  }
+  };
   return (
     <>
-      <div className="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
+      <div className="flex flex-col justify-center min-h-full px-6 py-6 lg:px-8">
         <CardWhite className="sm:mx-auto sm:w-full sm:max-w-md px-6 pt-12 pb-6 rounded-lg gap-[34px]">
           <div className="sm:w-full">
             <h2 className="text-start text-[32px] font-medium leading-9 tracking-tight text-gray-900">
@@ -99,8 +102,8 @@ const LoginSesion = () => {
                   {formFailed && <p className="text-error">{formMessage}</p>}
                 </div>
               </div>
-          
-              <div className="flex flex-col gap-2 items-center justify-between">
+
+              <div className="flex flex-col items-center justify-between gap-2">
                 <Button
                   type="submit"
                   className="flex w-full justify-center rounded-md px-6 bg-mainBlue py-1.5 text-base font-semibold leading-6 text-white shadow-sm hover:bg-hoverBlue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -108,7 +111,7 @@ const LoginSesion = () => {
                   Iniciar sesión
                 </Button>
                 <Button
-                onClick={handleForgetPassword}
+                  onClick={handleForgetPassword}
                   type="button"
                   className="flex w-full justify-center rounded-md px-6 bg-white py-1.5 text-lg font-normal leading-6 text-textBlue"
                 >
@@ -125,3 +128,4 @@ const LoginSesion = () => {
 };
 
 export default LoginSesion;
+

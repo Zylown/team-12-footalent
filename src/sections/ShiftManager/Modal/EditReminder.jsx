@@ -4,7 +4,7 @@ import CardWhite from '../../../components/CardWhite';
 import ModalOk from '../../../components/ModalOk';
 import TimeInput from '../../../components/TimeInput';
 import ModalCancel from '../../../components/ModalCancel';
-import { FaBold, FaUnderline, FaItalic, FaImage } from 'react-icons/fa';
+
 
 const EditReminder = ({ isVisible, setModalIsVisible }) => {
   //estado para el texto

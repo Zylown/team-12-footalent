@@ -5,14 +5,9 @@ import Button from '../../../components/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import reasonSchema from '../../../validations/addReason';
 import ModalOk from '../../../components/ModalOk';
-import { FiClock } from "react-icons/fi";
-import DatePicker, { registerLocale } from "react-datepicker";
 import { useForm, Controller } from "react-hook-form";
-import "react-datepicker/dist/react-datepicker.css";
-import { format, parse, setHours, setMinutes, addMinutes , setSeconds} from "date-fns";
-import es from "date-fns/locale/es"; // o cualquier otra localización que necesites
-
-registerLocale("es", es); // Registrar la localización
+import TimeInput from "../../../components/TimeInput";
+import { createReason } from '../../../api/reasons/reasons-services';
 
 const ModalAdd = ({ isVisible, setModalIsVisible }) => {
   const [modalOk, setModalOk] = useState(false);
@@ -20,24 +15,22 @@ const ModalAdd = ({ isVisible, setModalIsVisible }) => {
     resolver: zodResolver(reasonSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    setModalOk(true);
-  };
+  const onSubmit = async (data) => {
+    try{
+
+    
+    const response = await createReason(data);
+    if (response && response.status === 201) {
+      setModalOk(true);
+    }
+  }catch (error) {
+      console.error("Error de la API:", error);
+    }
+    };
+  
 
   const handleCancel = () => {
     setModalIsVisible(false);
-  };
-
-  const generateTimes = () => {
-    const times = [];
-    let start = setHours(setMinutes(setSeconds(new Date(), 0), 0), 0); // Asegurarse de que los segundos sean 0
-    let end = setHours(setMinutes(setSeconds(new Date(), 0), 0), 5); // Asegurarse de que los segundos sean 0
-    while (start <= end) {
-      times.push(start);
-      start = addMinutes(start, 30);
-    }
-    return times;
   };
 
   return (
@@ -64,44 +57,17 @@ const ModalAdd = ({ isVisible, setModalIsVisible }) => {
               </div>
               <div className="w-full relative">
                 <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-                  Tiempo del Motivo *
+                 
                 </label>
                 <Controller
-                  control={control}
                   name="time"
+                  control={control}
                   render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      className={`bg-[#F6FBFF] rounded-[4px] w-full border placeholder:text-[#1C3454] placeholder:text-opacity-25 placeholder:text-lg placeholder:font-normal ${
-                        errors.time ? "border-red-600 border-2" : "border-[#193B67] border-opacity-15"
-                      }`}
-                      locale="es"
-                      selected={field.value ? parse(field.value, "HH:mm", new Date()) : null}
-                      timeCaption="Hora"
-                      dateFormat="HH:mm"
-                      showTimeSelectOnly
-                      showTimeSelect
-                      includeTimes={generateTimes()}
-                      scrollableTimePicker={"00:00"}
-                      onSelect={null}
-                      minTime={setHours(setMinutes(new Date(), 0), 0)}
-                      maxTime={setHours(setMinutes(new Date(), 0), 5)}
-                      placeholderText="Seleccione hora"
-                      onChange={(hour) => field.onChange(format(hour, "HH:mm"))}
-                      customInput={
-                        <div className="relative">
-                          <input
-                            type="text"
-                            value={field.value || ""}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className="w-full bg-transparent border-none focus:ring-0 p-1"
-                            placeholder="Seleccione hora"
-                            {...register("time")}
-                            readOnly
-                          />
-                          <FiClock className="text-[#1B2B41] text-opacity-70 absolute right-0 top-1/2 transform -translate-y-1/2 text-2xl" />
-                        </div>
-                      }
+                    <TimeInput
+                      maxTime={240} // Máximo tiempo en minutos (4 horas)
+                      interval={30} // Intervalo en minutos (30 minutos)
+                      onChange={field.onChange}
+                      label="Tiempo del Motivo *"
                     />
                   )}
                 />
@@ -129,4 +95,3 @@ const ModalAdd = ({ isVisible, setModalIsVisible }) => {
 };
 
 export default ModalAdd;
-
