@@ -1,6 +1,6 @@
 import CardWhite from "../../components/CardWhite";
 import BannerHome from "../../assets/ImageFilter.svg";
-import BannerAdmin from "../../assets/BannerAdmin.svg";
+import BannerAdmin from "../../assets/BannerAdmin.jpg";
 import { PiIdentificationCard } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
@@ -68,18 +68,18 @@ export default function CardWelcome() {
         <div className="w-full bg-[#f3f5f7] flex flex-col gap-2 px-4 py-3">
           <div className="flex sm:flex-row flex-col gap-2">
             <Link
-              to={"/agenda"}
-              className="flex rounded items-center justify-center bg-[#006af5] flex-1 px-[14px] py-2 text-white hover:bg-[#005fdb] transition-all"
-            >
-              <CiCalendar className="text-4xl text-[#c0d2ff]" />
-              <p className="text-xl font-extralight">Agenda</p>
-            </Link>
-            <Link
               to={"/pacientes"}
               className="flex rounded items-center justify-center bg-[#006af5] flex-1 px-[14px] py-2 text-white hover:bg-[#005fdb] transition-all"
             >
               <PiIdentificationCard className="text-4xl text-[#c0d2ff]" />
               <p className="text-xl font-extralight">Pacientes</p>
+            </Link>
+            <Link
+              to={"/agenda"}
+              className="flex rounded items-center justify-center bg-[#006af5] flex-1 px-[14px] py-2 text-white hover:bg-[#005fdb] transition-all"
+            >
+              <CiCalendar className="text-4xl text-[#c0d2ff]" />
+              <p className="text-xl font-extralight">Agenda</p>
             </Link>
             {role === "admin" ? (
               <Link

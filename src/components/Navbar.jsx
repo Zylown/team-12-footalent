@@ -20,6 +20,8 @@ export default function Navbar() {
   let nombreUsuario;
   //estado para saber si el usuario esta logueado
   const [isLogin, setIsLogin] = useState(false);
+  // no mostrar pacientes y agenda en el inicio
+  const [isInicio, setIsInicio] = useState(false);
 
   const getUserData = useMemo(() => {
     return async (userId) => {
@@ -59,10 +61,16 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (location.pathname === "/" || location.pathname === "/inicio") {
+    if (location.pathname === "/") {
       setIsLogin(false);
     } else {
       setIsLogin(true);
+    }
+
+    if (location.pathname === "/inicio") {
+      setIsInicio(true);
+    } else {
+      setIsInicio(false);
     }
 
     // Cerrar el menú si se hace clic fuera de él
@@ -87,7 +95,7 @@ export default function Navbar() {
     >
       <div className="lg:px-[120px] px-4 pr-8 flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <Link to={isLogin ? "/" : "/inicio"} className="flex items-center">
+          <Link to={isLogin ? "/inicio" : "/"} className="flex items-center">
             <p className="text-white text-2xl font-bold font-nunito mr-2">
               DentPlanner
             </p>
@@ -139,7 +147,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-        {isLogin && (
+        {isInicio ? null : (
           <div className="md:flex hidden">
             <ul className="flex gap-6 text-white font-semibold text-xl items-center">
               <li>
@@ -207,16 +215,21 @@ export default function Navbar() {
                   <FaCaretDown className="ml-1 text-white" />
                 </button>
                 {isOpenMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded z-10">
+                  <div
+                    className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded z-10"
+                    ref={menuRef}
+                  >
                     <div className="absolute top-[-6px] right-2 w-5 h-5 bg-white rotate-45 -z-10"></div>
-                    <Link
-                      to="/perfil"
-                      className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
-                      onClick={closeMenu}
-                    >
-                      <AiOutlineUser className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
-                      Perfil
-                    </Link>
+                    {isInicio ? null : (
+                      <Link
+                        to="/perfil"
+                        className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-t"
+                        onClick={closeMenu}
+                      >
+                        <AiOutlineUser className="text-[#1B2B41] text-opacity-70 text-2xl mr-3" />
+                        Perfil
+                      </Link>
+                    )}
                     <Link
                       to="/soporte"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100"
