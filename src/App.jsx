@@ -36,10 +36,10 @@ function App() {
   return (
     <Router>
       {/* en caso de que la ruta sea landing se muestra el componente LandingPage, en caso contrario se muestra el componente Navbar */}
-      {window.location.pathname === "/landing" ? null : <Navbar />}
+      {window.location.pathname === "/" ? null : <Navbar />}
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/iniciar-sesion" element={<Login />} />
         <Route
           path="/agenda"
           element={allRoles ? <CalendarPage /> : <Navigate to="/" replace />}

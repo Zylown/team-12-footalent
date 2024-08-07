@@ -61,7 +61,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (location.pathname === "/iniciar-sesion") {
       setIsLogin(false);
     } else {
       setIsLogin(true);
@@ -95,7 +95,10 @@ export default function Navbar() {
     >
       <div className="lg:px-[120px] px-4 pr-8 flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <Link to={isLogin ? "/inicio" : "/"} className="flex items-center">
+          <Link
+            to={isLogin ? "/inicio" : "/iniciar-sesion"}
+            className="flex items-center"
+          >
             <p className="text-white text-2xl font-bold font-nunito mr-2">
               DentPlanner
             </p>
@@ -135,7 +138,7 @@ export default function Navbar() {
                 Soporte
               </Link>
               <Link
-                to="/"
+                to="/iniciar-sesion"
                 className="flex items-center px-4 py-3 border-t-2 text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
                 onClick={() => {
                   localStorage.removeItem("token");
@@ -147,7 +150,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-        {isInicio ? null : (
+        {isInicio || location.pathname === "/iniciar-sesion" ? null : (
           <div className="md:flex hidden">
             <ul className="flex gap-6 text-white font-semibold text-xl items-center">
               <li>
@@ -186,7 +189,7 @@ export default function Navbar() {
                       Soporte
                     </Link>
                     <Link
-                      to="/"
+                      to="/iniciar-sesion"
                       className="flex items-center px-4 py-3 border-t  text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
                       onClick={() => {
                         localStorage.removeItem("token");
@@ -239,7 +242,7 @@ export default function Navbar() {
                       Soporte
                     </Link>
                     <Link
-                      to="/"
+                      to="/iniciar-sesion"
                       className="flex items-center px-4 py-3 border-t  text-gray-700 text-lg font-normal hover:bg-gray-100 rounded-b"
                       onClick={() => {
                         localStorage.removeItem("token");
