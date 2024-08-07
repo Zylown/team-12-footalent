@@ -10,7 +10,7 @@ import {
   deletePatientById,
   getAllPatients,
 } from "../../api/patients/apiPatients";
-import { HiOutlineTrash } from "react-icons/hi";
+import { AiOutlineUserDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import ModalDeleted from "../../components/ModalDeleted";
 import { toast, Toaster } from "react-hot-toast";
@@ -43,7 +43,7 @@ export default function TableDni({ searchDni }) {
       cell: (info) => (
         <div className="flex items-center justify-center gap-2 relative w-full">
           <span>{info.getValue()}</span>
-          <HiOutlineTrash
+          <AiOutlineUserDelete
             className="text-[#1C304A] text-opacity-50 text-2xl cursor-pointer absolute right-0"
             onClick={(event) => handleDeleteClick(event, info.row.original.id)}
           />

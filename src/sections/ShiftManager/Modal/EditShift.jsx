@@ -26,7 +26,7 @@ export default function EditShift({
   setModalModifyIsVisible,
   eventInfo,
   data,
-  updateEventInState,
+  forceCalendarUpdate,
 }) {
   //estados para manejar la fecha y la hora
   const [selectedDate, setSelectedDate] = useState(null);
@@ -93,18 +93,7 @@ export default function EditShift({
         data: formData,
       });
       if (response) {
-        const updatedEvent = {
-          id: SHIFT_ID,
-          title: `${eventInfo.title}`,
-          start: `${formData.date}T${formData.time}`,
-          backgroundColor: eventInfo.backgroundColor,
-          borderColor: eventInfo.borderColor,
-          extendedProps: {
-            ...eventInfo.extendedProps,
-          },
-        };
-        console.log("UPDATE EVENTS", updatedEvent);
-        updateEventInState(updatedEvent);
+        forceCalendarUpdate();
         toast.success("Turno modificado con éxito");
         setTimeout(() => {
           setModalModifyIsVisible(false);
@@ -137,6 +126,10 @@ export default function EditShift({
     const formattedHour = hour ? format(hour, "HH:mm") : "";
     setValue("hour", formattedHour);
     setSelectedHour(hour);
+  };
+
+  const handleDelete = () => {
+    SHIFT_ID;
   };
 
   //parsear la fecha para que se muestre en el input
@@ -308,12 +301,20 @@ export default function EditShift({
                 </div>
               </div>
               <div className="flex flex-col w-full gap-2">
-                <Button
-                  type="submit"
-                  className="bg-[#006AF5] text-white font-semibold"
-                >
-                  Guardar cambios
-                </Button>
+                <div className="flex w-full gap-2">
+                  <Button
+                    className="bg-white border border-[#E21D12] text-[#E21D12] font-semibold w-1/2"
+                    onClick={handleDelete}
+                  >
+                    Eliminar
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-[#006AF5] text-white font-semibold w-1/2"
+                  >
+                    Guardar
+                  </Button>
+                </div>
                 <Button
                   className="bg-white text-[#006AF5] font-normal"
                   type="button"
@@ -340,7 +341,7 @@ EditShift.propTypes = {
   eventInfo: PropTypes.object.isRequired,
   isVisible: PropTypes.bool.isRequired,
   setModalModifyIsVisible: PropTypes.func.isRequired,
-  updateEventInState: PropTypes.func.isRequired,
+  forceCalendarUpdate: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
 };
 

@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Button from '../../../components/Button';
-import CardWhite from '../../../components/CardWhite';
-import ModalOk from '../../../components/ModalOk';
-import TimeInput from '../../../components/TimeInput';
-import ModalCancel from '../../../components/ModalCancel';
-
+import React, { useState, useEffect } from "react";
+import Button from "../../../components/Button";
+import CardWhite from "../../../components/CardWhite";
+import ModalOk from "../../../components/ModalOk";
+import TimeInput from "../../../components/TimeInput";
+import ModalCancel from "../../../components/ModalCancel";
 
 const EditReminder = ({ isVisible, setModalIsVisible }) => {
   //estado para el texto
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   // Estado para la anticipación
-  const [anticipation, setAnticipation] = useState(null); 
+  const [anticipation, setAnticipation] = useState(null);
   //estado para el modal de ok
   const [modalOk, setModalOk] = useState(false);
-  
+
   //estado para el modal de cancelar
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
 
@@ -22,12 +21,10 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
     setText(generateReminderMessage("Marcelo", "01/08/2024", anticipation));
   }, [anticipation]);
 
-  
-
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
-//configuro la anticipacion
+  //configuro la anticipacion
   const handleAnticipationChange = (value) => {
     if (value === "") {
       setAnticipation(null);
@@ -35,7 +32,11 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
       const minutes = parseInt(value, 10);
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
-      setAnticipation(`${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')} hs`);
+      setAnticipation(
+        `${hours.toString().padStart(2, "0")}:${mins
+          .toString()
+          .padStart(2, "0")} hs`
+      );
     }
   };
   const handleOnClose = () => {
@@ -61,19 +62,22 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <CardWhite className="w-[568px] bg-white">
             <div className="space-y-1">
               {/* Sección de botones para modificar texto */}
               <div className="flex justify-between items-start p-[10px] bg-bgGrey">
-                <h2 className="text-[24px] font-semibold text-textGrey mb-1">Recordatorio</h2>
+                <h2 className="text-[24px] font-semibold text-textGrey mb-1">
+                  Recordatorio
+                </h2>
               </div>
               {/* Campo de texto predefinido */}
-              <div className='px-[10px]'>
-                <label htmlFor="text" className="block text-sm font-medium text-gray-700">
-                 
-                </label>
-                <div className=" p-2">
+              <div className="px-[10px]">
+                <label
+                  htmlFor="text"
+                  className="block text-sm font-medium text-gray-700"
+                ></label>
+                <div className="p-2 ">
                   <textarea
                     id="text"
                     value={text}
@@ -85,8 +89,11 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
               </div>
 
               {/* Botón de seleccionar anticipación */}
-              <div className='p-[10px]  border-t bg-[#FAFDFF]'>
-                <label htmlFor="anticipation" className="block text-sm font-medium pb-1 text-gray-700">
+              <div className="p-[10px]  border-t bg-[#FAFDFF]">
+                <label
+                  htmlFor="anticipation"
+                  className="block pb-1 text-sm font-medium text-gray-700"
+                >
                   Anticipación
                 </label>
                 <TimeInput
@@ -95,13 +102,16 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
                   onChange={handleAnticipationChange}
                   className="max-w-[250px]" // Clase personalizada para el ancho máximo
                 />
-               
               </div>
 
               {/* Botones de cancelar y guardar */}
               <div className="flex gap-2 p-[10px] bg-bgGrey justify-end">
-                <Button onClick={handleCancel} className=" text-mainBlue">Cancelar</Button>
-                <Button onClick={handleSave} className="bg-mainBlue text-white">Guardar</Button>
+                <Button onClick={handleCancel} className=" text-mainBlue">
+                  Cancelar
+                </Button>
+                <Button onClick={handleSave} className="text-white bg-mainBlue">
+                  Guardar
+                </Button>
               </div>
             </div>
           </CardWhite>
@@ -122,3 +132,4 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
 };
 
 export default EditReminder;
+

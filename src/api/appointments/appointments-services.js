@@ -8,6 +8,7 @@ export const getAppointments = async ({ id }) => {
     const response = await axios.get(
       `${BASE_URL}${APPOINTMENTS_PATHS.GET_BY_DENTIST_ID}/${id}`
     );
+
     return formatEvents(response.data);
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -48,6 +49,31 @@ export const getAppointmentPatientById = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching appointment patient:", error);
+    throw error;
+  }
+};
+
+export const deleteAppointment = async (id) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}${APPOINTMENTS_PATHS.UPDATE_APPOINTMENT}/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error update appointmets:", error.response.data);
+    throw error;
+  }
+};
+
+export const updateAppointmentState = async ({ id, data }) => {
+  try {
+    const response = await axios.patch(
+      `${BASE_URL}${APPOINTMENTS_PATHS.UPDATE_APPOINTMENT_STATE}/${id}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error update state appointmets:", error.response.data);
     throw error;
   }
 };

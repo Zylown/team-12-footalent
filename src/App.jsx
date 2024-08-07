@@ -1,15 +1,8 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Register from "./pages/Register/Register";
 import Patients from "./pages/Pacientes/Patients";
-import Navbar from "./components/Navbar";
 import History from "./pages/Pacientes/History";
 import Profile from "./pages/Profile/Profile";
 import ClininalInfo from "./pages/ClinicalInfo/ClininalInfo";
@@ -20,6 +13,9 @@ import { useDecode } from "./hooks/useDecode";
 import LandingPage from "./pages/Landing/LandingPage";
 import Reasons from "./pages/Reasons/Reasons";
 import ChangePassword from "./pages/ChangePassword/ChangePassword";
+import Support from "./pages/Support/Support";
+import Layout from "./components/Layout";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   // const token = localStorage.getItem("token") ? true : false;
@@ -34,11 +30,9 @@ function App() {
       decoded.role === "dentist");
 
   return (
-    <Router>
-      {/* en caso de que la ruta sea landing se muestra el componente LandingPage, en caso contrario se muestra el componente Navbar */}
-      {window.location.pathname === "/" ? null : <Navbar />}
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route element={<Layout />}>
         <Route path="/iniciar-sesion" element={<Login />} />
         <Route
           path="/agenda"
@@ -50,7 +44,7 @@ function App() {
         />
         <Route
           path="/perfil/cambiar-contraseña"
-          element={allRoles ? <ChangePassword/> : <Navigate to="/" replace />}
+          element={allRoles ? <ChangePassword /> : <Navigate to="/" replace />}
         />
         <Route
           path="/pacientes"
@@ -63,6 +57,10 @@ function App() {
         <Route
           path="/perfil/motivos"
           element={allRoles ? <Reasons /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/perfil/soporte"
+          element={allRoles ? <Support /> : <Navigate to="/" replace />}
         />
         <Route
           path="/usuarios"
@@ -101,9 +99,9 @@ function App() {
         />
         <Route path="/test" element={<CalendarPage />} />
         <Route path="/test/:id" element={<CalendarPage />} />
-        <Route path="*" element={<p>404 page not found</p>} />
-      </Routes>
-    </Router>
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 

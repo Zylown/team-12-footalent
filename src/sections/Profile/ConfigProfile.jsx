@@ -46,13 +46,13 @@ const ConfigProfile = () => {
               </Link>
             </div>
             <div className="py-1 flex justify-center ">
-              <Button
-                type="button"
+              <Link
+                to="/perfil/soporte"
                 className="py-[13.5px] px-[48px] border border-mainBlue text-mainBlue  text-center "
-                onClick={handleOpenModalAdd}
+                
               >
                 Soporte
-              </Button>
+              </Link>
             </div>
             <div className="py-1 flex  justify-center ">
               <Link

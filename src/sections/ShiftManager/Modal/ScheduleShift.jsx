@@ -6,9 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import addShiftSchema from "../../../validations/addShift";
 import Button from "../../../components/Button";
 import { AiOutlineUserAdd } from "react-icons/ai";
-import { FiCalendar } from "react-icons/fi";
-import { FiClock } from "react-icons/fi";
-import { FaChevronDown } from "react-icons/fa";
+import { FiCalendar, FiClock } from "react-icons/fi";
+import { FaChevronDown, FaRegEdit } from "react-icons/fa";
 import DatePicker, { registerLocale } from "react-datepicker";
 import { es } from "date-fns/locale";
 import { format, parse } from "date-fns";
@@ -18,6 +17,7 @@ import PatientsModal from "./AddPatients/AddPatientsModal";
 import { createAppointment } from "/src/api/appointments/appointments-services";
 import { Toaster, toast } from "react-hot-toast";
 import EditReminder from "./EditReminder";
+import TimeInput from "../../../components/TimeInput";
 
 const locale = es;
 registerLocale("es", locale);
@@ -80,6 +80,9 @@ export default function ScheduleShift({
       }
     } catch (error) {
       console.error("Error al crear el turno:", error);
+      if (error.response.data.error === "Appointment slot already taken") {
+        return toast.error("Ups, este horario ya está ocupado por otro turno.");
+      }
       toast.error(
         "No se pudo realizar el cambio. Por favor, intenta nuevamente."
       );
@@ -129,6 +132,21 @@ export default function ScheduleShift({
   const handleReminder = () => {
     setModalReminder(true);
   };
+
+  /* const handleAnticipationChange = (value) => {
+    if (value === "") {
+      setAnticipation(null);
+    } else {
+      const minutes = parseInt(value, 10);
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      setAnticipation(
+        `${hours.toString().padStart(2, "0")}:${mins
+          .toString()
+          .padStart(2, "0")} hs`
+      );
+    }
+  }; */
   return (
     isVisible && (
       <>
@@ -295,26 +313,49 @@ export default function ScheduleShift({
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
               </div>
-              <div className="flex flex-col gap-2 sm:items-center sm:gap-1 sm:flex-row">
-                <div className="flex items-center w-full gap-2 sm:w-2/4">
-                  <input
-                    className="w-6 h-6 bg-[#193B67] bg-opacity-15"
-                    type="checkbox"
-                    {...register("reminder")}
-                  />
-                  <label className="text-[#192739] text-opacity-95 text-lg font-normal">
-                    Recordatorio automático
-                  </label>
-                </div>
-                <div className="flex-1">
-                  {/* esto te lleva a otro modal para editar*/}
-                  <Button
+              <div className="flex flex-col gap-2 md:items-start sm:items-center sm:gap-1">
+                <label
+                  htmlFor="anticipation"
+                  className="font-semibold text-lg text-[#1B2B41] text-opacity-70"
+                >
+                  Recordatorio
+                </label>
+                <div className="flex flex-col justify-between w-full gap-5 mb-1 md:flex-row">
+                  <div className="flex items-center order-2 w-full gap-2 md:order-none sm:w-2/4">
+                    <label className="inline-flex items-center text-[#192739] text-opacity-95 text-base font-normal text-nowrap select-none">
+                      <input
+                        className="w-6 h-6 bg-[#193B67] bg-opacity-15 mr-2"
+                        type="checkbox"
+                        {...register("reminder")}
+                      />
+                      Envio automático
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between w-full gap-2 md:justify-end">
+                    {/* esto te lleva a otro modal para editar*/}
+                    <div className="">
+                      <TimeInput
+                        maxTime={2880} // Máximo tiempo en minutos (48 horas)
+                        interval={720} // Intervalo en minutos (12 hora)
+                        //onChange={handleAnticipationChange}
+                        className="w-48" // Clase personalizada para el ancho máximo
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleReminder}
+                      className="p-2"
+                    >
+                      <FaRegEdit className="w-6 h-6" />
+                    </button>
+                    {/* <Button
                     type="button"
                     onClick={handleReminder}
                     className="w-full justify-center flex font-light text-lg border border-[#C3D4FF] bg-[#F6FBFF] text-[#005FDB]"
                   >
                     Editar recordatorio
-                  </Button>
+                  </Button> */}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col w-full gap-2">

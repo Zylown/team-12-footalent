@@ -7,15 +7,13 @@ import esLocale from "@fullcalendar/core/locales/es";
 import EditShift from "../ShiftManager/Modal/EditShift";
 import EventsContent from "./EventsContent";
 
-//import { IoMdInformationCircleOutline } from "react-icons/io";
-
 export default function WeeklyCalendar({
   eventsDB,
   dateSelected,
   setModalModifyIsVisible,
   modalModifyIsVisible,
   data,
-  updateEventInState,
+  forceCalendarUpdate,
 }) {
   const [calendarApis, setCalendarApis] = useState(null);
   const [contentHeight, setContentHeight] = useState(600);
@@ -84,17 +82,6 @@ export default function WeeklyCalendar({
     setEventClickInfo(clickInfo.event);
   }
 
-  const updateCalendarEvent = (updatedEvent) => {
-    if (calendarRef.current) {
-      const calendarApi = calendarRef.current.getApi();
-      const existingEvent = calendarApi.getEventById(updatedEvent.id);
-      if (existingEvent) {
-        existingEvent.remove();
-      }
-      calendarApi.addEvent(updatedEvent);
-    }
-  };
-
   return (
     <>
       <div className="relative p-2 pb-3 demo-app">
@@ -118,7 +105,10 @@ export default function WeeklyCalendar({
             events={eventsDB}
             select={handleDateSelect}
             eventContent={(eventInfo) => (
-              <EventsContent eventInfo={eventInfo} />
+              <EventsContent
+                eventInfo={eventInfo}
+                forceCalendarUpdate={forceCalendarUpdate}
+              />
             )} // custom render function
             eventClick={handleEventClick}
             eventOverlap={false}
@@ -136,7 +126,6 @@ export default function WeeklyCalendar({
             slotMaxTime="21:00:00"
             allDaySlot={false}
             contentHeight={contentHeight}
-            /* height={500} */
             slotLabelFormat={{
               hour: "numeric",
               minute: "2-digit",
@@ -156,10 +145,7 @@ export default function WeeklyCalendar({
           eventInfo={eventClickInfo}
           isVisible={modalModifyIsVisible}
           setModalModifyIsVisible={setModalModifyIsVisible}
-          updateEventInState={(updatedEvent) => {
-            updateEventInState(updatedEvent);
-            updateCalendarEvent(updatedEvent);
-          }}
+          forceCalendarUpdate={forceCalendarUpdate}
         />
       )}
     </>
@@ -170,7 +156,7 @@ WeeklyCalendar.propTypes = {
   data: PropTypes.object.isRequired,
   modalModifyIsVisible: PropTypes.bool.isRequired,
   setModalModifyIsVisible: PropTypes.func.isRequired,
-  updateEventInState: PropTypes.func.isRequired,
+  forceCalendarUpdate: PropTypes.func.isRequired,
   eventsDB: PropTypes.array,
   dateSelected: PropTypes.string.isRequired, // Cambiado a string
 };

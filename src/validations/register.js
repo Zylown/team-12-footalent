@@ -23,7 +23,8 @@ const registerSchema = z.object({
     .max(100, "La contraseña no puede exceder los 100 caracteres"),
   phone1: z
     .string()
-    .regex(/^[0-9]{10}$/, "El teléfono debe tener 10 dígitos"),
+    .regex(/^[0-9]/, "Debe ingresar un numero válido")
+    .min(10, "el numero tiene que tener mas de 10 dígitos"),
     role: z.enum(["odontologo", "secretario"], {
       message: "Debe seleccionar un rol válido",
     }),

@@ -51,6 +51,7 @@ export default function formatEvents(events) {
         patientId: event.patient_id,
         dentistId: event.dentist_id,
         reasonId: event.reason_id,
+        assistance: event.assistance,
       },
     };
   });

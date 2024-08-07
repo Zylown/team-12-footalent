@@ -7,6 +7,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { getAppointments, getDentists, getAllReasons } from "../../api";
 import CardWhite from "../../components/CardWhite";
 import { useDecode } from "../../hooks/useDecode";
+import toast, { Toaster } from "react-hot-toast";
 
 function CalendarPage() {
   const [eventsDB, setEventsDB] = useState(null);
@@ -38,6 +39,7 @@ function CalendarPage() {
       setLoading(true);
       try {
         const response = await getAppointments({ id: dentistID });
+
         setEventsDB(response);
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -74,6 +76,15 @@ function CalendarPage() {
         });
       } catch (error) {
         console.error("Error fetching data:", error);
+        if (error.status === 500) {
+          toast.error(
+            "Problemas en el servidor, Por favor, intenta nuevamente"
+          );
+        } else {
+          toast.error(
+            "No se pudo conectar con el servidor. Por favor, intenta nuevamente."
+          );
+        }
       } finally {
         setLoading(false);
       }
@@ -94,15 +105,15 @@ function CalendarPage() {
     setDentistID(value);
   };
 
-  const updateEventInState = (updatedEvent) => {
+  /* const updateEventInState = (updatedEvent) => {
     setEventsDB((prevEvents) => {
       if (!prevEvents) return [updatedEvent];
       return prevEvents.map((event) =>
         event.id === updatedEvent.id ? updatedEvent : event
       );
     });
-  };
-
+  }; */
+  //console.log("SERCIVE", eventsDB);
   return (
     <>
       <div className="max-w-7xl relative flex justify-center w-full mx-auto bg-white border-2 border-[#1C3454]/26 border-solid rounded my-6 font-sans">
@@ -131,7 +142,7 @@ function CalendarPage() {
             modalModifyIsVisible={modalModifyIsVisible}
             setModalModifyIsVisible={setModalModifyIsVisible}
             data={data}
-            updateEventInState={updateEventInState}
+            forceCalendarUpdate={forceCalendarUpdate}
           />
           <ShiftSidebar
             handleDateSelect={handleDateSelect}
@@ -166,7 +177,7 @@ function CalendarPage() {
               <select
                 /* placeholder="Seleccionar profesional" */
                 defaultValue=""
-                className="appearance-none cursor-pointer bg-white py-2 px-2.5 w-full rounded border border-mainBlue text-textBlue focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
+                className="appearance-none cursor-pointer bg-white py-1.5 px-2.5 w-full rounded border border-mainBlue text-textBlue focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
                 onChange={(e) => handleChange(e.target.value)}
               >
                 <option value="" disabled hidden>
@@ -175,8 +186,7 @@ function CalendarPage() {
                 {data.dentists &&
                   data.dentists.map((dentist) => (
                     <option key={dentist.id} value={dentist.id}>
-                      {dentist.first_name}
-                      {dentist.last_name}
+                      {dentist.first_name} {dentist.last_name}
                     </option>
                   ))}
               </select>
@@ -185,6 +195,7 @@ function CalendarPage() {
           </div>
         </CardWhite>
       </div>
+      <Toaster position="top-right" />
     </>
   );
 }

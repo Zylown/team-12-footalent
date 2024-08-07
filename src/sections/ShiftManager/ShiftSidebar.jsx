@@ -45,7 +45,7 @@ function ShiftSidebar({
               <select
                 /* placeholder="Seleccionar profesional" */
                 defaultValue={dentistID}
-                className="appearance-none cursor-pointer bg-white py-2 px-2.5 w-full rounded border border-mainBlue text-textBlue focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
+                className="appearance-none cursor-pointer bg-white py-1.5 px-2.5 w-full rounded border border-mainBlue text-textBlue focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400"
                 onChange={(e) => handleChange(e.target.value)}
               >
                 <option value="" disabled hidden>
@@ -54,8 +54,7 @@ function ShiftSidebar({
                 {data.dentists &&
                   data.dentists.map((dentist) => (
                     <option key={dentist.id} value={dentist.id}>
-                      {dentist.first_name}
-                      {dentist.last_name}
+                      {dentist.first_name} {dentist.last_name}
                     </option>
                   ))}
               </select>

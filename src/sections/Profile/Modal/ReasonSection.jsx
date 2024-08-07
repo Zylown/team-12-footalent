@@ -6,8 +6,7 @@ import Button from '../../../components/Button';
 import { IoSearch,IoClose } from "react-icons/io5";
 import { GoPersonAdd } from "react-icons/go";
 import ModalAdd from "./ModalAdd";
-import ModalDeleted from "../../../components/ModalDeleted";
-import { HiOutlineTrash } from "react-icons/hi";
+
 
 const ReasonSection = () => {
   const [reasons, setReasons] = useState([]);
@@ -52,18 +51,6 @@ const ReasonSection = () => {
   const handleDeletedModal = (reason) => {
     setDeletedReason(true);
     setReasonToDelete(reason);
-  };
-
-  const handleDeleteReason = async () => {
-    
-    if (reasonToDelete) {
-      try{
-      await deleteReasonById(reasonToDelete.id);
-      fetchReasons(); // Refrescar la lista de motivos
-      setDeletedReason(false);}catch (error) {
-        console.error("Error de la API:", error);
-      }
-    }
   };
 
   const handleAddModal = () => {
@@ -126,17 +113,12 @@ const ReasonSection = () => {
                       <p className="border rounded-md p-2 bg-white">{reason.time} Hs</p>
                     </td>
                     <td className="w-3/4">
-                      <div className="flex items-center justify-center relative">
+                      <div className="flex items-center justify-center ">
                         <p className="w-full p-2 rounded-md border text-center mr-2 bg-white">
                           {reason.description}
                         </p>
-                        <Button
-                          type="button"
-                          onClick={() => handleDeletedModal(reason)}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
-                        >
-                          <HiOutlineTrash className="text-[#7d8693]" />
-                        </Button>
+                        
+                      
                       </div>
                     </td>
                   </tr>
@@ -147,15 +129,7 @@ const ReasonSection = () => {
         </CardWhite>
       </div>
       {addModal && <ModalAdd isVisible={addModal} setModalIsVisible={setAddModal} />}
-      {deletedReason && (
-        <ModalDeleted
-          isVisible={deletedReason}
-          setIsVisible={setDeletedReason}
-          deletedModal={handleDeleteReason}
-          titleModal={"Eliminar motivo"}
-          infoModal={"¿Estás seguro que querés eliminar este motivo? Se eliminarán todos sus datos."}
-        />
-      )}
+     
     </>
   );
 };

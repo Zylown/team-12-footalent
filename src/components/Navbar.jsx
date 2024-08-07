@@ -191,7 +191,7 @@ export default function Navbar() {
                       Perfil
                     </Link>
                     <Link
-                      to="/soporte"
+                      to="/perfil/soporte"
                       className="flex items-center px-4 py-3 text-gray-700 text-lg font-normal hover:bg-gray-100"
                       onClick={closeMenu}
                     >
