@@ -56,7 +56,7 @@ function App() {
         />
         <Route
           path="/perfil/motivos"
-          element={allRoles ? <Reasons /> : <Navigate to="/" replace />}
+          element={(decoded?.role === "admin" ||decoded?.role === "secretary" ) ? (<Reasons />) : (<Navigate to="/inicio" replace />)}
         />
         <Route
           path="/perfil/soporte"

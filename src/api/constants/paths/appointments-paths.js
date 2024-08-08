@@ -5,6 +5,5 @@ export const APPOINTMENTS_PATHS = {
   UPDATE_APPOINTMENT: "/appointments",
   CREATE_APPOINTMENT: "/appointments",
   UPDATE_APPOINTMENT_STATE: "/appointments",
-  /* DELETE_BY_ID: '/api/appointments',
-   */
+  DELETE_BY_ID: "/appointments",
 };

@@ -56,7 +56,7 @@ export const getAppointmentPatientById = async (id) => {
 export const deleteAppointment = async (id) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}${APPOINTMENTS_PATHS.UPDATE_APPOINTMENT}/${id}`
+      `${BASE_URL}${APPOINTMENTS_PATHS.DELETE_BY_ID}/${id}`
     );
     return response.data;
   } catch (error) {

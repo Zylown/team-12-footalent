@@ -11,13 +11,11 @@ import { useCallback, useMemo } from "react";
 const Adjustments = () => {
   const token = localStorage.getItem("token");
   const decode = useDecode(token);
+const role = decode.role
+
 
   const [infoClinic, setInfoClinic] = useState(null);
-  const [modalIsVisible, setModalIsVisible] = useState(false);
-
-  const handleReasons = () => {
-    window.location.href = "perfil/motivos";
-  };
+  
 
   // Mapeo de nombres de columnas a nombres legibles en español y el useMemo para evitar que se recalcule en cada render
   const columnNames = useMemo(
@@ -83,14 +81,17 @@ const Adjustments = () => {
               sections={infoClinic}
             />
           </div>
-
-          <div className="border rounded-md">
+{ (role === "admin"|| role === "secretary") && (
+  <div className="border rounded-md">
             <DropTable
               nameButton={"Consultas"}
               sections={section2}
-              setModalIsVisible={handleReasons}
+              redirect={"/perfil/motivos"}
             />
-          </div>
+          </div>)
+
+          
+          }
 
           <div className="border rounded-md">
             <ConfigProfile nameButton={"Consultas"} sections={section2} />

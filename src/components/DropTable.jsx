@@ -1,8 +1,9 @@
 import Button from "./Button";
 import { useState } from "react";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const Table = ({ nameButton, sections, setModalIsVisible }) => {
+const Table = ({ nameButton, sections, redirect }) => {
   //seteo y funcion para desplegar la tabla
   const [isOpen, setIsOpen] = useState(false);
   const handle = () => {
@@ -41,13 +42,13 @@ const Table = ({ nameButton, sections, setModalIsVisible }) => {
                     </p>
 
                     {section.icon && (
-                      <Button
-                        type="button"
-                        onClick={setModalIsVisible}
+                      <Link
+                        to={redirect}
+                        
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                       >
                         {section.icon}
-                      </Button>
+                      </Link>
                     )}
                   </div>
                 </td>

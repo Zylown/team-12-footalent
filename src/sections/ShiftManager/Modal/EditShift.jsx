@@ -13,9 +13,13 @@ import { es } from "date-fns/locale";
 import { format, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import ModalCancel from "../../../components/ModalCancel";
-import { updateAppointment } from "/src/api/appointments/appointments-services";
+import {
+  updateAppointment,
+  deleteAppointment,
+} from "/src/api/appointments/appointments-services";
 import { Toaster, toast } from "react-hot-toast";
 import TimeReminderPicker from "/src/components/TimeReminderPicker";
+import ConfirmDelete from "/src/components/ConfirmDelete";
 
 const locale = es;
 registerLocale("es", locale);
@@ -32,9 +36,12 @@ export default function EditShift({
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [loadingDelete, setLoadingDelete] = useState(null);
   const [timeReminder, setTimeReminder] = useState(24);
   //estado para cancelar turno y mostrar modal
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
+  //estado para eliminar turno y mostrar modal
+  const [showModal, setShowModal] = useState(false);
 
   const { control, setValue, register, handleSubmit } = useForm({
     resolver: zodResolver(editShiftSchema),
@@ -141,8 +148,29 @@ export default function EditShift({
     setSelectedHour(hour);
   };
 
-  const handleDelete = () => {
-    SHIFT_ID;
+  const handleDelete = async () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setLoadingDelete(true);
+      const response = await deleteAppointment(SHIFT_ID);
+      if (response) {
+        forceCalendarUpdate();
+        toast.success("Turno modificado con éxito");
+        setLoadingDelete(false);
+        setTimeout(() => {
+          setModalModifyIsVisible(false);
+        }, 800);
+      }
+    } catch (error) {
+      console.error("Error al eliminar el turno:", error);
+      setLoadingDelete(false);
+      toast.error("No se pudo borrar el turno. Por favor, intenta nuevamente.");
+    } finally {
+      setLoadingDelete(false);
+    }
   };
 
   //parsear la fecha para que se muestre en el input
@@ -290,8 +318,7 @@ export default function EditShift({
                     {data.dentists &&
                       data.dentists.map((dentist) => (
                         <option key={dentist.id} value={dentist.id}>
-                          {dentist.first_name}
-                          {dentist.last_name}
+                          {dentist.first_name} {dentist.last_name}
                         </option>
                       ))}
                   </select>
@@ -326,7 +353,7 @@ export default function EditShift({
                   <Button
                     danger
                     className="bg-white border border-[#E21D12] text-[#E21D12] font-semibold w-1/2 px-4 py-3 h-10 text-base rounded font-sans"
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(SHIFT_ID)}
                   >
                     Eliminar
                   </Button>
@@ -353,6 +380,13 @@ export default function EditShift({
           isVisible={modalCancelIsVisible}
           setIsVisible={setModalCancelIsVisible}
           cancelModal={handleOnClose}
+        />
+        <ConfirmDelete
+          showModal={showModal}
+          setShowModal={setShowModal}
+          cancelModal={handleOnClose}
+          handleConfirmDelete={handleConfirmDelete}
+          loadingDelete={loadingDelete}
         />
         <Toaster position="top-right" />
       </>
