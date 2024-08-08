@@ -17,7 +17,7 @@ import PatientsModal from "./AddPatients/AddPatientsModal";
 import { createAppointment } from "/src/api/appointments/appointments-services";
 import { Toaster, toast } from "react-hot-toast";
 import EditReminder from "./EditReminder";
-import TimeInput from "../../../components/TimeInput";
+import TimeReminderPicker from "/src/components/TimeReminderPicker";
 
 const locale = es;
 registerLocale("es", locale);
@@ -39,6 +39,7 @@ export default function ScheduleShift({
   const [modalAddPatientVisible, setModalAddPatientVisible] = useState(false);
   // estado para mostrar el modal de editar recordatorio
   const [modalReminder, setModalReminder] = useState(false);
+  const [timeReminder, setTimeReminder] = useState(24);
 
   const {
     control,
@@ -51,7 +52,6 @@ export default function ScheduleShift({
   });
 
   const handleOnSubmit = async (data) => {
-    console.log(data);
     try {
       const dateFormatted = format(selectedDate, "yyyy-MM-dd");
       const hourFormatted = format(selectedHour, "HH:mm");
@@ -65,6 +65,7 @@ export default function ScheduleShift({
         reason_id: reasonID,
         date: dateFormatted,
         time: hourFormatted,
+        anticipation_time: timeReminder,
         is_active: data.reminder,
       };
       console.log("formData", formData);
@@ -151,7 +152,7 @@ export default function ScheduleShift({
     isVisible && (
       <>
         <div className="fixed inset-0 z-50 flex items-center justify-center px-2 bg-white bg-opacity-50">
-          <CardWhite className="bg-white max-w-[568px] px-6 py-2 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <CardWhite className="bg-white max-w-[568px] p-6 pt-12 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="pb-5">
               <h2 className="sm:text-[32px] text-2xl font-semibold text-[#192739]">
                 Agendar turno
@@ -320,7 +321,7 @@ export default function ScheduleShift({
                 >
                   Recordatorio
                 </label>
-                <div className="flex flex-col justify-between w-full gap-5 mb-1 md:flex-row">
+                <div className="flex flex-col items-center justify-between w-full gap-5 mb-1 md:flex-row">
                   <div className="flex items-center order-2 w-full gap-2 md:order-none sm:w-2/4">
                     <label className="inline-flex items-center text-[#192739] text-opacity-95 text-base font-normal text-nowrap select-none">
                       <input
@@ -333,13 +334,8 @@ export default function ScheduleShift({
                   </div>
                   <div className="flex items-center justify-between w-full gap-2 md:justify-end">
                     {/* esto te lleva a otro modal para editar*/}
-                    <div className="">
-                      <TimeInput
-                        maxTime={2880} // Máximo tiempo en minutos (48 horas)
-                        interval={720} // Intervalo en minutos (12 hora)
-                        //onChange={handleAnticipationChange}
-                        className="w-48" // Clase personalizada para el ancho máximo
-                      />
+                    <div className="flex-1 md:flex-none">
+                      <TimeReminderPicker setTimeReminder={setTimeReminder} />
                     </div>
                     <button
                       type="button"
@@ -348,13 +344,6 @@ export default function ScheduleShift({
                     >
                       <FaRegEdit className="w-6 h-6" />
                     </button>
-                    {/* <Button
-                    type="button"
-                    onClick={handleReminder}
-                    className="w-full justify-center flex font-light text-lg border border-[#C3D4FF] bg-[#F6FBFF] text-[#005FDB]"
-                  >
-                    Editar recordatorio
-                  </Button> */}
                   </div>
                 </div>
               </div>

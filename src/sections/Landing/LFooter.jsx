@@ -1,15 +1,37 @@
-import LogoFooter from "../../assets/LogoFooter.svg";
+import LogoFooter from "../../assets/Landing/LogoFooter.svg";
 import { TbWorld } from "react-icons/tb";
 import { IoIosArrowDown } from "react-icons/io";
+import { Link as ScrollLink } from "react-scroll";
 
 export default function LFooter() {
   return (
     <footer className="sm:pt-[19px] sm:pb-[67px] py-[54px] pl-6 bg-[#143D72]">
       <div className="flex flex-col items-center">
         <ul className="sm:flex hidden gap-6 text-[#C3D4FF] justify-center pb-[22px] w-full">
-          <li className="font-semibold text-2xl">Nosotros</li>
-          <li className="font-semibold text-2xl">Funcionalidades</li>
-          <li className="font-semibold text-2xl">Contacto</li>
+          <ScrollLink
+            to="nosotros"
+            smooth={true}
+            duration={500}
+            className="cursor-pointer font-semibold text-2xl hover:opacity-70"
+          >
+            Nosotros
+          </ScrollLink>
+          <ScrollLink
+            to="funcionalidades"
+            smooth={true}
+            duration={500}
+            className="cursor-pointer font-semibold text-2xl hover:opacity-70"
+          >
+            Funcionalidades
+          </ScrollLink>
+          <ScrollLink
+            to="contacto"
+            smooth={true}
+            duration={500}
+            className="cursor-pointer font-semibold text-2xl hover:opacity-70"
+          >
+            Contacto
+          </ScrollLink>
         </ul>
         <div className="w-full flex justify-center">
           <div className="container__dentplanner max-w-[1125px] w-full flex flex-col gap-6">
@@ -37,7 +59,7 @@ export default function LFooter() {
                 <TbWorld className="text-xl" />
                 <p className="pl-2.5">Español</p>
                 {/* icono de flecha para abajo */}
-                <IoIosArrowDown className="text-xl" />
+                <IoIosArrowDown className="text-xl cursor-pointer" />
               </div>
               <div className="text-[#BABABA] font-medium text-xl">
                 <p>Copyright © 2024. All rights reserved.</p>

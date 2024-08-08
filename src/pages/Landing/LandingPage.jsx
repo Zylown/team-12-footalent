@@ -9,10 +9,16 @@ export default function LandingPage() {
   return (
     <div className="wrapper__landing">
       <LHeader />
-      <LFeatures />
-      <LUs />
+      <div id="funcionalidades">
+        <LFeatures />
+      </div>
+      <div id="nosotros">
+        <LUs />
+      </div>
       <LTypesUsers />
-      <LContact />
+      <div id="contacto">
+        <LContact />
+      </div>
       <LFooter />
     </div>
   );

@@ -21,10 +21,10 @@ const eventColors = {
     borderColor: "#3D005A",
     statusColor: "#AD00FF",
   },
-  presente: {
-    backgroundColor: "#D9F5E0",
-    borderColor: "#3ab258",
-    statusColor: "#34C759",
+  null: {
+    backgroundColor: "#F5EDD9",
+    borderColor: "#834E00",
+    statusColor: "#FF9900",
   },
 };
 
@@ -43,7 +43,7 @@ export default function formatEvents(events) {
       statusColor: colors.statusColor,
       extendedProps: {
         dentist: event.dentist_name,
-        state: event.state,
+        state: event.state || "pending",
         observations: event.observations,
         date: event.date,
         time: event.time,

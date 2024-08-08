@@ -1,4 +1,5 @@
-import Us from "../../assets/us.png";
+import Us from "../../assets/Landing/us.png";
+import { Link as ScrollLink } from "react-scroll";
 
 export default function LUs() {
   return (
@@ -22,9 +23,14 @@ export default function LUs() {
           </h3>
         </div>
         <div className="h-[67px] sm:flex hidden">
-          <button className="bg-[#006AF5] max-w-[469px] w-full rounded text-[#FAFAFA] font-normal text-2xl h-full">
+          <ScrollLink
+            to="contacto"
+            smooth={true}
+            duration={500}
+            className="bg-[#006AF5] cursor-pointer items-center flex justify-center max-w-[167px] w-full rounded text-[#FAFAFA] font-normal text-2xl h-full"
+          >
             Contáctanos
-          </button>
+          </ScrollLink>
         </div>
       </div>
     </div>

@@ -39,14 +39,14 @@ function EventsContent({ eventInfo, forceCalendarUpdate }) {
           : true;
 
       //informacion formateada solicitada por el back
-
       const formData = {
         patient_id: infoAppointment.extendedProps.patientId,
         dentist_id: infoAppointment.extendedProps.dentistId,
         reason_id: infoAppointment.extendedProps.reasonId,
         date: dateFormatted,
         time: infoAppointment.extendedProps.time,
-        assistance: newAssistence,
+        state: infoAppointment.extendedProps.state,
+        ...(newAssistence !== null && { assistance: newAssistence }),
       };
       //peticion put
       const response = await updateAppointmentState({

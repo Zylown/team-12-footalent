@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import CardWhite from "../../../components/CardWhite";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "../../../components/Button";
+import { Button } from "antd";
 import { AiOutlineUserAdd } from "react-icons/ai";
-import { FiCalendar } from "react-icons/fi";
-import { FiClock } from "react-icons/fi";
+import { FiClock, FiCalendar } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
 import editShiftSchema from "../../../validations/editShift";
 import DatePicker, { registerLocale } from "react-datepicker";
@@ -16,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ModalCancel from "../../../components/ModalCancel";
 import { updateAppointment } from "/src/api/appointments/appointments-services";
 import { Toaster, toast } from "react-hot-toast";
+import TimeReminderPicker from "/src/components/TimeReminderPicker";
 
 const locale = es;
 registerLocale("es", locale);
@@ -31,6 +31,8 @@ export default function EditShift({
   //estados para manejar la fecha y la hora
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [timeReminder, setTimeReminder] = useState(24);
   //estado para cancelar turno y mostrar modal
   const [modalCancelIsVisible, setModalCancelIsVisible] = useState(false);
 
@@ -66,6 +68,8 @@ export default function EditShift({
 
   //boton guardar cambios
   const handleOnSubmit = async (data) => {
+    setLoading(true);
+
     try {
       //se le da formato correcto para hacer la peticion al back
       const dateFormatted = selectedDate
@@ -74,18 +78,19 @@ export default function EditShift({
       const hourFormatted = selectedHour ? format(selectedHour, "HH:mm") : "";
       const dentistID = Number(data.odontologist);
       const reasonID = Number(data.reason);
-      //const state = data.reminder ? "pending" : "confirmed";
+      const state = eventInfo.extendedProps.state;
       const selectedPatientID = eventInfo.extendedProps.patientId;
 
       //informacion formateada solicitada por el back
       const formData = {
-        /* ...data, */
         patient_id: selectedPatientID,
         dentist_id: dentistID,
         reason_id: reasonID,
         date: dateFormatted,
         time: hourFormatted,
+        anticipation_time: timeReminder,
         is_active: data.reminder,
+        state: state,
       };
       //peticion put
       const response = await updateAppointment({
@@ -95,13 +100,22 @@ export default function EditShift({
       if (response) {
         forceCalendarUpdate();
         toast.success("Turno modificado con éxito");
+        setLoading(false);
         setTimeout(() => {
           setModalModifyIsVisible(false);
         }, 600);
       }
     } catch (error) {
       console.error("Error al modificar el turno:", error);
-      alert("No se pudo realizar el cambio. Por favor, intenta nuevamente.");
+      setLoading(false);
+      if (error.response.data.error === "Appointment slot already taken") {
+        return toast.error("Ups, este horario ya está ocupado por otro turno.");
+      }
+      toast.error(
+        "No se pudo realizar el cambio. Por favor, intenta nuevamente."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,7 +123,6 @@ export default function EditShift({
   const handleOnCancel = () => {
     setModalCancelIsVisible(true);
   };
-
   const handleOnClose = () => {
     setModalModifyIsVisible(false);
   };
@@ -142,11 +155,16 @@ export default function EditShift({
     ? parse(format(selectedHour, "HH:mm"), "HH:mm", new Date())
     : null;
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    control.handleSubmit(handleOnSubmit)(e);
+  };
+
   return (
     isVisible && (
       <>
         <div className="fixed inset-0 z-50 flex items-center justify-center px-2 bg-white bg-opacity-50">
-          <CardWhite className="bg-white max-w-[568px] px-6 py-2 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <CardWhite className="bg-white max-w-[568px] p-6 pt-12 w-full relative sm:max-h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div className="pb-5">
               <h2 className="sm:text-[32px] text-2xl font-semibold text-[#192739]">
                 Modificar turno
@@ -156,13 +174,10 @@ export default function EditShift({
               <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
                 Paciente
               </label>
-              <Button
-                type="button"
-                className="flex pl-3.5 pr-0 box-border max-w-[250px] w-full text-lg border border-[#005FDB] bg-[#F6FBFF] text-[#005FDB]"
-              >
+              <div className="flex pl-3.5 pr-0 rounded-[4px] px-4 py-2 box-border max-w-[250px] w-full text-lg border border-[#005FDB] bg-[#F6FBFF] text-[#005FDB]">
                 <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
                 {eventInfo.title}
-              </Button>
+              </div>
             </div>
             <form
               className="flex flex-col gap-4"
@@ -260,13 +275,17 @@ export default function EditShift({
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-semibold text-lg text-[#1B2B41] text-opacity-70">
+                <label
+                  htmlFor="dentistsSelect"
+                  className="font-semibold text-lg text-[#1B2B41] text-opacity-70"
+                >
                   Odontólogo
                 </label>
                 <div className="relative">
                   <select
+                    id="dentistsSelect"
                     className={`appearance-none cursor-pointer bg-[#F6FBFF] py-2 px-2.5 w-full rounded border border-[#193B67] border-opacity-15 text-[#193B67] text-opacity-50`}
-                    {...register("odontologist")}
+                    {...register("odontologist", { required: false })}
                   >
                     {data.dentists &&
                       data.dentists.map((dentist) => (
@@ -279,45 +298,49 @@ export default function EditShift({
                   <FaChevronDown className="text-[#1B2B41] text-opacity-70 absolute right-0 pointer-events-none top-1/2 transform -translate-y-1/2 mr-2.5" />
                 </div>
               </div>
-              <div className="flex flex-col gap-2 sm:items-center sm:gap-1 sm:flex-row">
-                <div className="flex items-center w-full gap-2 sm:w-2/4">
-                  <input
-                    className="w-6 h-6 bg-[#193B67] bg-opacity-15"
-                    type="checkbox"
-                    {...register("reminder")}
-                  />
-                  <label className="text-[#192739] text-opacity-95 text-lg font-normal">
-                    Recordatorio automático
-                  </label>
-                </div>
-                <div className="flex-1">
-                  {/* esto te lleva a otro modal para editar*/}
-                  <Button
-                    type="button"
-                    className="w-full justify-center flex font-light text-lg border border-[#C3D4FF] bg-[#F6FBFF] text-[#005FDB]"
-                  >
-                    Editar recordatorio
-                  </Button>
+              <div className="flex flex-col gap-2 md:items-start sm:items-center sm:gap-1">
+                <label
+                  htmlFor="anticipation"
+                  className="font-semibold text-lg text-[#1B2B41] text-opacity-70"
+                >
+                  Recordatorio
+                </label>
+                <div className="flex flex-col justify-between w-full gap-5 mb-1 md:flex-row">
+                  <div className="flex items-center order-2 w-full gap-2 md:order-none sm:w-2/4">
+                    <label className="inline-flex items-center text-[#192739] text-opacity-95 text-base font-normal text-nowrap select-none">
+                      <input
+                        className="w-6 h-6 bg-[#193B67] bg-opacity-15 mr-2"
+                        type="checkbox"
+                        {...register("reminder")}
+                      />
+                      Envio automático
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between w-full gap-2 md:justify-end">
+                    <TimeReminderPicker setTimeReminder={setTimeReminder} />
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col w-full gap-2">
                 <div className="flex w-full gap-2">
                   <Button
-                    className="bg-white border border-[#E21D12] text-[#E21D12] font-semibold w-1/2"
+                    danger
+                    className="bg-white border border-[#E21D12] text-[#E21D12] font-semibold w-1/2 px-4 py-3 h-10 text-base rounded font-sans"
                     onClick={handleDelete}
                   >
                     Eliminar
                   </Button>
                   <Button
-                    type="submit"
-                    className="bg-[#006AF5] text-white font-semibold w-1/2"
+                    type="primary"
+                    onClick={onSubmit}
+                    loading={loading}
+                    className="w-1/2 h-10 px-4 py-3 font-sans text-base font-semibold rounded "
                   >
                     Guardar
                   </Button>
                 </div>
                 <Button
-                  className="bg-white text-[#006AF5] font-normal"
-                  type="button"
+                  className="text-[#006AF5] font-normal px-4 py-3 h-10 text-base rounded font-sans border-none shadow-none"
                   onClick={handleOnCancel}
                 >
                   Cancelar

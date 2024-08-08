@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "../../../components/Button";
 import CardWhite from "../../../components/CardWhite";
 import ModalOk from "../../../components/ModalOk";
-import TimeInput from "../../../components/TimeInput";
+//import TimeInput from "../../../components/TimeInput";
 import ModalCancel from "../../../components/ModalCancel";
 
 const EditReminder = ({ isVisible, setModalIsVisible }) => {
@@ -25,7 +25,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
     setText(e.target.value);
   };
   //configuro la anticipacion
-  const handleAnticipationChange = (value) => {
+  /* const handleAnticipationChange = (value) => {
     if (value === "") {
       setAnticipation(null);
     } else {
@@ -38,21 +38,21 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
           .padStart(2, "0")} hs`
       );
     }
-  };
+  }; */
   const handleOnClose = () => {
     setModalIsVisible(false);
   };
-  const handleCancel = () => {
+  /* const handleCancel = () => {
     setModalCancelIsVisible(true);
-  };
+  }; */
 
-  const handleSave = () => {
+  /* const handleSave = () => {
     // Aquí puedes hacer la lógica para guardar los cambios en la base de datos
     console.log(text);
     console.log(anticipation);
 
     setModalOk(true);
-  };
+  }; */
 
   //genero el texto
   const generateReminderMessage = (name, date, time) => {
@@ -89,7 +89,7 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
               </div>
 
               {/* Botón de seleccionar anticipación */}
-              <div className="p-[10px]  border-t bg-[#FAFDFF]">
+              {/* <div className="p-[10px]  border-t bg-[#FAFDFF]">
                 <label
                   htmlFor="anticipation"
                   className="block pb-1 text-sm font-medium text-gray-700"
@@ -102,16 +102,19 @@ const EditReminder = ({ isVisible, setModalIsVisible }) => {
                   onChange={handleAnticipationChange}
                   className="max-w-[250px]" // Clase personalizada para el ancho máximo
                 />
-              </div>
+              </div> */}
 
               {/* Botones de cancelar y guardar */}
               <div className="flex gap-2 p-[10px] bg-bgGrey justify-end">
-                <Button onClick={handleCancel} className=" text-mainBlue">
-                  Cancelar
+                <Button
+                  onClick={handleOnClose}
+                  className="text-white bg-mainBlue"
+                >
+                  Volver
                 </Button>
-                <Button onClick={handleSave} className="text-white bg-mainBlue">
+                {/* <Button onClick={handleSave} className="text-white bg-mainBlue">
                   Guardar
-                </Button>
+                </Button> */}
               </div>
             </div>
           </CardWhite>
