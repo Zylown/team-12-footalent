@@ -4,7 +4,7 @@ import BannerAdmin from "../../assets/BannerAdmin.jpg";
 import { PiIdentificationCard } from "react-icons/pi";
 import { CiCalendar } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
-import { AiOutlineSnippets } from "react-icons/ai";
+// import { AiOutlineSnippets } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useMemo } from "react";
@@ -20,10 +20,10 @@ export default function CardWelcome() {
       return jwtDecode(token);
     } catch (e) {
       console.error("Invalid token", e);
-      return null;
+      window.location.href = "/iniciar-sesion";
     }
   }, [token]);
-  
+
   useEffect(() => {
     if (!user && decoded) {
       const getUsersByIdToken = async () => {
@@ -108,11 +108,11 @@ export default function CardWelcome() {
             <div className="flex justify-center w-full">
               <div className="flex sm:flex-row flex-col gap-2 max-w-[718px] w-full">
                 <Link
-                  to={"/reportes"}
+                  to={"/perfil"}
                   className="flex rounded items-center justify-center bg-[#006af5] flex-1 px-[14px] py-2 text-white hover:bg-[#005fdb] transition-all"
                 >
-                  <AiOutlineSnippets className="text-4xl text-[#c0d2ff]" />
-                  <p className="text-xl font-extralight">Reportes</p>
+                  {/* <AiOutlineUser className="text-4xl text-[#c0d2ff]" /> */}
+                  <p className="text-xl font-extralight">Perfil</p>
                 </Link>
                 <Link
                   to={"/info-clinica"}

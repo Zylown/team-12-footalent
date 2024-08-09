@@ -65,10 +65,10 @@ export default function PatientsModal({ onSelectPatient, closeModal }) {
               )}
             </div>
             <Button
-              className="flex px-[14px] box-border items-center font-normal text-lg text-[#005FDB] rounded border border-[#C3D4FF]"
+              className="flex px-[14px] box-border bg-mainBlue items-center font-normal text-lg text-white rounded border border-[#C3D4FF]"
               onClick={handleOpenModalAdd}
             >
-              <AiOutlineUserAdd className="mr-1 text-[#005FDB] text-2xl" />
+              <AiOutlineUserAdd className="mr-1 text-white text-2xl" />
               Añadir paciente
             </Button>
           </div>

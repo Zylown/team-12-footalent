@@ -35,12 +35,7 @@ const InfoProfile = () => {
             alt="Perfil del Usuario"
             className="w-[127px] h-[127px]object-cover"
           />
-          <Button
-            type="button"
-            className="flex justify-center bg-white text-base font-normal underline text-[#192739] text-opacity-95"
-          >
-            Subir imagen
-          </Button>
+         
         </div>
         {/* Información del Usuario */}
         {

@@ -18,8 +18,8 @@ import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
-  // const token = localStorage.getItem("token") ? true : false;
   const token = localStorage.getItem("token");
+  const tokenExist = token ? true : false; // Verificar si existe un token
   const decoded = useDecode(token);
 
   // Verificar si el usuario tiene alguno de los siguientes roles
@@ -36,36 +36,63 @@ function App() {
         <Route path="/iniciar-sesion" element={<Login />} />
         <Route
           path="/agenda"
-          element={allRoles ? <CalendarPage /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? (
+              <CalendarPage />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
         />
         <Route
           path="/inicio"
-          element={allRoles ? <Home /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? <Home /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/perfil/cambiar-contraseña"
-          element={allRoles ? <ChangePassword /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? (
+              <ChangePassword />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
         />
         <Route
           path="/pacientes"
-          element={allRoles ? <Patients /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? <Patients /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/pacientes/historia-clinica/:id"
-          element={allRoles ? <History /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? <History /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/perfil/motivos"
-          element={(decoded?.role === "admin" ||decoded?.role === "secretary" ) ? (<Reasons />) : (<Navigate to="/inicio" replace />)}
+          element={
+            (decoded?.role === "admin" || decoded?.role === "secretary") &&
+            tokenExist ? (
+              <Reasons />
+            ) : (
+              <Navigate to="/inicio" replace />
+            )
+          }
         />
         <Route
           path="/perfil/soporte"
-          element={allRoles ? <Support /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? <Support /> : <Navigate to="/" replace />
+          }
         />
         <Route
           path="/usuarios"
           element={
-            decoded?.role === "admin" ? (
+            decoded?.role === "admin" && tokenExist ? (
               <Users />
             ) : (
               <Navigate to="/inicio" replace />
@@ -75,7 +102,7 @@ function App() {
         <Route
           path="usuarios/añadir"
           element={
-            decoded?.role === "admin" ? (
+            decoded?.role === "admin" && tokenExist ? (
               <Register />
             ) : (
               <Navigate to="/inicio" replace />
@@ -84,21 +111,21 @@ function App() {
         />
         <Route
           path="/perfil"
-          element={allRoles ? <Profile /> : <Navigate to="/" replace />}
+          element={
+            allRoles && tokenExist ? <Profile /> : <Navigate to="/" replace />
+          }
         />
         <Route path="/recuperar-contraseña" element={<ResetPassword />} />
         <Route
           path="/info-clinica"
           element={
-            decoded?.role === "admin" ? (
+            decoded?.role === "admin" && tokenExist ? (
               <ClininalInfo />
             ) : (
               <Navigate to="/inicio" replace />
             )
           }
         />
-        <Route path="/test" element={<CalendarPage />} />
-        <Route path="/test/:id" element={<CalendarPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -15,8 +15,8 @@ import { useNavigate } from "react-router-dom";
 import ModalDeleted from "../../components/ModalDeleted";
 import { toast, Toaster } from "react-hot-toast";
 
-export default function TableDni({ searchDni }) {
-  const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
+export default function TableDni({ searchDni, pacientes, setPacientes }) {
+  // const [pacientes, setPacientes] = useState([]); // Inicializar con dataExample por ahora
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [patientIdToDelete, setPatientIdToDelete] = useState(null);
 
@@ -69,7 +69,7 @@ export default function TableDni({ searchDni }) {
       }
     };
     fetchData();
-  }, []);
+  }, [setPacientes]);
 
   const deletePatient = async (id) => {
     try {
@@ -87,8 +87,13 @@ export default function TableDni({ searchDni }) {
     if (!searchDni) {
       return pacientes;
     }
-    return pacientes.filter((patient) =>
-      patient.dni.toString().toLowerCase().startsWith(searchDni.toLowerCase())
+    return pacientes.filter(
+      (patient) =>
+        patient.dni
+          .toString()
+          .toLowerCase()
+          .startsWith(searchDni.toLowerCase()) ||
+        patient.patient.toLowerCase().startsWith(searchDni.toLowerCase())
     );
   }, [searchDni, pacientes]);
 
@@ -155,7 +160,7 @@ export default function TableDni({ searchDni }) {
           isVisible={isModalOpen}
           setIsVisible={setIsModalOpen}
           //en deledtedModal va la funcion que se ejecuta al dar click en aceptar osea la funcion de eliminar a la api
-          DeletedModal={() => deletePatient(patientIdToDelete)}
+          deletedModal={() => deletePatient(patientIdToDelete)}
           titleModal="Eliminar paciente"
           infoModal="¿Estás seguro que deseas eliminar este paciente?"
         />
@@ -166,4 +171,6 @@ export default function TableDni({ searchDni }) {
 }
 TableDni.propTypes = {
   searchDni: PropTypes.string,
+  pacientes: PropTypes.array,
+  setPacientes: PropTypes.func,
 };

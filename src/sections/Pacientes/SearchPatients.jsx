@@ -12,6 +12,7 @@ import AddPatients from "./Modal/AddPatients";
 export default function SearchPatients() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [searchDni, setSearchDni] = useState("");
+  const [pacientes, setPacientes] = useState([]); // Estado compartido de pacientes
 
   const handleInputSearch = (e) => {
     if (setSearchDni) {
@@ -67,7 +68,11 @@ export default function SearchPatients() {
             </Button>
           </div>
           <div className="bg-[#f6fbff] border border-[#DAE0E7] rounded-lg p-4 md:h-80 h-auto overflow-y-auto custom-scrollbar">
-            <TableDni searchDni={searchDni} />
+            <TableDni
+              searchDni={searchDni}
+              pacientes={pacientes}
+              setPacientes={setPacientes}
+            />
           </div>
         </CardWhite>
       </div>
@@ -75,6 +80,7 @@ export default function SearchPatients() {
         <AddPatients
           isVisible={modalIsVisible}
           setModalIsVisible={setModalIsVisible}
+          setPacientes={setPacientes}
         />
       )}
     </>
@@ -84,4 +90,5 @@ export default function SearchPatients() {
 SearchPatients.propTypes = {
   searchDni: PropTypes.string,
   setSearchDni: PropTypes.func,
+  setPacientes: PropTypes.func,
 };

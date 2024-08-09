@@ -4,6 +4,7 @@ import LFooter from "../../sections/Landing/LFooter";
 import LHeader from "../../sections/Landing/LHeader";
 import LTypesUsers from "../../sections/Landing/LTypesUsers";
 import LUs from "../../sections/Landing/LUs";
+import { ScrollArrow } from "../../components/landing/ScrollArrow";
 
 export default function LandingPage() {
   return (
@@ -20,6 +21,7 @@ export default function LandingPage() {
         <LContact />
       </div>
       <LFooter />
+      <ScrollArrow />
     </div>
   );
 }

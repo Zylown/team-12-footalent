@@ -46,8 +46,13 @@ export default function TablePatients({ onSelectPatient, searchDni }) {
     if (!searchDni) {
       return pacientes;
     }
-    return pacientes.filter((patient) =>
-      patient.dni.toString().toLowerCase().startsWith(searchDni.toLowerCase())
+    return pacientes.filter(
+      (patient) =>
+        patient.dni
+          .toString()
+          .toLowerCase()
+          .startsWith(searchDni.toLowerCase()) ||
+        patient.patient.toLowerCase().startsWith(searchDni.toLowerCase())
     );
   }, [searchDni, pacientes]);
 
@@ -110,4 +115,3 @@ TablePatients.propTypes = {
   onSelectPatient: PropTypes.func.isRequired,
   searchDni: PropTypes.string,
 };
-

@@ -9,7 +9,7 @@ import passwordSchema from "../../../validations/changePassword";
 import ModalOk from "../../../components/ModalOk";
 import { apiChangePassword } from "../../../api/apiLogin";
 import { useDecode } from "../../../hooks/useDecode";
-
+import { Toaster, toast } from "react-hot-toast";
 const ModalPassword = () => {
   const [modalOk, setModalOk] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +34,11 @@ const ModalPassword = () => {
   const onSubmit = async (data) => {
     try {
       const response = await apiChangePassword(userId, data);
-      setModalOk(true);
+      if (response.status === 200) {
+        toast.success("La contraseña se cambió con éxito");
+        setTimeout(() => {
+          window.location.href = "/perfil";
+        }, 500);}
     } catch (error) {
       setErrorMessage(error.message || "Failed to change password");
     }
@@ -145,6 +149,7 @@ const ModalPassword = () => {
           Contraseña cambiada con éxito
         </ModalOk>
       )}
+      <Toaster position="top-right" />
     </>
   );
 };

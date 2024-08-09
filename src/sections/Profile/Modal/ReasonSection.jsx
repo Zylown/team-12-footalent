@@ -88,7 +88,7 @@ const ReasonSection = () => {
               </div>
               <div className="flex gap-1">
                 
-                <Button className="flex items-center gap-1 border text-mainBlue" onClick={handleAddModal}>
+                <Button className="flex items-center bg-mainBlue gap-1 border text-white" onClick={handleAddModal}>
                   <GoPersonAdd /> Añadir motivo
                 </Button>
               </div>

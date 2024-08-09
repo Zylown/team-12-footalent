@@ -4,7 +4,7 @@ import {
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import EditClinical from "./Modal/EditClinical";
 import {
@@ -13,6 +13,8 @@ import {
 } from "../../api/clinicalInfo/apiClinicalInfo";
 import { apiGetUserById } from "../../api/users/apiUsers";
 import { useDecode } from "../../hooks/useDecode";
+import { clinicalStore } from "../../context/clinicalStore";
+import { toast, Toaster } from "react-hot-toast";
 
 // esto transforma el objeto en un array de objetos con la forma {field: key, value: clinic[key]}
 const transformData = (clinic) => {
@@ -26,17 +28,18 @@ const transformData = (clinic) => {
 export default function TableClinicalInfo() {
   // Variable para guardar el token decodificado
   const decoded = useDecode(localStorage.getItem("token"));
-  const [clinics, setClinics] = useState([]); // Inicializar con dataExample por ahora
-  // Estado para mostrar el modal de edición
-  const [modalEditVisible, setModalEditVisible] = useState(false);
-  // Estado para guardar el valor del input
-  const [valueData, setValueData] = useState({
-    id: 1, // Usa un valor por defecto si es necesario
-    data: "",
-    description: "",
-  });
-  // Estado para mostrar el loading
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    clinics,
+    isLoading,
+    modalEditVisible,
+    valueData,
+    setClinics,
+    setIsLoading,
+    openModal,
+    closeModal,
+    updateClinic,
+  } = clinicalStore();
+
   // columnHelper es un objeto con funciones para crear columnas de la tabla
   const columnHelper = createColumnHelper();
 
@@ -60,7 +63,7 @@ export default function TableClinicalInfo() {
       }
     };
     fetchData();
-  }, []);
+  }, [setClinics, setIsLoading]);
 
   // Mapeo de nombres de columnas a nombres legibles
   const columnNames = {
@@ -91,9 +94,8 @@ export default function TableClinicalInfo() {
   ];
 
   const handleEditRow = (row) => {
-    setModalEditVisible(true);
-    // Guarda el objeto completo para mostrarlo en el modal
-    setValueData({
+    // Abre el modal para editar la información de la clínica
+    openModal({
       id: row.original.id,
       data: row.original.data,
       description: row.original.description,
@@ -102,39 +104,31 @@ export default function TableClinicalInfo() {
 
   const handleSubmitEdit = async (data) => {
     try {
-      // Obtiene el id del usuario logueado
+      // Obtener el id de la clínica
       const userId = await apiGetUserById(decoded.user_id);
-      // Obtiene el id de la clínica del usuario logueado
+      // aca guaradmos en clinicId el id de la clinica del usuario
       const clinicId = userId.data.clinic_id;
-      // Actualiza la información de la clínica
-      const updatedData = clinics.map((clinic) => {
-        // clinic.data es de la data que viene de la API y data.data es de la data que viene del formulario
-        if (clinic.id === clinicId) {
-          // ...clinic es para mantener los datos que no se están editando y solo cambiar la descripción
-          return { ...clinic, description: data.description };
-        }
-        // retorna el objeto sin cambios si no es el que se está editando
-        return clinic;
+      // Enviar la información actualizada a la API
+      const response = await apiEditClinicalInfo(clinicId, {
+        [data.data]: data.description,
       });
-      // Actualiza el estado con la nueva información de la clínica editada
-      setClinics(updatedData);
-      // Aquí se debe hacer la petición PUT a la API
-      try {
-        // el {[data.data]: data.description} es para que el objeto tenga la forma {key: value}
-        // por ejemplo {nombre: "DentPlanner"}
-        const response = await apiEditClinicalInfo(clinicId, {
-          [data.data]: data.description,
+      // Validar que la respuesta sea correcta
+      if (response.status === 200) {
+        // Actualizar la información de la clínica en el estado global
+        updateClinic({
+          id: clinicId,
+          data: data.data,
+          description: data.description,
         });
-        if (response.status === 200) {
-          console.log("Información editada con éxito");
-        }
-      } catch (error) {
-        console.error("Error al editar la información:", error);
+        toast.success(
+          "La información de la clínica ha sido actualizada con éxito"
+        );
       }
     } catch (error) {
       console.error("Error al editar la información:", error);
+      toast.error("Error al actualizar la información");
     } finally {
-      setModalEditVisible(false);
+      closeModal();
     }
   };
 
@@ -200,10 +194,11 @@ export default function TableClinicalInfo() {
           </tbody>
         </table>
       )}
+      <Toaster position="top-right" />
       {
         <EditClinical
           isVisible={modalEditVisible}
-          setIsVisible={setModalEditVisible}
+          setIsVisible={closeModal}
           valueData={valueData}
           onSubmit={handleSubmitEdit}
         />

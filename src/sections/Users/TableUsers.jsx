@@ -43,7 +43,7 @@ const TableUsers = ({ users }) => {
   };
 
   return (
-    <div className="min-w-[744px] border rounded-md bg-bgTable py-[16px] max-w-[20rem] h-[20rem] overflow-y-auto">
+    <div className="min-w-full overflow-auto border rounded-md bg-bgTable py-[16px] sm:min-w-[20rem] h-[20rem] overflow-y-auto ">
       <table className="w-full ">
         <thead className="space-y-1">
           <tr className="space-y-1 space-x-3 rounded-md">

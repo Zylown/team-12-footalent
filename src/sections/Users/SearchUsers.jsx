@@ -46,13 +46,13 @@ const SearchUsers = () => {
 
   return (
     <div className="bg-white xl:mx-72 md:mx-48 sm:mx-4 mt-4 mb-4 px-2 gap-[24px]">
-      <CardWhite className="gap-5 min-w-[690px] px-6 py-4">
+      <CardWhite className="gap-5 sm:min-w-[690px] w-full sm:px-6 px-2 py-4">
         <div className="container__h1 py-[10px]">
           <h1 className="text-[32px] text-[#192739] font-semibold">
             Usuarios
           </h1>
         </div>
-        <div className="w-full h-11 flex gap-1.5 flex-col md:flex-row">
+        <div className="w-full flex gap-1.5 flex-col md:flex-row">
           <div className="flex-1 relative">
             <Input
               value={searchQuery}
@@ -62,17 +62,18 @@ const SearchUsers = () => {
               placeholder="Buscar DNI o Nombre del Usuario..."
             />
             {searchQuery === "" ? (
-             <IoSearch className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2 text-[#1B2B41]" />
-            ): (<button
+              <IoSearch className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2 text-[#1B2B41]" />
+            ) : (
+              <button
                 onClick={handleClearSearch}
                 className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2"
               >
                 <IoClose className="text-[#1B2B41]" />
-              </button>)
-          }
+              </button>
+            )}
           </div>
           <Button
-            className="flex px-[14px] bg-mainBlue box-border items-center font-normal text-lg text-white rounded border border-[#C3D4FF]"
+            className="flex px-[14px] bg-mainBlue box-border items-center font-normal text-lg text-white rounded border border-[#C3D4FF] mt-2 md:mt-0"
             onClick={handleAddUser}
           >
             <AiOutlineUserAdd className="mr-1 text-white text-2xl" />
@@ -83,6 +84,6 @@ const SearchUsers = () => {
       </CardWhite>
     </div>
   );
-}
+};
 
 export default SearchUsers;

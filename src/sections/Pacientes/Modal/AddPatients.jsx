@@ -7,7 +7,11 @@ import addPatientSchema from "../../../validations/addPatient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "react-hot-toast";
 import { postPatient } from "../../../api/patients/apiPatients";
-export default function AddPatients({ isVisible, setModalIsVisible }) {
+export default function AddPatients({
+  isVisible,
+  setModalIsVisible,
+  setPacientes,
+}) {
   const {
     register,
     handleSubmit,
@@ -45,10 +49,19 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
     // Llamar a la API para añadir un paciente
     try {
       const res = await postPatient(formattedData);
-      console.log(res);
       if (res.status === 201) {
         toast.success("Se añadió un paciente con éxito");
+        // Actualizar la lista de pacientes
+        setPacientes((prevPacientes) => [
+          ...prevPacientes,
+          {
+            id: res.data.id,
+            dni: formattedData.dni,
+            patient: `${formattedData.first_name} ${formattedData.last_name}`,
+          },
+        ]);
         reset();
+        setModalIsVisible(false);
       } else {
         toast.error("Error al añadir un paciente");
         console.error("Error al añadir un paciente:", res);
@@ -236,4 +249,5 @@ export default function AddPatients({ isVisible, setModalIsVisible }) {
 AddPatients.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   setModalIsVisible: PropTypes.func.isRequired,
+  setPacientes: PropTypes.func.isRequired,
 };
