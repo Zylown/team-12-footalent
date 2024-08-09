@@ -96,17 +96,17 @@ function EventsContent({ eventInfo, forceCalendarUpdate }) {
   return (
     <>
       <div
-        className={`flex items-center justify-between px-2 mx-auto w-full ${
+        className={`cursor-pointer hover:opacity-70 flex items-center justify-between px-2 mx-auto w-full ${
           isWeekView
-            ? "text-sm text-textBlue"
-            : "text-sm font-medium text-textBlue"
+            ? "text-sm text-[#1B2B41]/70 hover:text-textBlue"
+            : "text-sm font-medium text-[#1B2B41]/70 hover:text-textBlue"
         }`}
       >
         {!isWeekView && (
-          <div className="inline-flex items-center">
+          <div className="inline-flex items-center ">
             <div
               style={{ backgroundColor }}
-              className="w-2.5 h-2.5 mr-1 rounded-full items-center"
+              className="items-center w-4 h-4 mr-1 rounded-full"
             />
             <p className="me-2 text-nowrap">| {eventInfo.timeText}</p>
           </div>

@@ -63,7 +63,7 @@ export default function SearchPatients() {
               className="flex px-[14px] box-border bg-mainBlue items-center font-normal text-lg text-white rounded border border-[#006AF5]"
               onClick={handleOpenModalAdd}
             >
-              <AiOutlineUserAdd className="mr-1 text-white text-2xl" />
+              <AiOutlineUserAdd className="mr-1 text-white text-[14px] sm:text-[18px]" />
               Añadir paciente
             </Button>
           </div>

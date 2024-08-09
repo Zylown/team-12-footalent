@@ -1,13 +1,11 @@
 import Button from "../../components/Button";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { useState } from "react";
-import Soporte from "./Modal/Soporte";
-import ModalPassword from "./Modal/ModalPassword";
 import { Link } from "react-router-dom";
 const ConfigProfile = () => {
-  // info que vendria desde el back
+  
   const [isOpen, setIsOpen] = useState(false);
-  const [modalIsVisible, setModalIsVisible] = useState(false);
+ 
   
 
  
@@ -16,9 +14,7 @@ const ConfigProfile = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOpenModalAdd = () => {
-    setModalIsVisible(true);
-  };
+  
   return (
     <>
       <div className="border rounded-md">
@@ -35,32 +31,32 @@ const ConfigProfile = () => {
           )}
         </Button>
         {isOpen && (
-          <div className="flex justify-center gap-2 py-1">
-            <div className="py-1 flex  justify-center ">
+          <div className="flex flex-col px-[16.5px] sm:flex-row justify-center gap-2 py-1">
+            <div className="py-1 flex  justify-center items-center">
               <Link
                 to="/perfil/cambiar-contraseña"
-                className="py-[13.5px] px-[48px] border border-mainBlue text-mainBlue   text-center "
+                className="w-full mx-1 py-1 px-[71px] border rounded-md border-mainBlue text-mainBlue   text-center text-[14px] sm:text-[18px]  sm:py-[11px] sm:px-[40px]"
                 
               >
                 Cambiar contraseña
               </Link>
             </div>
-            <div className="py-1 flex justify-center ">
+            <div className="py-1 flex justify-center items-center ">
               <Link
                 to="/perfil/soporte"
-                className="py-[13.5px] px-[48px] border border-mainBlue text-mainBlue  text-center "
+                className="w-full mx-1 py-1 px-[71px]  border rounded-md border-mainBlue text-mainBlue text-[14px] sm:text-[18px]    text-center sm:py-[11px] md:px-[40px] "
                 
               >
                 Soporte
               </Link>
             </div>
-            <div className="py-1 flex  justify-center ">
+            <div className="py-1 flex  justify-center items-center">
               <Link
                 to="/"
                 onClick={() => {
                   localStorage.removeItem("token");
                 }}
-                className="py-[13.5px] px-[48px] border bg-mainBlue text-white text-center "
+                className="w-full mx-1 py-1 px-[71px] border rounded-md  text-white bg-mainBlue text-[14px] sm:text-[18px]   text-center sm:py-[11px] sm:px-[40px] "
               >
                 Cerrar sesion
               </Link>
@@ -68,12 +64,6 @@ const ConfigProfile = () => {
           </div>
         )}
       </div>
-      {modalIsVisible && (
-        <Soporte
-          isVisible={modalIsVisible}
-          setModalIsVisible={setModalIsVisible}
-        />
-      )}
       
     </>
   );

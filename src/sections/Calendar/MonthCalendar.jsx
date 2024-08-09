@@ -13,8 +13,10 @@ const MonthCalendar = ({ handleDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
 
   const handleDateChange = (value) => {
-    setCurrentDate(value);
-    handleDateSelect(value.format("YYYY-MM-DD"));
+    if (value.day() !== 0) {
+      setCurrentDate(value);
+      handleDateSelect(value.format("YYYY-MM-DD"));
+    }
   };
 
   const handleMonthChange = (amount) => {
@@ -29,6 +31,29 @@ const MonthCalendar = ({ handleDateSelect }) => {
       ...dayjs.localeData("es"),
       shortWeekDays: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
     },
+  };
+
+  const disabledDate = (current) => {
+    return current && current.day() === 0;
+  };
+
+  const fullCellRender = (date) => {
+    const isDisabled = date.day() === 0;
+    return (
+      <div
+        className={`ant-picker-cell-inner ${
+          isDisabled ? "cursor-not-allowed" : ""
+        }`}
+        style={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {date.date()}
+      </div>
+    );
   };
 
   return (
@@ -63,6 +88,8 @@ const MonthCalendar = ({ handleDateSelect }) => {
         }}
         onChange={handleDateChange}
         locale={customLocale}
+        disabledDate={disabledDate}
+        fullCellRender={fullCellRender}
       />
     </div>
   );

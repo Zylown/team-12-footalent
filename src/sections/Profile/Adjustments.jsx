@@ -23,9 +23,9 @@ const role = decode.role
       name: "Nombre",
       phone_number: "Teléfono",
       address: "Dirección",
-      email: "Correo Electrónico",
-      opening_hours: "Hora de Apertura",
-      closing_hours: "Hora de Cierre",
+      email: "Correo",
+      opening_hours: "Apertura",
+      closing_hours: "Cierre",
     }),
     []
   );
@@ -70,9 +70,9 @@ const role = decode.role
 
   return (
     <>
-      <div className="bg-white  max-w-[746px] w-full gap-6">
-        <CardWhite className="!gap-4 px-6 py-[34px]">
-          <h1 className="text-[32px] font-medium text-[#192739]">
+      <div className="bg-white  max-w-[746px] w-full gap-6 px-[16px]">
+        <CardWhite className="!gap-4 py-[24px] px-6 sm:py-[34px]">
+          <h1 className="text-[24px] sm:text-[24px] font-medium text-[#192739]">
             Ajustes generales
           </h1>
           <div className="border rounded-md">

@@ -13,8 +13,7 @@ const ReasonSection = () => {
   const [filteredReasons, setFilteredReasons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [addModal, setAddModal] = useState(false);
-  const [deletedReason, setDeletedReason] = useState(false);
-  const [reasonToDelete, setReasonToDelete] = useState(null);
+  
 
   const fetchReasons = useCallback(async () => {
     const response = await getAllReasons();
@@ -48,10 +47,6 @@ const ReasonSection = () => {
     setFilteredReasons(reasons)
   };
 
-  const handleDeletedModal = (reason) => {
-    setDeletedReason(true);
-    setReasonToDelete(reason);
-  };
 
   const handleAddModal = () => {
     setAddModal(true);
@@ -59,16 +54,16 @@ const ReasonSection = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center pt-4  ">
-        <CardWhite className="bg-white min-w-[744px] p-[24px] gap-[24px] ">
+      <div className="flex justify-center items-center pt-4 p-2 ">
+        <CardWhite className=" sm:gap-5 gap-2 max-w-[744px] w-full sm:px-6 px-4 py-4 ">
           <div className="pb-6">
-            <h2 className="text-[32px] font-semibold text-[#192739]">
+            <h2 className="text-[24px] sm:text-[32px] font-semibold text-[#192739]">
               Motivos de Consulta
             </h2>
           </div>
           <div>
-            <div className="flex gap-4">
-              <div className="flex-grow relative">
+            <div className="w-full flex-col flex gap-1.5 md:flex-row">
+              <div className="flex-1  relative">
               <Input
                 placeholder={"Buscar motivos..."}
                 value={searchTerm}
@@ -76,7 +71,7 @@ const ReasonSection = () => {
                 type="text"
                 className="w-full"
               />
-              {searchTerm === "" ? (<IoSearch className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent mr-2 text-[#1B2B41]"/>)
+              {searchTerm === "" ? (<IoSearch className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent mr-1 sm:mr-2 text-[#1B2B41]"/>)
               :(<button
                 onClick={handleClearSearch}
                 className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2"
@@ -88,13 +83,13 @@ const ReasonSection = () => {
               </div>
               <div className="flex gap-1">
                 
-                <Button className="flex items-center bg-mainBlue gap-1 border text-white" onClick={handleAddModal}>
+                <Button className="flex items-center w-full justify-center  bg-mainBlue gap-1 border text-white" onClick={handleAddModal}>
                   <GoPersonAdd /> Añadir motivo
                 </Button>
               </div>
             </div>
           </div>
-          <div className="min-w-[744px] border rounded-md bg-bgTable h-[20rem] overflow-y-auto">
+          <div className="max-w-[744px] border rounded-md bg-bgTable h-[20rem] overflow-y-auto">
             <table className="w-full ">
               <thead>
                 <tr className="pt-[16px]">
@@ -110,7 +105,7 @@ const ReasonSection = () => {
                 {filteredReasons.map((reason, index) => (
                   <tr key={index} className="space-x-2">
                     <td className="p-2 text-center w-1/4">
-                      <p className="border rounded-md p-2 bg-white">{reason.time} Hs</p>
+                      <p className=" flex gap-1 border justify-center rounded-md p-2 bg-white">{reason.time} <span className="hidden sm:block"> Hs</span></p>
                     </td>
                     <td className="w-3/4">
                       <div className="flex items-center justify-center ">

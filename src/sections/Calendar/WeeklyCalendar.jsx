@@ -4,8 +4,10 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
-import EditShift from "../ShiftManager/Modal/EditShift";
+//import EditShift from "../ShiftManager/Modal/EditShift";
 import EventsContent from "./EventsContent";
+import { ScheduleShift, EditShift } from "../ShiftManager/Modal";
+import { isBefore, isToday, isFuture } from "date-fns";
 
 export default function WeeklyCalendar({
   eventsDB,
@@ -18,6 +20,8 @@ export default function WeeklyCalendar({
   const [calendarApis, setCalendarApis] = useState(null);
   const [contentHeight, setContentHeight] = useState(600);
   const [eventClickInfo, setEventClickInfo] = useState([]);
+  const [showModal, setShowModal] = useState(null);
+  const [infoEventSelected, setInfoEventSelected] = useState(null);
 
   const calendarRef = useRef(null);
 
@@ -59,27 +63,49 @@ export default function WeeklyCalendar({
 
   //funcion para añadir eventos
   function handleDateSelect(selectInfo) {
-    let title = prompt("Alerta");
-    let calendarApi = selectInfo.view.calendar;
+    const now = new Date();
+    const selectedStart = new Date(selectInfo.start);
+    const dayOfWeek = selectedStart.getDay(); // 0 es domingo, 6 es sábado
 
-    calendarApi.unselect(); // clear date selection
+    // Comprueba si la fecha seleccionada es hoy o en el futuro, y no es domingo
+    if (
+      (isToday(selectedStart) || isFuture(selectedStart)) &&
+      dayOfWeek !== 0
+    ) {
+      // Si es hoy, comprueba si la hora seleccionada es futura
+      if (isToday(selectedStart) && isBefore(selectedStart, now)) {
+        // No abrir el modal si es una hora pasada de hoy
+        return;
+      }
 
-    if (title) {
-      calendarApi.addEvent({
-        //id: nowStr,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
+      // Si pasa las comprobaciones, abre el modal
+      setInfoEventSelected(selectInfo);
+      setShowModal(true);
     }
+    // Si la fecha es pasada o es domingo, no hace nada
   }
 
-  //funcion para mostrar modal a hacer click en evento
+  //funcion para editar turno a hacer click en evento
   function handleEventClick(clickInfo) {
-    setModalModifyIsVisible(true);
-    /* console.log("evento clickeado", clickInfo.event); */
-    setEventClickInfo(clickInfo.event);
+    const now = new Date();
+    const selectedStart = new Date(clickInfo.event.start);
+    const dayOfWeek = selectedStart.getDay(); // 0 es domingo, 6 es sábado
+
+    // Comprueba si la fecha seleccionada es hoy o en el futuro, y no es domingo
+    if (
+      (isToday(selectedStart) || isFuture(selectedStart)) &&
+      dayOfWeek !== 0
+    ) {
+      // Si es hoy, comprueba si la hora seleccionada es futura
+      if (isToday(selectedStart) && isBefore(selectedStart, now)) {
+        // No abrir el modal si es una hora pasada de hoy
+        return;
+      }
+
+      // Si pasa las comprobaciones, abre el modal
+      setEventClickInfo(clickInfo.event);
+      setModalModifyIsVisible(true);
+    }
   }
 
   return (
@@ -96,11 +122,16 @@ export default function WeeklyCalendar({
               right: "timeGridWeek,timeGridDay",
             }}
             initialView="timeGridWeek"
-            editable={true}
             selectable={true}
+            selectOverlap={false}
             selectMirror={true}
+            selectConstraint={{
+              start: new Date(),
+              end: "2100-01-01",
+            }}
             dayMaxEvents={true}
-            weekends={false}
+            weekends={true}
+            hiddenDays={[0]}
             /* events */
             events={eventsDB}
             select={handleDateSelect}
@@ -112,6 +143,8 @@ export default function WeeklyCalendar({
             )} // custom render function
             eventClick={handleEventClick}
             eventOverlap={false}
+            editable={false}
+            eventDurationEditable={false}
             //eventsSet={handleEvents} // called after events are initialized/added/changed/removed
             /* you can update a remote database when these fire:
             eventAdd={function(){}}
@@ -146,6 +179,15 @@ export default function WeeklyCalendar({
           isVisible={modalModifyIsVisible}
           setModalModifyIsVisible={setModalModifyIsVisible}
           forceCalendarUpdate={forceCalendarUpdate}
+        />
+      )}
+      {showModal && (
+        <ScheduleShift
+          isVisible={showModal}
+          setModalShiftIsVisible={setShowModal}
+          data={data}
+          forceCalendarUpdate={forceCalendarUpdate}
+          dateSelected={infoEventSelected}
         />
       )}
     </>

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardWhite from "../../../components/CardWhite";
 import { useForm, Controller } from "react-hook-form"; // controller sirve para manejar inputs que no son nativos de html
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,7 @@ export default function ScheduleShift({
   setModalShiftIsVisible,
   data,
   forceCalendarUpdate,
+  dateSelected,
 }) {
   // estado para manejar el paciente seleccionado
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -50,6 +51,31 @@ export default function ScheduleShift({
   } = useForm({
     resolver: zodResolver(addShiftSchema),
   });
+
+  useEffect(() => {
+    //En caso de que se quiera agregar turno desde el calendario este traera un horario y fecha del lugar donde se clickeo.
+    //Aca se cargar esos datos en el modal.
+    if (dateSelected) {
+      const startStr = dateSelected.startStr;
+
+      const startDate = parse(startStr, "yyyy-MM-dd'T'HH:mm:ssxxx", new Date());
+      const parsedDate = format(startDate, "dd-MM-yyyy");
+      const parsedHour = format(startDate, "HH:mm");
+
+      //setea la fecha
+      const formattedDate = format(parsedDate, "dd/MM/yyyy");
+      setSelectedDate(parsedDate);
+      setValue("date", formattedDate);
+
+      //setea la hora
+      const formattedTime = parse(parsedHour, "HH:mm", new Date());
+      console.log("formattedTime", formattedTime);
+
+      setSelectedHour(formattedTime);
+      setValue("hour", parsedHour);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateSelected]);
 
   const handleOnSubmit = async (data) => {
     try {
@@ -134,20 +160,6 @@ export default function ScheduleShift({
     setModalReminder(true);
   };
 
-  /* const handleAnticipationChange = (value) => {
-    if (value === "") {
-      setAnticipation(null);
-    } else {
-      const minutes = parseInt(value, 10);
-      const hours = Math.floor(minutes / 60);
-      const mins = minutes % 60;
-      setAnticipation(
-        `${hours.toString().padStart(2, "0")}:${mins
-          .toString()
-          .padStart(2, "0")} hs`
-      );
-    }
-  }; */
   return (
     isVisible && (
       <>
@@ -391,6 +403,7 @@ export default function ScheduleShift({
 ScheduleShift.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   data: PropTypes.object,
+  dateSelected: PropTypes.object,
   setModalShiftIsVisible: PropTypes.func.isRequired,
   forceCalendarUpdate: PropTypes.func.isRequired,
 };

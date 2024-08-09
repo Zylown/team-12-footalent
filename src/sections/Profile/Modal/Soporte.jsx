@@ -89,9 +89,8 @@ const Soporte = () => {
 
           <div className="flex flex-col gap-2 w-full">
             <label htmlFor="issue_detail" className="font-semibold text-lg text-[#1B2B41] text-opacity-65">Detalles del problema *</label>
-            <Input
-              className={`bg-white placeholder:text-[#c4cbd3] placeholder:text-lg placeholder:font-normal border border-[#DAE0E7] outline-none ${errors.issue_detail ? "border-red-600 border-2" : ""}`}
-              type="text"
+            <textarea
+              className={`bg-white placeholder:text-[#c4cbd3] placeholder:text-lg placeholder:font-normal h-[80px] sm:h-[109px] border border-[#DAE0E7] outline-none resize-none ${errors.issue_detail ? "border-red-600 border-2" : ""}`}
               placeholder="Por favor, bríndenos con detalles sobre su problema y lo solucionaremos. Muchas gracias!"
               {...register("issue_detail")}
             />
@@ -117,3 +116,4 @@ const Soporte = () => {
 }
 
 export default Soporte;
+

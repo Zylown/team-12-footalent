@@ -27,13 +27,13 @@ const InfoProfile = () => {
   }, [decode.user_id, user, setUser]);
 
   return (
-    <div className="bg-white max-w-[746px] w-full">
-      <CardWhite className="p-6 bg-white rounded-lg h-full flex !flex-row gap-6 items-start">
+    <div className="bg-white max-w-[746px] px-[16px] w-full">
+      <CardWhite className=" p-[20px] sm:p-6 bg-white rounded-lg h-full flex !flex-row gap-6 items-start">
         <div className="flex flex-col items-center">
           <img
             src={imgProfile}
             alt="Perfil del Usuario"
-            className="w-[127px] h-[127px]object-cover"
+            className=" hidden sm:block sm:w-[127px] sm:h-[127px]object-cover "
           />
          
         </div>
@@ -49,10 +49,10 @@ const InfoProfile = () => {
           ) : (
             <div className="flex flex-col justify-between gap-2 h-full">
               <div className="flex flex-col">
-                <h2 className="text-2xl text-[#192739] font-semibold">
+                <h2 className=" text-[20px]  sm:text-2xl text-[#192739] font-semibold">
                   {user.first_name} {user.last_name}
                 </h2>
-                <p className="text-[#005FDB] text-lg font-medium">
+                <p className="text-[#005FDB] text-[14]  sm:text-[18px] font-medium">
                   {" "}
                   {decode.role === "admin"
                     ? "Administrador"
@@ -71,17 +71,17 @@ const InfoProfile = () => {
                   </p>
                 </div> */}
                 <div>
-                  <p className="text-[#1B2B41] text-opacity-70 text-lg font-medium">
+                  <p className="text-[#1B2B41] text-opacity-70 text-[14]  sm:text-[18px] font-medium">
                     DNI{" "}
-                    <span className="text-[#1C304A] text-opacity-50 text-lg font-normal ml-2.5">
+                    <span className="text-[#1C304A] text-opacity-50 text-[14]  sm:text-[18px] font-normal ml-2.5">
                       {user.dni}
                     </span>
                   </p>
                 </div>
                 <div>
-                  <p className="text-[#1B2B41] text-opacity-70 text-lg font-medium">
+                  <p className="text-[#1B2B41] text-opacity-70 text-[14]  sm:text-[18px] font-medium">
                     Correo Electrónico{" "}
-                    <span className="text-[#006AF5] underline text-lg font-normal ml-2.5">
+                    <span className="text-[#006AF5] underline text-[14]  sm:text-[18px]font-normal ml-2.5">
                       {user.email}
                     </span>
                   </p>

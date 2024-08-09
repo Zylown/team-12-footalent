@@ -36,9 +36,9 @@ const ModalAdd = ({ isVisible, setModalIsVisible }) => {
   return (
     isVisible && (
       <>
-        <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center px-1 items-center z-50">
           <CardWhite className="w-[568px] bg-white pt-[48px] p-[24px]">
-            <h2 className="text-2xl font-semibold text-[#192739] mb-6">
+            <h2 className="text-[24px] font-semibold text-[#192739] mb-6">
               Añadir Motivo
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

@@ -43,18 +43,18 @@ const TableUsers = ({ users }) => {
   };
 
   return (
-    <div className="min-w-full overflow-auto border rounded-md bg-bgTable py-[16px] sm:min-w-[20rem] h-[20rem] overflow-y-auto ">
+    <div className="max-w-[744px] border pt-1 rounded-md bg-bgTable h-[20rem] overflow-y-auto">
       <table className="w-full ">
         <thead className="space-y-1">
           <tr className="space-y-1 space-x-3 rounded-md">
             <td className="p-1 text-center w-1/4">
-              <h3 className="border rounded-md p-2 bg-custom-gradient">ROL</h3>
+              <h3 className="border text-[14px] sm:text-[18px] rounded-md p-2 bg-custom-gradient">ROL</h3>
             </td>
-            <td className="p-1 w-1/4 text-center">
-              <h3 className="border rounded-md p-2 bg-custom-gradient">DNI</h3>
+            <td className="p-1 hidden sm:table-cell w-1/4 text-center">
+              <h3 className=" text-[14px] sm:text-[18px]  border rounded-md p-2 bg-custom-gradient">DNI</h3>
             </td>
             <td className="p-1 w-full text-center">
-              <h3 className="border rounded-md p-2 mr-2 bg-custom-gradient">NOMBRE Y APELLIDO</h3>
+              <h3 className="border text-[14px] sm:text-[18px]  rounded-md p-2 mr-2 bg-custom-gradient">NOMBRE Y APELLIDO</h3>
             </td>
           </tr>
         </thead>
@@ -62,22 +62,22 @@ const TableUsers = ({ users }) => {
           {users.map((user, index) => (
             <tr key={index} className="space-x-3">
               <td className="text-center p-1 w-1/4">
-                <p className="border rounded-md p-2 bg-white">{handleRole(user.role_id)}</p>
+                <p className="border text-[14px] sm:text-[18px]  rounded-md p-2 bg-white">{handleRole(user.role_id)}</p>
               </td>
-              <td className="text-center p-1 w-1/4">
-                <p className="border rounded-md p-2 bg-white">{user.dni}</p>
+              <td className="hidden sm:table-cell text-center p-1 w-1/4">
+                <p className="border text-[14px] sm:text-[18px]  rounded-md p-2 bg-white">{user.dni}</p>
               </td>
               <td className="p-1 w-full">
                 <div className="flex items-center justify-center relative">
-                  <p className="w-full p-2 rounded-md border text-center mr-2 bg-white">
+                  <p className="w-full text-[14px] sm:text-[18px]  p-2 rounded-md border text-center mr-2 bg-white">
                     {user.first_name} {user.last_name}
                   </p>
                   <Button
                     type="button"
                     onClick={() => handleDeletedModal(user)}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
+                    className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                   >
-                   <AiOutlineUserDelete className="text-[#7d8693]" />
+                   <AiOutlineUserDelete className="text-[#7d8693]  text-[14px] sm:text-[18px] " />
                   </Button>
                 </div>
               </td>

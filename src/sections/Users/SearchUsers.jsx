@@ -45,21 +45,21 @@ const SearchUsers = () => {
   };
 
   return (
-    <div className="bg-white xl:mx-72 md:mx-48 sm:mx-4 mt-4 mb-4 px-2 gap-[24px]">
-      <CardWhite className="gap-5 sm:min-w-[690px] w-full sm:px-6 px-2 py-4">
-        <div className="container__h1 py-[10px]">
-          <h1 className="text-[32px] text-[#192739] font-semibold">
+    <div className="flex justify-center items-center pt-4 p-2">
+      <CardWhite className="sm:gap-5 gap-2 md:min-w-[744px] w-full sm:px-6 px-4 py-4">
+        <div className=" py-[10px]">
+          <h1 className=" text-[24px] sm:text-[32px] text-[#192739] font-semibold">
             Usuarios
           </h1>
         </div>
-        <div className="w-full flex gap-1.5 flex-col md:flex-row">
-          <div className="flex-1 relative">
+        <div className="w-full flex-col flex gap-1.5 md:flex-row">
+          <div className="flex-1  relative">
             <Input
               value={searchQuery}
               type="text"
               onChange={handleInputSearch}
               className="w-full box-border h-full bg-white border-[1.5px] border-[#1C304A] border-opacity-50 placeholder:text-[#1B2B41] placeholder:text-opacity-70 placeholder:text-lg placeholder:font-normal outline-[#1C304A] text-[#1B2B41] text-opacity-70 font-normal px-3"
-              placeholder="Buscar DNI o Nombre del Usuario..."
+              placeholder="Buscar por DNI o Nombre..."
             />
             {searchQuery === "" ? (
               <IoSearch className="absolute top-1/2 text-lg right-2 transform -translate-y-1/2 text-[#1B2B41]" />
@@ -73,13 +73,14 @@ const SearchUsers = () => {
             )}
           </div>
           <Button
-            className="flex px-[14px] bg-mainBlue box-border items-center font-normal text-lg text-white rounded border border-[#C3D4FF] mt-2 md:mt-0"
+            className="flex px-[14px] bg-mainBlue box-border items-center font-normal text-lg text-white justify-center rounded border border-[#C3D4FF] mt-2 md:mt-0"
             onClick={handleAddUser}
           >
             <AiOutlineUserAdd className="mr-1 text-white text-2xl" />
             Añadir usuario
           </Button>
         </div>
+        
         <TableUsers users={filteredUsers} />
       </CardWhite>
     </div>

@@ -8,7 +8,6 @@ import { getAppointments, getDentists, getAllReasons } from "../../api";
 import CardWhite from "../../components/CardWhite";
 import { useDecode } from "../../hooks/useDecode";
 import toast, { Toaster } from "react-hot-toast";
-import CalendarCheck from "../../assets/CalendarCheck.svg";
 
 function CalendarPage() {
   const [eventsDB, setEventsDB] = useState(null);
@@ -21,7 +20,7 @@ function CalendarPage() {
   const [dateSelected, setDateSelected] = useState(
     dayjs().format("YYYY-MM-DD")
   );
-  //const { Option } = Select;
+
   const [data, setData] = useState({
     dentists: null,
     reasons: null,
@@ -106,15 +105,6 @@ function CalendarPage() {
     setDentistID(value);
   };
 
-  /* const updateEventInState = (updatedEvent) => {
-    setEventsDB((prevEvents) => {
-      if (!prevEvents) return [updatedEvent];
-      return prevEvents.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      );
-    });
-  }; */
-  //console.log("SERCIVE", eventsDB);
   return (
     <>
       <div className="max-w-7xl relative flex justify-center w-full mx-auto bg-white border-2 border-[#1C3454]/26 border-solid rounded my-6 font-sans">
@@ -138,21 +128,24 @@ function CalendarPage() {
 
         <>
           <WeeklyCalendar
+            dateSelected={dateSelected} //props para manejo de fechas e/calendarios
+            forceCalendarUpdate={forceCalendarUpdate} //forzar renderizado
+            // datos de bd
+            data={data}
             eventsDB={eventsDB}
-            dateSelected={dateSelected}
+            // modal editar turno
             modalModifyIsVisible={modalModifyIsVisible}
             setModalModifyIsVisible={setModalModifyIsVisible}
-            data={data}
-            forceCalendarUpdate={forceCalendarUpdate}
           />
           <ShiftSidebar
-            handleDateSelect={handleDateSelect}
-            forceCalendarUpdate={forceCalendarUpdate}
-            isDentist={isDentist}
+            handleDateSelect={handleDateSelect} //props para manejo de fechas e/calendarios
+            forceCalendarUpdate={forceCalendarUpdate} //forzar renderizado
+            isDentist={isDentist} //rol del usuario actual
+            handleChange={handleChange} //Id de la agenda del dentista seleccionado
+            //datos de bd
             data={data}
-            handleChange={handleChange}
-            dentistID={dentistID}
             eventsDB={eventsDB}
+            dentistID={dentistID}
           />
         </>
       </div>
@@ -166,8 +159,8 @@ function CalendarPage() {
         <CardWhite className="mx-auto bg-white w-80 lg:w-[437px] lg:h-80">
           <div className="flex flex-col items-center justify-center h-full gap-2 p-5 text-center lg:px-14">
             <img
-              src={CalendarCheck}
-              alt="calendar svg"
+              src="/src/assets/CalendarCheck.svg"
+              alt="caledar svg"
               className="w-12 h-12 lg:w-24 lg:h-24"
             />
             <h2 className="text-2xl font-semibold text-mainBlue text-nowrap">

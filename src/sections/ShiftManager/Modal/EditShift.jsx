@@ -51,6 +51,8 @@ export default function EditShift({
   useEffect(() => {
     if (eventInfo.extendedProps) {
       //setea la fecha
+      console.log(eventInfo.extendedProps.date, eventInfo.extendedProps.time);
+
       const parsedDate = parse(
         eventInfo.extendedProps.date,
         "dd-MM-yyyy",

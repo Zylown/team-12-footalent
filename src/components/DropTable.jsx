@@ -18,7 +18,7 @@ const Table = ({ nameButton, sections, redirect }) => {
       <Button
         type="button"
         onClick={toggleTable}
-        className="bg-custom-gradient !py-3 w-full text-xl flex justify-center items-center"
+        className="bg-custom-gradient !py-3 w-full text-[18px] sm:text-[24px] flex justify-center items-center"
       >
         {nameButton}
         {isOpen ? (
@@ -33,19 +33,20 @@ const Table = ({ nameButton, sections, redirect }) => {
             {sections.map((section, index) => (
               <tr key={index} className="space-x-2">
                 <td className="p-2  text-center w-1/4">
-                  <p className="border rounded-md p-2"> {section.nombre}</p>
+                  <p className="border rounded-md p-2 text-[14px] sm:text-[18px]"> {section.nombre}</p>
                 </td>
                 <td className=" w-3/4">
                   <div className="flex items-center justify-center relative">
-                    <p className="w-full p-2 rounded-md text-center bg-gray-100 mr-2">
-                      {section.value}{" "}
-                    </p>
+                  <p className="w-full p-2 text-[14px] sm:text-[18px] rounded-md text-center bg-gray-100 mr-2 pr-2">
+  {section.value}
+</p>
+
 
                     {section.icon && (
                       <Link
                         to={redirect}
                         
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
+                        className="absolute text-[14px] sm:text-[18px] right-2 top-1/2 transform -translate-y-1/2 bg-transparent p-1"
                       >
                         {section.icon}
                       </Link>
