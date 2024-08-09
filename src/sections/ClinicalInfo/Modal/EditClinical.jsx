@@ -38,6 +38,15 @@ export default function EditClinical({
   const handleBack = () => {
     setIsVisible(false);
   };
+
+  const valueInputSpanish =
+    (valueData.data === "name" && "Nombre") ||
+    (valueData.data === "address" && "Dirección") ||
+    (valueData.data === "phone_number" && "Teléfono") ||
+    (valueData.data === "email" && "Correo Electrónico") ||
+    (valueData.data === "opening_hours" && "Hora de Apertura") ||
+    (valueData.data === "closing_hours" && "Hora de Cierre");
+
   return (
     isVisible && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 sm:p-0 p-2">
@@ -60,7 +69,7 @@ export default function EditClinical({
                 className="border border-[#1C304A] border-opacity-50"
                 type="text"
                 placeholder="Dato"
-                value={valueData.data}
+                value={valueInputSpanish}
                 disabled
               />
               <input
